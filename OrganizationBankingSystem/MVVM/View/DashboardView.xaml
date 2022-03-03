@@ -21,10 +21,6 @@
                     </RectangleGeometry>
                 </Border.Clip>
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="88*"/>
-                        <ColumnDefinition Width="137*"/>
-                    </Grid.ColumnDefinitions>
                     <StackPanel Margin="10,0,0,0" Grid.ColumnSpan="2">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -34,11 +30,11 @@
                             <TextBlock Text="Банковский счет" Foreground="#FFF8F8F8" FontSize="15"/>
                         </Grid>
                     </StackPanel>
-                    <Image Width="248"
-                               Height="363"
+                    <Image Width="250"
+                               Height="230"
                                 RenderTransformOrigin="0.5,0.5"
                            HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom" Margin="0,0,-84,-53" Source="/MVVM/View/Bank5.png" Grid.Column="1">
+                           VerticalAlignment="Bottom" Margin="0,0,-67,-32" Source="/MVVM/View/Bank5.png">
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
