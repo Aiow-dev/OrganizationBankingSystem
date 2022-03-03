@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace OrganizationBankingSystem
@@ -38,6 +39,12 @@ namespace OrganizationBankingSystem
             //    Offset = 0.5
             //});
             //myButton.Background = new LinearGradientBrush(gsc, new Point(0.5, 0), new Point(0.5, 1));
+        }
+
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }

@@ -4,16 +4,105 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OrganizationBankingSystem"
+        xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
         mc:Ignorable="d"
-        Title="DeltaBank" Height="450" Width="800">
-    <Grid>
-        <Button x:Name="myButton" Click="myButton_Click">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black"/>
-                    <GradientStop Color="#FFB9268D" Offset="1"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
-    </Grid>
+        Height="600" Width="1000"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+    <Border Background="#FF1A1919"
+            CornerRadius="8">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" MinWidth="100"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="65"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="DeltaBank"
+                   VerticalAlignment="Top"
+                   HorizontalAlignment="Left"
+                   Foreground="#FFF8F8F8"
+                   FontSize="15"
+                   Margin="5 0 0 0"/>
+            <StackPanel Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock HorizontalAlignment="Center" Text="📈" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <RadioButton Content="Главная"
+                             Foreground="#FFF8F8F8"
+                             FontSize="18"
+                             Margin="5 0 0 15"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                        <RadioButton Content="Счет"
+                             Foreground="#FFF8F8F8"
+                             FontSize="18"
+                             Margin="5 0 0 15"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                        <RadioButton Content="Транзакции"
+                             Foreground="#FFF8F8F8"
+                             FontSize="18"
+                             Margin="5 0 0 15"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                        <RadioButton Content="Переводы"
+                             Foreground="#FFF8F8F8"
+                             FontSize="18"
+                             Margin="5 0 0 15"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                        <RadioButton Content="Вклады"
+                             Foreground="#FFF8F8F8"
+                             FontSize="18"
+                             Margin="5 0 0 15"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                        <RadioButton Content="Акции"
+                             Foreground="#FFF8F8F8"
+                             FontSize="18"
+                             Margin="5 0 0 15"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                        <RadioButton Content="Кредитование"
+                             Foreground="#FFF8F8F8"
+                             FontSize="18"
+                             Margin="5 0 0 15"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                        <RadioButton Content="Настройки"
+                             Foreground="#FFF8F8F8"
+                             FontSize="18"
+                             Margin="5 0 0 15"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                        <RadioButton Content="Финансы"
+                             Foreground="#FFF8F8F8"
+                             FontSize="18"
+                             Margin="5 0 0 15"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+            <ContentControl Grid.Row="1"
+                            Grid.Column="1"
+                            Content="{Binding CurrentView}"/>
+        </Grid>
+    </Border>
 </Window>
