@@ -33,7 +33,7 @@
                    HorizontalAlignment="Left"
                    Foreground="#FFF8F8F8"
                    FontSize="15"
-                   Margin="5 0 0 0"/>
+                   Margin="10 1 0 0"/>
             <StackPanel Grid.Row="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -103,6 +103,24 @@
             <ContentControl Grid.Row="1"
                             Grid.Column="1"
                             Content="{Binding CurrentView}"/>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Width="53" Margin="0 5 10 0">
+                    <Border Background="#FFF8F8F8" HorizontalAlignment="Left" CornerRadius="10" Width="13" Height="13">
+                        <TextBlock Text="❌" HorizontalAlignment="Center" Foreground="#FF282828" FontSize="8" Margin="0,1,0,-1"/>
+                    </Border>
+                    <Border Background="#FFF8F8F8" HorizontalAlignment="Left" CornerRadius="10" Width="13" Height="13" Margin="7 0 0 0">
+                        <TextBlock Text="➖" HorizontalAlignment="Center" Foreground="#FF282828" FontSize="8" Margin="0,1,0,-1"/>
+                    </Border>
+                    <Border Background="#FFF8F8F8" HorizontalAlignment="Left" CornerRadius="10" Width="13" Height="13" Margin="7 0 0 0">
+                        <TextBlock Text="🡼" HorizontalAlignment="Center" Foreground="#FF282828" FontSize="9"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+            <Border Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Background="#FF222222" Height="1" Margin="10 0 10 5"></Border>
         </Grid>
     </Border>
 </Window>
