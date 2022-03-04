@@ -7,28 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="MVVM\View\Bank.png" />
-    <None Remove="MVVM\View\Bank2.png" />
-    <None Remove="MVVM\View\Bank3.png" />
-    <None Remove="MVVM\View\Bank4.png" />
     <None Remove="MVVM\View\Bank5.png" />
     <None Remove="MVVM\View\dollar2.png" />
-    <None Remove="x.png" />
-    <None Remove="x2.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Images\" />
     <Folder Include="MVVM\Model\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="MVVM\View\Bank.png" />
-    <Resource Include="MVVM\View\Bank2.png" />
-    <Resource Include="MVVM\View\Bank3.png" />
-    <Resource Include="MVVM\View\Bank4.png" />
     <Resource Include="MVVM\View\Bank5.png" />
     <Resource Include="MVVM\View\dollar2.png" />
-    <Resource Include="x.png" />
-    <Resource Include="x2.png" />
   </ItemGroup>
 
 </Project>

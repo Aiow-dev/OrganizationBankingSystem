@@ -7,13 +7,14 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
-                        <Grid VerticalAlignment="Stretch"
+                        <Border VerticalAlignment="Stretch"
                           HorizontalAlignment="Stretch"
-                          Background="{TemplateBinding Background}">
-                            <TextBlock Text="{TemplateBinding Property=Content}"
+                          Background="{TemplateBinding Background}"
+                          CornerRadius="3">
+                            <TextBlock Text="{TemplateBinding Property=Content}" Margin="3 0 0 0"
                                    VerticalAlignment="Center">
                             </TextBlock>
-                        </Grid>
+                        </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

@@ -4,7 +4,10 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
 {
     class MainViewModel : ObservableObject
     {
+        public RelayCommand DashboardViewCommand { get; set; }
+        public RelayCommand BankAccountViewCommand { get; set; }
         public DashboardViewModel DashboardVM;
+        public BankAccountViewModel BankAccountVM;
         private object _currentView;
 
         public object CurrentView
@@ -19,7 +22,19 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
         public MainViewModel()
         {
             DashboardVM = new DashboardViewModel();
+            BankAccountVM = new BankAccountViewModel();
+
             CurrentView = DashboardVM;
+
+            DashboardViewCommand = new RelayCommand(o =>
+            {
+                CurrentView = DashboardVM;
+            });
+
+            BankAccountViewCommand = new RelayCommand(o =>
+            {
+                CurrentView = BankAccountVM;
+            });
         }
     }
 }

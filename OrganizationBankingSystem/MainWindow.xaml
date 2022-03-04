@@ -42,31 +42,28 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock HorizontalAlignment="Center" Text="📈" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="B" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="⇌" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="💰" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="⅍" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="%" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
                         <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
-                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
-                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
-                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
-                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
-                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
-                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
-                        <TextBlock HorizontalAlignment="Center" Text="$" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
+                        <TextBlock HorizontalAlignment="Center" Text="⚙" FontSize="18" Foreground="#FFF8F8F8" Margin="0 0 0 15"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <RadioButton Content="Главная"
                              Foreground="#FFF8F8F8"
                              FontSize="18"
                              Margin="5 0 0 15"
-                             Style="{StaticResource MenuButtonTheme}"/>
+                             Style="{StaticResource MenuButtonTheme}"
+                             IsChecked="True"
+                             Command="{Binding DashboardViewCommand}"/>
                         <RadioButton Content="Счет"
                              Foreground="#FFF8F8F8"
                              FontSize="18"
                              Margin="5 0 0 15"
-                             Style="{StaticResource MenuButtonTheme}"/>
-                        <RadioButton Content="Транзакции"
-                             Foreground="#FFF8F8F8"
-                             FontSize="18"
-                             Margin="5 0 0 15"
-                             Style="{StaticResource MenuButtonTheme}"/>
+                             Style="{StaticResource MenuButtonTheme}"
+                             Command="{Binding BankAccountViewCommand}"/>
                         <RadioButton Content="Переводы"
                              Foreground="#FFF8F8F8"
                              FontSize="18"
@@ -87,12 +84,12 @@
                              FontSize="18"
                              Margin="5 0 0 15"
                              Style="{StaticResource MenuButtonTheme}"/>
-                        <RadioButton Content="Настройки"
+                        <RadioButton Content="Валюты"
                              Foreground="#FFF8F8F8"
                              FontSize="18"
                              Margin="5 0 0 15"
                              Style="{StaticResource MenuButtonTheme}"/>
-                        <RadioButton Content="Финансы"
+                        <RadioButton Content="Настройки"
                              Foreground="#FFF8F8F8"
                              FontSize="18"
                              Margin="5 0 0 15"
@@ -108,15 +105,15 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Width="53" Margin="0 5 10 0">
-                    <Border Background="#FFF8F8F8" HorizontalAlignment="Left" CornerRadius="10" Width="13" Height="13">
-                        <TextBlock Text="❌" HorizontalAlignment="Center" Foreground="#FF282828" FontSize="8" Margin="0,1,0,-1"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Width="50" Margin="0 5 10 0">
+                    <Border Background="#FFF8F8F8" HorizontalAlignment="Left" CornerRadius="10" Width="12" Height="12">
+                        <TextBlock Text="❌" HorizontalAlignment="Center" Foreground="#FF282828" FontSize="7" Margin="0,1,0,-1"/>
                     </Border>
-                    <Border Background="#FFF8F8F8" HorizontalAlignment="Left" CornerRadius="10" Width="13" Height="13" Margin="7 0 0 0">
-                        <TextBlock Text="➖" HorizontalAlignment="Center" Foreground="#FF282828" FontSize="8" Margin="0,1,0,-1"/>
+                    <Border Background="#FFF8F8F8" HorizontalAlignment="Left" CornerRadius="10" Width="12" Height="12" Margin="7 0 0 0">
+                        <TextBlock Text="➖" HorizontalAlignment="Center" Foreground="#FF282828" FontSize="7" Margin="0,1,0,-1"/>
                     </Border>
-                    <Border Background="#FFF8F8F8" HorizontalAlignment="Left" CornerRadius="10" Width="13" Height="13" Margin="7 0 0 0">
-                        <TextBlock Text="🡼" HorizontalAlignment="Center" Foreground="#FF282828" FontSize="9"/>
+                    <Border Background="#FFF8F8F8" HorizontalAlignment="Left" CornerRadius="10" Width="12" Height="12" Margin="7 0 0 0">
+                        <TextBlock Text="🡼" HorizontalAlignment="Center" Foreground="#FF282828" FontSize="8"/>
                     </Border>
                 </StackPanel>
             </Grid>
