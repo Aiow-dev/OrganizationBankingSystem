@@ -12,22 +12,23 @@
                    FontSize="20"
                    Margin="10 0 0 20"/>
         <StackPanel Orientation="Horizontal" Margin="10">
-            <Border Width="450"
-                    Height="200"
+            <Border Width="800"
+                    Height="400"
                     CornerRadius="8"
                     Background="#FF282828">
                 <Border.Clip>
-                    <RectangleGeometry Rect="0, 0, 450, 200">
+                    <RectangleGeometry Rect="0, 0, 800, 400">
                     </RectangleGeometry>
                 </Border.Clip>
                 <Grid>
-                    <StackPanel Margin="10,0,0,0" Grid.ColumnSpan="2">
+                    <StackPanel Margin="10,0,0,0">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
-                                <RowDefinition/>
+                                <RowDefinition Height="360"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Тест" Foreground="#FFF8F8F8" FontSize="15"/>
+                            <TextBlock Text="Банковский счет" Foreground="#FFF8F8F8" FontSize="15"/>
+                            <TextBlock Grid.Row="1" Foreground="#FFF8F8F8" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Нет информации о текущем банковском счете"/>
                         </Grid>
                     </StackPanel>
                     <Image Width="250"
@@ -46,114 +47,6 @@
                     </Image>
                 </Grid>
             </Border>
-            <Border Width="350"
-                    Height="200"
-                    CornerRadius="8"
-                    Margin="10 0 0 0"
-                    Background="#FF282828">
-                <Border.Clip>
-                    <RectangleGeometry Rect="0, 0, 350, 200">
-                    </RectangleGeometry>
-                </Border.Clip>
-                <Grid>
-                    <StackPanel Margin="10 0 0 0">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Курсы валют" Foreground="#FFF8F8F8" FontSize="15"/>
-                        </Grid>
-                    </StackPanel>
-                    <Image Width="250"
-                               Height="260"
-                                RenderTransformOrigin="0.5,0.5"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom" Margin="0,0,-76,-44" Source="/MVVM/View/dollar2.png">
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="-35.754"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
-                </Grid>
-            </Border>
-        </StackPanel>
-        <StackPanel>
-            <TextBlock Text="Транзакции"
-                   FontSize="20"
-                   Margin="10 4 0 16"
-                   Foreground="#FFF8F8F8"/>
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <Border Width="260"
-                    Height="200"
-                    CornerRadius="8"
-                    Background="#FF282828">
-                    <Border.Clip>
-                        <RectangleGeometry Rect="0, 0, 266, 200">
-                        </RectangleGeometry>
-                    </Border.Clip>
-                    <Grid>
-                        <StackPanel Margin="10 0 0 0">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Последние транзакции" Foreground="#FFF8F8F8" FontSize="15"/>
-                                <TextBlock Grid.Row="1" Text="Пока нет последних транзакций" Foreground="#FFF8F8F8"/>
-                            </Grid>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-                <Border Width="260"
-                    Height="200"
-                    CornerRadius="8"
-                    Background="#FF282828"
-                        Margin="15 0 0 0">
-                    <Border.Clip>
-                        <RectangleGeometry Rect="0, 0, 266, 200">
-                        </RectangleGeometry>
-                    </Border.Clip>
-                    <Grid>
-                        <StackPanel Margin="10 0 0 0">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Последние транзакции" Foreground="#FFF8F8F8" FontSize="15"/>
-                                <TextBlock Grid.Row="1" Text="Пока нет последних транзакций" Foreground="#FFF8F8F8"/>
-                            </Grid>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-                <Border Width="260"
-                    Height="200"
-                    CornerRadius="8"
-                    Background="#FF282828"
-                        Margin="15 0 0 0">
-                    <Border.Clip>
-                        <RectangleGeometry Rect="0, 0, 266, 200">
-                        </RectangleGeometry>
-                    </Border.Clip>
-                    <Grid>
-                        <StackPanel Margin="10 0 0 0">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="Последние транзакции" Foreground="#FFF8F8F8" FontSize="15"/>
-                                <TextBlock Grid.Row="1" Text="Пока нет последних транзакций" Foreground="#FFF8F8F8"/>
-                            </Grid>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-            </StackPanel>
         </StackPanel>
     </StackPanel>
 </UserControl>

@@ -12,8 +12,7 @@
                           Background="{TemplateBinding Background}"
                           CornerRadius="3">
                             <TextBlock Text="{TemplateBinding Property=Content}" Margin="3 0 0 0"
-                                   VerticalAlignment="Center">
-                            </TextBlock>
+                                   VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -22,8 +21,8 @@
             <Setter Property="BorderThickness" Value="0"/>
         </Style.Setters>
         <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="#FF515050"></Setter>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#FF282828"/>
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -24,27 +24,9 @@ namespace OrganizationBankingSystem
             _mapper = mapper;
         }
 
-
-        private void myButton_Click(object sender, RoutedEventArgs e)
+        private void WindowMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //GradientStopCollection gsc = new GradientStopCollection();
-            //gsc.Add(new GradientStop()
-            //{
-            //    Color = Colors.Red,
-            //    Offset = 0.0
-            //});
-            //gsc.Add(new GradientStop()
-            //{
-            //    Color = Colors.Black,
-            //    Offset = 0.5
-            //});
-            //myButton.Background = new LinearGradientBrush(gsc, new Point(0.5, 0), new Point(0.5, 1));
-        }
-
-
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            this.DragMove();
+            DragMove();
         }
     }
 }

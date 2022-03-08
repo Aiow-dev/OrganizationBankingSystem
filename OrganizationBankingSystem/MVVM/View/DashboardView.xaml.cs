@@ -1,17 +1,9 @@
-﻿using System;
+﻿using OrganizationBankingSystem.MVVM.ViewModel;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace OrganizationBankingSystem.MVVM.View
 {
@@ -23,6 +15,17 @@ namespace OrganizationBankingSystem.MVVM.View
         public DashboardView()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //DashboardViewModel dashboardViewModel = new DashboardViewModel();
+            //Console.WriteLine(dashboardViewModel.exchangeRates);
+            //dynamic dynamic = dashboardViewModel.exchangeRates["Realtime Currency Exchange Rate"];
+            //currencyExchangeRatesText.Text = dynamic.GetProperty("5. Exchange Rate").ToString();
+            //JsonSerializer.Deserialize<Dictionary<dynamic, dynamic>>(dashboardViewModel.exchangeRates["Realtime Currency Exchange Rate"])
+            //currencyExchangeRatesText.Text = dashboardViewModel.exchangeRates["8. Bid Price"];
+            //currencyExchangeRatesText.Text = dashboardViewModel.exchangeRates;
         }
     }
 }

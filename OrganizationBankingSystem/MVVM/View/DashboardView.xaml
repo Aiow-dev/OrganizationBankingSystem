@@ -4,8 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
+             xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="542.764" d:DesignWidth="800">
+    <UserControl.Resources>
+        <viewModel:DashboardViewModel x:Key="currencyExchangeRates"/>
+    </UserControl.Resources>
     <StackPanel>
         <TextBlock Text="Обзор"
                    Foreground="#FFF8F8F8"
@@ -63,6 +67,9 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="Курсы валют" Foreground="#FFF8F8F8" FontSize="15"/>
+                            <StackPanel Grid.Row="1" Width="170" Height="150" HorizontalAlignment="Left">
+                                <TextBlock VerticalAlignment="Center" Text="Текущих сведений избранных валют нет. Перейдите в раздел Валюты" Height="100" TextWrapping="Wrap" Foreground="#FFF8F8F8" FontSize="15"/>
+                            </StackPanel>
                         </Grid>
                     </StackPanel>
                     <Image Width="250"

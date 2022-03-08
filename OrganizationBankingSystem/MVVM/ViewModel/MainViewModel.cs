@@ -6,8 +6,10 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
     {
         public RelayCommand DashboardViewCommand { get; set; }
         public RelayCommand BankAccountViewCommand { get; set; }
+        public RelayCommand CurrencyViewCommand { get; set; }
         public DashboardViewModel DashboardVM;
         public BankAccountViewModel BankAccountVM;
+        public CurrencyViewModel CurrencyVM;
         private object _currentView;
 
         public object CurrentView
@@ -23,6 +25,7 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
         {
             DashboardVM = new DashboardViewModel();
             BankAccountVM = new BankAccountViewModel();
+            CurrencyVM = new CurrencyViewModel();
 
             CurrentView = DashboardVM;
 
@@ -35,6 +38,12 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
             {
                 CurrentView = BankAccountVM;
             });
+
+            CurrencyViewCommand = new RelayCommand(o =>
+            {
+                CurrentView = CurrencyVM;
+            }
+            );
         }
     }
 }
