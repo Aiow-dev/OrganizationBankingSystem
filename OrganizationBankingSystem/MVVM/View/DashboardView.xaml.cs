@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Shapes;
 
 namespace OrganizationBankingSystem.MVVM.View
 {
@@ -27,5 +29,21 @@ namespace OrganizationBankingSystem.MVVM.View
             //currencyExchangeRatesText.Text = dashboardViewModel.exchangeRates["8. Bid Price"];
             //currencyExchangeRatesText.Text = dashboardViewModel.exchangeRates;
         }
+    }
+    public class RectConvertor : IMultiValueConverter
+    {
+        #region IMultiValueConverter Members
+
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return new Rect(0, 0, System.Convert.ToInt32(450), System.Convert.ToInt32(250));
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

@@ -9,87 +9,83 @@
              d:DesignHeight="542.764" d:DesignWidth="800">
     <UserControl.Resources>
         <viewModel:DashboardViewModel x:Key="currencyExchangeRates"/>
+        <local:RectConvertor x:Key="RectConverter"/>
     </UserControl.Resources>
-    <StackPanel>
+    <Grid Width="Auto" Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <TextBlock Text="Обзор"
                    Foreground="#FFF8F8F8"
                    FontSize="20"
                    Margin="10 0 0 20"/>
-        <StackPanel Orientation="Horizontal" Margin="10">
-            <Border Width="450"
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="bankAccountColumn" Width="*"/>
+                <ColumnDefinition Width="0.85*"/>
+            </Grid.ColumnDefinitions>
+            <Border
                     Height="200"
                     CornerRadius="8"
-                    Background="#FF282828">
-                <Border.Clip>
-                    <RectangleGeometry Rect="0, 0, 450, 200">
-                    </RectangleGeometry>
-                </Border.Clip>
+                Background="#FF282828"
+                x:Name="borderBankAccount">
                 <Grid>
-                    <StackPanel Margin="10,0,0,0" Grid.ColumnSpan="2">
+                    <StackPanel Margin="10,0,0,0">
                         <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
-                                <RowDefinition/>
+                                <RowDefinition Height="170"/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="Банковский счет" Foreground="#FFF8F8F8" FontSize="15"/>
+                            <Border Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    CornerRadius="0, 8, 8, 0"
+                                    Background="#FFA1CCA5"/>
                         </Grid>
                     </StackPanel>
-                    <Image Width="250"
-                               Height="230"
-                                RenderTransformOrigin="0.5,0.5"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom" Margin="0,0,-67,-32" Source="/MVVM/View/Bank5.png">
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="-35.754"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
                 </Grid>
             </Border>
-            <Border Width="350"
+            <Border
                     Height="200"
                     CornerRadius="8"
                     Margin="10 0 0 0"
-                    Background="#FF282828">
-                <Border.Clip>
-                    <RectangleGeometry Rect="0, 0, 350, 200">
-                    </RectangleGeometry>
-                </Border.Clip>
+                    Background="#FF282828"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch">
                 <Grid>
-                    <StackPanel Margin="10 0 0 0">
+                    <StackPanel Margin="10,0,0,0">
                         <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
-                                <RowDefinition/>
+                                <RowDefinition Height="170"/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="Курсы валют" Foreground="#FFF8F8F8" FontSize="15"/>
-                            <StackPanel Grid.Row="1" Width="170" Height="150" HorizontalAlignment="Left">
-                                <TextBlock VerticalAlignment="Center" Text="Текущих сведений избранных валют нет. Перейдите в раздел Валюты" Height="100" TextWrapping="Wrap" Foreground="#FFF8F8F8" FontSize="15"/>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBlock Text="★" Foreground="#FFFFF1D0"/>
+                                <TextBlock Text="Нет избранных курсов валют" Foreground="#FFF8F8F8"/>
                             </StackPanel>
+                            <Border Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    CornerRadius="0, 8, 8, 0"
+                                    Background="#FFFFF1D0"/>
                         </Grid>
                     </StackPanel>
-                    <Image Width="250"
-                               Height="260"
-                                RenderTransformOrigin="0.5,0.5"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom" Margin="0,0,-76,-44" Source="/MVVM/View/dollar2.png">
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="-35.754"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
                 </Grid>
             </Border>
-        </StackPanel>
-        <StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1">
             <TextBlock Text="Транзакции"
                    FontSize="20"
                    Margin="10 4 0 16"
@@ -138,13 +134,13 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-                <Border Width="260"
+                <Border Width="240"
                     Height="200"
                     CornerRadius="8"
                     Background="#FF282828"
                         Margin="15 0 0 0">
                     <Border.Clip>
-                        <RectangleGeometry Rect="0, 0, 266, 200">
+                        <RectangleGeometry Rect="0, 0, 240, 200">
                         </RectangleGeometry>
                     </Border.Clip>
                     <Grid>
@@ -162,5 +158,5 @@
                 </Border>
             </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </Grid>
 </UserControl>  

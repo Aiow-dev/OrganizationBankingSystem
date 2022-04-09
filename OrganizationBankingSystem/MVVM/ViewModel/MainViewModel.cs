@@ -14,7 +14,7 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
 
         public object CurrentView
         {
-            get { return _currentView; }
+            get => _currentView;
             set
             {
                 _currentView = value;

@@ -11,7 +11,8 @@
                 <ResourceDictionary Source="Theme/MenuButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/TextBlockTheme.xaml"/>
                 <ResourceDictionary Source="Theme/ComboBoxTheme.xaml"/>
-                
+                <ResourceDictionary Source="Theme/TextBlockHideAnimationTheme.xaml"/>
+
                 <!--FluentWPF Controls-->
                 <!--<ResourceDictionary Source="pack://application:,,,/FluentWPF;component/Styles/Controls.xaml"/>-->
                 
