@@ -7,8 +7,8 @@
                 <BeginStoryboard>
                     <Storyboard>
                         <ColorAnimation Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                        To="White"
-                                        Duration="0:0:1"/>
+                                        To="#FFF8F8F8"
+                                        Duration="0:0:0.3"/>
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
@@ -18,7 +18,7 @@
                         <Storyboard>
                             <ColorAnimation Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
                                             To="#FF282828"
-                                            Duration="0:0:1"/>
+                                            Duration="0:0:0.3"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger.Actions>

@@ -11,7 +11,7 @@
         <viewModel:DashboardViewModel x:Key="currencyExchangeRates"/>
         <local:RectConvertor x:Key="RectConverter"/>
     </UserControl.Resources>
-    <Grid Width="Auto" Margin="10">
+    <Grid Width="Auto" Margin="10 0 10 0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -22,8 +22,9 @@
         <TextBlock Text="Обзор"
                    Foreground="#FFF8F8F8"
                    FontSize="20"
-                   Margin="10 0 0 20"/>
-        <Grid Margin="10">
+                   VerticalAlignment="Top"
+                   Margin="10 0 0 0"/>
+        <Grid Margin="10 20 10 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="bankAccountColumn" Width="*"/>
                 <ColumnDefinition Width="0.85*"/>
@@ -56,7 +57,7 @@
             <Border
                     Height="200"
                     CornerRadius="8"
-                    Margin="10 0 0 0"
+                    Margin="10 0 10 0"
                     Background="#FF282828"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch">
@@ -87,9 +88,10 @@
         </Grid>
         <StackPanel Grid.Row="1">
             <TextBlock Text="Транзакции"
-                   FontSize="20"
-                   Margin="10 4 0 16"
-                   Foreground="#FFF8F8F8"/>
+                       FontSize="20"
+                       VerticalAlignment="Top"
+                       Margin="10 4 0 16"
+                       Foreground="#FFF8F8F8"/>
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Border Width="260"
                     Height="200"
