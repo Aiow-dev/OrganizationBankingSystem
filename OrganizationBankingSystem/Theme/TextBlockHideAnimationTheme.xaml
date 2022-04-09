@@ -1,14 +1,13 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style TargetType="{x:Type TextBlock}"
-           x:Key="TextBlockHideAnimationTheme">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="TextBlockHideAnimationTheme" TargetType="{x:Type TextBlock}">
         <Style.Triggers>
             <EventTrigger RoutedEvent="MouseEnter">
                 <BeginStoryboard>
                     <Storyboard>
-                        <ColorAnimation Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                        To="#FFF8F8F8"
-                                        Duration="0:0:0.3"/>
+                        <ColorAnimation
+                            Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                            To="#FFF8F8F8"
+                            Duration="0:0:0.3" />
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
@@ -16,9 +15,10 @@
                 <EventTrigger.Actions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ColorAnimation Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                            To="#FF282828"
-                                            Duration="0:0:0.3"/>
+                            <ColorAnimation
+                                Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                                To="#FF282828"
+                                Duration="0:0:0.3" />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger.Actions>

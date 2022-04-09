@@ -1,98 +1,131 @@
-﻿<UserControl x:Class="OrganizationBankingSystem.MVVM.View.CurrencyView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="542.764" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="OrganizationBankingSystem.MVVM.View.CurrencyView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="542.764"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <StackPanel>
-        <TextBlock Text="Обзор валют"
-                   Foreground="#FFF8F8F8"
-                   FontSize="20"
-                   Margin="10 0 0 20"/>
+        <TextBlock
+            Margin="10,0,0,20"
+            FontSize="20"
+            Foreground="#FFF8F8F8"
+            Text="Обзор валют" />
 
-        <StackPanel Orientation="Horizontal" Margin="10">
-            <Border Width="400"
-                    Height="225"
-                    CornerRadius="8"
-                    Background="#FF282828">
+        <StackPanel Margin="10" Orientation="Horizontal">
+            <Border
+                Width="400"
+                Height="225"
+                Background="#FF282828"
+                CornerRadius="8">
                 <Border.Clip>
-                    <RectangleGeometry Rect="0, 0, 400, 225">
-                    </RectangleGeometry>
+                    <RectangleGeometry Rect="0, 0, 400, 225" />
                 </Border.Clip>
                 <Grid>
-                    <StackPanel Margin="10 0 0 0">
+                    <StackPanel Margin="10,0,0,0">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="195"/>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="195" />
                             </Grid.RowDefinitions>
-                            <TextBlock Foreground="#FFF8F8F8" Text="График валюты"/>
-                            <TextBlock Grid.Row="1" Foreground="#FFF8F8F8" Text="Нет данных для построения графика. Требуются выбранные валюты" VerticalAlignment="Top" Margin="0,81,0,0"/>
+                            <TextBlock Foreground="#FFF8F8F8" Text="График валюты" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Margin="0,81,0,0"
+                                VerticalAlignment="Top"
+                                Foreground="#FFF8F8F8"
+                                Text="Нет данных для построения графика. Требуются выбранные валюты" />
                         </Grid>
                     </StackPanel>
                 </Grid>
             </Border>
-            <Border Width="370"
-                    Height="225"
-                    CornerRadius="8"
-                    Background="#FF282828"
-                    Margin="10 0 0 0">
+            <Border
+                Width="370"
+                Height="225"
+                Margin="10,0,0,0"
+                Background="#FF282828"
+                CornerRadius="8">
                 <Border.Clip>
-                    <RectangleGeometry Rect="0, 0, 400, 225">
-                    </RectangleGeometry>
+                    <RectangleGeometry Rect="0, 0, 400, 225" />
                 </Border.Clip>
                 <Grid>
-                    <StackPanel Margin="10 0 0 0">
+                    <StackPanel Margin="10,0,0,0">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="195"/>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="195" />
                             </Grid.RowDefinitions>
-                            <TextBlock Foreground="#FFF8F8F8" Text="Конвертер валют"/>
+                            <TextBlock Foreground="#FFF8F8F8" Text="Конвертер валют" />
                             <StackPanel Grid.Row="1">
-                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                                    <TextBox Width="165"/>
-                                    <ComboBox x:Name="comboBoxFromCurrency" Width="165" Height="35"
-                                              Background="#FF282828"
-                                              Margin="20 0 0 0" IsEditable="True" ToolTip="Исходная валюта">
-                                        <ComboBoxItem Content="USD"/>
-                                        <ComboBoxItem Content="EUR"/>
-                                        <ComboBoxItem Content="JPY"/>
-                                        <ComboBoxItem Content="CAD"/>
-                                        <ComboBoxItem Content="CZK"/>
-                                        <ComboBoxItem Content="RUB"/>
-                                        <ComboBoxItem Content="SEK"/>
-                                        <ComboBoxItem Content="DKK"/>
-                                        <ComboBoxItem Content="NOK"/>
-                                        <ComboBoxItem Content="PLN"/>
-                                        <ComboBoxItem Content="UAH"/>
-                                        <ComboBoxItem Content="BTC"/>
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <TextBox Width="165" />
+                                    <ComboBox
+                                        x:Name="comboBoxFromCurrency"
+                                        Width="165"
+                                        Height="35"
+                                        Margin="20,0,0,0"
+                                        Background="#FF282828"
+                                        IsEditable="True"
+                                        ToolTip="Исходная валюта">
+                                        <ComboBoxItem Content="USD" />
+                                        <ComboBoxItem Content="EUR" />
+                                        <ComboBoxItem Content="JPY" />
+                                        <ComboBoxItem Content="CAD" />
+                                        <ComboBoxItem Content="CZK" />
+                                        <ComboBoxItem Content="RUB" />
+                                        <ComboBoxItem Content="SEK" />
+                                        <ComboBoxItem Content="DKK" />
+                                        <ComboBoxItem Content="NOK" />
+                                        <ComboBoxItem Content="PLN" />
+                                        <ComboBoxItem Content="UAH" />
+                                        <ComboBoxItem Content="BTC" />
                                     </ComboBox>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                                    <TextBox Width="165"/>
-                                    <ComboBox x:Name="comboBoxToCurrency" Width="165" Height="35"
-                                              Background="#FF282828"
-                                              Margin="20 0 0 0" IsEditable="True" ToolTip="Конечная валюта">
-                                        <ComboBoxItem Content="USD"/>
-                                        <ComboBoxItem Content="EUR"/>
-                                        <ComboBoxItem Content="JPY"/>
-                                        <ComboBoxItem Content="CAD"/>
-                                        <ComboBoxItem Content="CZK"/>
-                                        <ComboBoxItem Content="RUB"/>
-                                        <ComboBoxItem Content="SEK"/>
-                                        <ComboBoxItem Content="DKK"/>
-                                        <ComboBoxItem Content="NOK"/>
-                                        <ComboBoxItem Content="PLN"/>
-                                        <ComboBoxItem Content="UAH"/>
-                                        <ComboBoxItem Content="BTC"/>
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <TextBox Width="165" />
+                                    <ComboBox
+                                        x:Name="comboBoxToCurrency"
+                                        Width="165"
+                                        Height="35"
+                                        Margin="20,0,0,0"
+                                        Background="#FF282828"
+                                        IsEditable="True"
+                                        ToolTip="Конечная валюта">
+                                        <ComboBoxItem Content="USD" />
+                                        <ComboBoxItem Content="EUR" />
+                                        <ComboBoxItem Content="JPY" />
+                                        <ComboBoxItem Content="CAD" />
+                                        <ComboBoxItem Content="CZK" />
+                                        <ComboBoxItem Content="RUB" />
+                                        <ComboBoxItem Content="SEK" />
+                                        <ComboBoxItem Content="DKK" />
+                                        <ComboBoxItem Content="NOK" />
+                                        <ComboBoxItem Content="PLN" />
+                                        <ComboBoxItem Content="UAH" />
+                                        <ComboBoxItem Content="BTC" />
                                     </ComboBox>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                                    <Button Background="#FF1A1919" Foreground="#FFF8F8F8" Content="Получить значение" Width="165" Height="35" Click="Button_Click" BorderThickness="0,0,0,0"/>
-                                    <TextBox x:Name="textBlockValueExchangeRates" Background="#FF1A1919" Foreground="#FFF8F8F8" Width="165" Height="76" TextWrapping="WrapWithOverflow" Margin="20 0 0 0" BorderThickness="0,0,0,0"/>
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Button
+                                        Width="165"
+                                        Height="35"
+                                        Background="#FF1A1919"
+                                        BorderThickness="0,0,0,0"
+                                        Click="Button_Click"
+                                        Content="Получить значение"
+                                        Foreground="#FFF8F8F8" />
+                                    <TextBox
+                                        x:Name="textBlockValueExchangeRates"
+                                        Width="165"
+                                        Height="76"
+                                        Margin="20,0,0,0"
+                                        Background="#FF1A1919"
+                                        BorderThickness="0,0,0,0"
+                                        Foreground="#FFF8F8F8"
+                                        TextWrapping="WrapWithOverflow" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

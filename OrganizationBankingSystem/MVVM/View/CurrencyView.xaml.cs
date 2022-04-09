@@ -21,9 +21,34 @@ namespace OrganizationBankingSystem.MVVM.View
             InitializeComponent();
         }
 
-        public string ToCurrency { get => _toCurrency; set => _toCurrency = value; }
-        public string FromCurrency { get => _fromCurrency; set => _fromCurrency = value; }
-        public string ValueExchangeRates { get => _valueExchangeRates; set => _valueExchangeRates = value; }
+        public string ToCurrency
+        {
+            get => _toCurrency; set
+            {
+                if (value != null)
+                    _toCurrency = value;
+                else _toCurrency = " ";
+            }
+        }
+        public string FromCurrency
+        {
+            get => _fromCurrency; set
+            {
+                if (value != null)
+                    _fromCurrency = value;
+                else _fromCurrency = " ";
+            }
+        }
+        public string ValueExchangeRates
+        {
+            get => _valueExchangeRates; set
+            {
+                if (value != null)
+                    _valueExchangeRates = value;
+                else
+                    _valueExchangeRates = " ";
+            }
+        }
 
         public void GetExchangeRates()
         {
@@ -57,6 +82,7 @@ namespace OrganizationBankingSystem.MVVM.View
         {
             ComboBoxItem selectedFromCurrency = (ComboBoxItem)comboBoxFromCurrency.SelectedItem;
             ComboBoxItem selectedToCurrency = (ComboBoxItem)comboBoxToCurrency.SelectedItem;
+
             if (selectedFromCurrency != null && selectedToCurrency != null)
             {
                 FromCurrency = selectedFromCurrency.Content.ToString();
