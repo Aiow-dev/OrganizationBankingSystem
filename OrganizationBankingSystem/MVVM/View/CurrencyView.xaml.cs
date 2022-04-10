@@ -1,10 +1,13 @@
-﻿using System;
+﻿using LiveCharts;
+using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace OrganizationBankingSystem.MVVM.View
 {
@@ -16,9 +19,13 @@ namespace OrganizationBankingSystem.MVVM.View
         private string _fromCurrency;
         private string _toCurrency;
         private string _valueExchangeRates;
+        public SeriesCollection Series { get; set; }
+        public ChartValues<double> Values1 { get; set; }
         public CurrencyView()
         {
             InitializeComponent();
+            CurrencyValues = new List<double>();
+            DataContext = this;
         }
 
         public string ToCurrency
@@ -50,17 +57,32 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
+        public List<double> CurrencyValues { get; set; }
+
         public void GetExchangeRates()
         {
-            string QUERY_URL = "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=" + FromCurrency + "&to_currency=" + ToCurrency + "&apikey=64SWH72PQKF16IA1";
+            string QUERY_URL = "https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=" + FromCurrency + "&to_symbol=" + ToCurrency + "&apikey=64SWH72PQKF16IA1";
             Uri queryUri = new(QUERY_URL);
 
-            using WebClient client = new();
+            //TODO: use HttpClient
+            using HttpClient client = new();
             try
             {
-                dynamic json_data = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(client.DownloadString(queryUri));
-                dynamic dynamic = json_data["Realtime Currency Exchange Rate"];
-                ValueExchangeRates = dynamic.GetProperty("5. Exchange Rate").ToString();
+                /*var stock = client.GetFromJsonAsync<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(QUERY_URL);
+                stock.ContinueWith<Dictionary<string, Dictionary<string, string>>>(daysCurrensy => 
+                ValueExchangeRates = stock.ToString();*/
+                dynamic json_data = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(new WebClient().DownloadString(queryUri));
+                JsonElement timeSeriesDaily = json_data["Time Series FX (Daily)"];
+                Dictionary<string, Dictionary<string, string>> daysCurrency =
+                    timeSeriesDaily.Deserialize<Dictionary<string, Dictionary<string, string>>>();
+                foreach (Dictionary<string, string> dayCurrency in daysCurrency.Values)
+                {
+                    foreach (string currency in dayCurrency.Values)
+                    {
+                        CurrencyValues.Add(Convert.ToDouble(currency.Replace(".", ",")));
+                    }
+                }
+                CurrencyValues.Reverse();
             }
             catch (WebException)
             {
@@ -80,6 +102,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            CurrencyValues.Clear();
+
             ComboBoxItem selectedFromCurrency = (ComboBoxItem)comboBoxFromCurrency.SelectedItem;
             ComboBoxItem selectedToCurrency = (ComboBoxItem)comboBoxToCurrency.SelectedItem;
 
@@ -88,7 +112,38 @@ namespace OrganizationBankingSystem.MVVM.View
                 FromCurrency = selectedFromCurrency.Content.ToString();
                 ToCurrency = selectedToCurrency.Content.ToString();
                 await GetExchangeRatesAsync();
-                textBlockValueExchangeRates.Text = ValueExchangeRates;
+                Values1 = new ChartValues<double>();
+                int requiredNumberGraphValues = 30;
+
+                for (int i = 0; i < requiredNumberGraphValues; i++)
+                {
+                    Values1.Add(CurrencyValues[i]);
+                }
+
+                SolidColorBrush fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
+                string arrow = "↑";
+                string numberSign = "+";
+
+                double firstCurrencyValue = CurrencyValues[0];
+                double lastCurrencyValue = CurrencyValues[requiredNumberGraphValues - 1];
+
+                textBlockValueExchangeRates.Text = firstCurrencyValue + " " + lastCurrencyValue;
+
+                if (firstCurrencyValue > lastCurrencyValue)
+                {
+                    fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
+                    arrow = "↓";
+                    numberSign = "";
+                }
+
+                graphSeries.Stroke = fillColor;
+                fillColor.Opacity = 0.7;
+                graphSeries.Fill = fillColor;
+                //graphSeries.PointGeometry = null;
+                graphSeries.Values = Values1;
+
+                differencePercentValueText.Foreground = fillColor;
+                differencePercentValueText.Text = $"{numberSign}{lastCurrencyValue - firstCurrencyValue} ({lastCurrencyValue / firstCurrencyValue} %){arrow}";
             }
             else
             {

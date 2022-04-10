@@ -4,11 +4,163 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
+    xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance local:CurrencyView}"
     d:DesignHeight="542.764"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <StackPanel>
+    <Grid Width="Auto" Margin="10,0,10,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Margin="10,0,0,0"
+            VerticalAlignment="Top"
+            FontSize="20"
+            Foreground="#FFF8F8F8"
+            Text="Обзор" />
+        <Grid Margin="10,20,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0.6*" />
+            </Grid.ColumnDefinitions>
+            <Border
+                Height="225"
+                Background="#FF282828"
+                CornerRadius="8">
+                <Grid>
+                    <StackPanel Margin="10,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="170" />
+                                <RowDefinition Height="25" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                FontSize="15"
+                                Foreground="#FFF8F8F8"
+                                Text="График курсов валют" />
+                            <lvc:CartesianChart x:Name="graph" Grid.Row="1">
+                                <lvc:CartesianChart.Series>
+                                    <lvc:LineSeries
+                                        x:Name="graphSeries"
+                                        Grid.Row="1"
+                                        Stroke="#FFA1CCA5"
+                                        Values="{Binding Values1}">
+                                        <lvc:LineSeries.Fill>
+                                            <SolidColorBrush Opacity="0.7" Color="#FFA1CCA5" />
+                                        </lvc:LineSeries.Fill>
+                                    </lvc:LineSeries>
+                                </lvc:CartesianChart.Series>
+                            </lvc:CartesianChart>
+                            <TextBlock
+                                x:Name="differencePercentValueText"
+                                Grid.Row="2"
+                                FontSize="15"
+                                Foreground="#FFF8F8F8" />
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border
+                Grid.Column="1"
+                Height="225"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Stretch"
+                Background="#FF282828"
+                CornerRadius="8">
+                <Grid>
+                    <StackPanel Margin="10,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="170" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                FontSize="15"
+                                Foreground="#FFF8F8F8"
+                                Text="Конвертер валют" />
+                            <StackPanel Grid.Row="1">
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <TextBox Width="165" />
+                                    <ComboBox
+                                        x:Name="comboBoxFromCurrency"
+                                        Width="165"
+                                        Height="35"
+                                        Margin="20,0,0,0"
+                                        Background="#FF282828"
+                                        IsEditable="True"
+                                        ToolTip="Исходная валюта">
+                                        <ComboBoxItem Content="USD" />
+                                        <ComboBoxItem Content="EUR" />
+                                        <ComboBoxItem Content="JPY" />
+                                        <ComboBoxItem Content="CAD" />
+                                        <ComboBoxItem Content="CZK" />
+                                        <ComboBoxItem Content="RUB" />
+                                        <ComboBoxItem Content="SEK" />
+                                        <ComboBoxItem Content="DKK" />
+                                        <ComboBoxItem Content="NOK" />
+                                        <ComboBoxItem Content="PLN" />
+                                        <ComboBoxItem Content="UAH" />
+                                        <ComboBoxItem Content="BTC" />
+                                    </ComboBox>
+                                </StackPanel>
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <TextBox Width="165" />
+                                    <ComboBox
+                                        x:Name="comboBoxToCurrency"
+                                        Width="165"
+                                        Height="35"
+                                        Margin="20,0,0,0"
+                                        Background="#FF282828"
+                                        IsEditable="True"
+                                        ToolTip="Конечная валюта">
+                                        <ComboBoxItem Content="USD" />
+                                        <ComboBoxItem Content="EUR" />
+                                        <ComboBoxItem Content="JPY" />
+                                        <ComboBoxItem Content="CAD" />
+                                        <ComboBoxItem Content="CZK" />
+                                        <ComboBoxItem Content="RUB" />
+                                        <ComboBoxItem Content="SEK" />
+                                        <ComboBoxItem Content="DKK" />
+                                        <ComboBoxItem Content="NOK" />
+                                        <ComboBoxItem Content="PLN" />
+                                        <ComboBoxItem Content="UAH" />
+                                        <ComboBoxItem Content="BTC" />
+                                    </ComboBox>
+                                </StackPanel>
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                                    <Button
+                                        Width="165"
+                                        Height="35"
+                                        Background="#FF1A1919"
+                                        BorderThickness="0,0,0,0"
+                                        Click="Button_Click"
+                                        Content="Получить значение"
+                                        Foreground="#FFF8F8F8" />
+                                    <TextBox
+                                        x:Name="textBlockValueExchangeRates"
+                                        Width="165"
+                                        Height="76"
+                                        Margin="20,0,0,0"
+                                        Background="#FF1A1919"
+                                        BorderThickness="0,0,0,0"
+                                        Foreground="#FFF8F8F8"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+    <!--<StackPanel>
         <TextBlock
             Margin="10,0,0,20"
             FontSize="20"
@@ -32,12 +184,23 @@
                                 <RowDefinition Height="195" />
                             </Grid.RowDefinitions>
                             <TextBlock Foreground="#FFF8F8F8" Text="График валюты" />
-                            <TextBlock
+                            <lvc:CartesianChart x:Name="graph" Grid.Row="1">
+                                <lvc:CartesianChart.Series>
+                                    <lvc:LineSeries x:Name="graphSeries" Stroke="#FFA1CCA5" Grid.Row="1" Values="{Binding Values1}">
+                                        <lvc:LineSeries.Fill>
+                                            <SolidColorBrush Color="#FFA1CCA5" Opacity="0.7"/>
+                                        </lvc:LineSeries.Fill>
+                                    </lvc:LineSeries>
+                                </lvc:CartesianChart.Series>
+                            </lvc:CartesianChart>
+    -->
+    <!--<TextBlock
                                 Grid.Row="1"
                                 Margin="0,81,0,0"
                                 VerticalAlignment="Top"
                                 Foreground="#FFF8F8F8"
-                                Text="Нет данных для построения графика. Требуются выбранные валюты" />
+                                Text="Нет данных для построения графика. Требуются выбранные валюты" />-->
+    <!--
                         </Grid>
                     </StackPanel>
                 </Grid>
@@ -125,7 +288,7 @@
                                         Background="#FF1A1919"
                                         BorderThickness="0,0,0,0"
                                         Foreground="#FFF8F8F8"
-                                        TextWrapping="WrapWithOverflow" />
+                                        TextWrapping="Wrap" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
@@ -133,5 +296,5 @@
                 </Grid>
             </Border>
         </StackPanel>
-    </StackPanel>
+    </StackPanel>-->
 </UserControl>
