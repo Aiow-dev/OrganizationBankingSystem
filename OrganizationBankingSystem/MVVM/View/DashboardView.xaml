@@ -9,10 +9,6 @@
     d:DesignHeight="542.764"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <viewModel:DashboardViewModel x:Key="currencyExchangeRates" />
-        <local:RectConvertor x:Key="RectConverter" />
-    </UserControl.Resources>
     <Grid Width="Auto" Margin="10,0,10,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />

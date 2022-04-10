@@ -11,6 +11,7 @@
     AllowsTransparency="True"
     Background="Transparent"
     MouseLeftButtonDown="WindowMouseLeftButtonDown"
+    Loaded="Window_Loaded"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
