@@ -20,7 +20,7 @@ namespace OrganizationBankingSystem
             InitializeComponent();
         }
 
-        private bool CheckInternetConnection()
+        public static bool CheckInternetConnection()
         {
             try
             {
@@ -29,9 +29,8 @@ namespace OrganizationBankingSystem
                     return false;
                 }
 
-                Ping ping = new Ping();
-                PingOptions pingOptions = new PingOptions();
-                PingReply pingReply = ping.Send("google.com", 1000, new byte[32], pingOptions);
+                Ping ping = new();
+                PingReply pingReply = ping.Send("google.com", 1000, new byte[32], new PingOptions());
                 return (pingReply.Status == IPStatus.Success);
             }
             catch (PingException)
@@ -49,23 +48,23 @@ namespace OrganizationBankingSystem
         {
             if (!CheckInternetConnection())
             {
-                Notifier notifier = new Notifier(cfg =>
-                {
-                    cfg.PositionProvider = new WindowPositionProvider(
-                        parentWindow: Application.Current.MainWindow,
-                        corner: Corner.BottomRight,
-                        offsetX: 10,
-                        offsetY: 10);
-
-                    cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                        notificationLifetime: TimeSpan.FromSeconds(5),
-                        maximumNotificationCount: MaximumNotificationCount.FromCount(5));
-
-                    cfg.Dispatcher = Application.Current.Dispatcher;
-                });
-
-                notifier.ShowMessage("Отсутствует подключение к сети Интернет. Это может повлиять на работу некоторых функций приложения");
+                notifier.ShowMessage("Отсутствует или является нестабильным подключение к сети Интернет. Это может повлиять на работу некоторых функций приложения");
             }
         }
+
+        public static readonly Notifier notifier = new(configureAction: cfg =>
+        {
+            cfg.PositionProvider = new WindowPositionProvider(
+                parentWindow: Application.Current.MainWindow,
+                corner: Corner.BottomRight,
+                offsetX: 10,
+                offsetY: 10);
+
+            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                notificationLifetime: TimeSpan.FromSeconds(5),
+                maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+
+            cfg.Dispatcher = Application.Current.Dispatcher;
+        });
     }
 }
