@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
@@ -55,8 +54,17 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        public double[] CurrencyValuesMas { get; set; }
+        public double[] OpenCurrencyValuesMas { get; set; }
+
+        public double[] MinCurrencyValuesMas { get; set; }
+
+        public double[] MaxCurrencyValuesMas { get; set; }
+
+        public double[] CloseCurrencyValuesMas { get; set; }
+
         public string[] CurrencyDatesMas { get; set; }
+
+        public List<DetailStatisticsItem> DetailStatisticsItems { get; set; }
 
         public CurrencyView()
         {
@@ -66,7 +74,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         public void GetExchangeRates()
         {
-            string QUERY_URL = "https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=" + FromCurrency + "&to_symbol=" + ToCurrency + "&apikey=64SWH72PQKF16IA1";
+            string QUERY_URL = "https://www.alphavantage.co/query?function=FX_DAILY&from_symbol="
+                + FromCurrency + "&to_symbol=" + ToCurrency + "&apikey=64SWH72PQKF16IA1";
             Uri queryUri = new(QUERY_URL);
 
             //TODO: use HttpClient
@@ -79,8 +88,11 @@ namespace OrganizationBankingSystem.MVVM.View
                     timeSeriesDaily.Deserialize<Dictionary<string, Dictionary<string, string>>>();
 
                 int requiredIndex = 0;
+                OpenCurrencyValuesMas = new double[RequiredValues];
+                MinCurrencyValuesMas = new double[RequiredValues];
+                MaxCurrencyValuesMas = new double[RequiredValues];
+                CloseCurrencyValuesMas = new double[RequiredValues];
                 CurrencyDatesMas = new string[RequiredValues];
-                CurrencyValuesMas = new double[RequiredValues];
 
                 foreach (string date in daysCurrency.Keys)
                 {
@@ -88,12 +100,13 @@ namespace OrganizationBankingSystem.MVVM.View
                     {
                         break;
                     }
-                    CurrencyDatesMas[requiredIndex] = date;
-                    foreach (string currency in daysCurrency[date].Values)
-                    {
 
-                        CurrencyValuesMas[requiredIndex] = Convert.ToDouble(currency.Replace(".", ","));
-                    }
+                    CurrencyDatesMas[requiredIndex] = date;
+
+                    OpenCurrencyValuesMas[requiredIndex] = Convert.ToDouble(daysCurrency[date]["1. open"].Replace(".", ","));
+                    MaxCurrencyValuesMas[requiredIndex] = Convert.ToDouble(daysCurrency[date]["2. high"].Replace(".", ","));
+                    MinCurrencyValuesMas[requiredIndex] = Convert.ToDouble(daysCurrency[date]["3. low"].Replace(".", ","));
+                    CloseCurrencyValuesMas[requiredIndex] = Convert.ToDouble(daysCurrency[date]["4. close"].Replace(".", ","));
 
                     requiredIndex++;
                 }
@@ -123,28 +136,34 @@ namespace OrganizationBankingSystem.MVVM.View
             {
                 FromCurrency = selectedFromCurrency.Content.ToString();
                 ToCurrency = selectedToCurrency.Content.ToString();
-                RequiredValues = 30;
+                RequiredValues = 50;
 
                 await GetExchangeRatesAsync();
 
                 Values1 = new ChartValues<double>();
+                DetailStatisticsItems = new List<DetailStatisticsItem>();
 
                 try
                 {
-                    StringBuilder datesCurrencyLine = new();
+                    int currencyValuesMasLength = OpenCurrencyValuesMas.Length;
 
-                    for (int i = CurrencyValuesMas.Length - 1; i >= 0; i--)
+                    for (int i = currencyValuesMasLength - 1; i >= 0; i--)
                     {
-                        datesCurrencyLine.Append(CurrencyDatesMas[i] + " ");
-                        if (i % 2 == 0)
+                        DetailStatisticsItems.Add(new DetailStatisticsItem
                         {
-                            datesCurrencyLine.Append('\n');
-                        }
-                        Values1.Add(CurrencyValuesMas[i]);
+                            NumberOfDay = currencyValuesMasLength - i,
+                            OpenValueCurrency = OpenCurrencyValuesMas[i],
+                            MinValueCurrency = MinCurrencyValuesMas[i],
+                            MaxValueCurrency = MaxCurrencyValuesMas[i],
+                            CloseValueCurrency = CloseCurrencyValuesMas[i],
+                            DateCurrency = CurrencyDatesMas[i]
+                        });
+
+                        Values1.Add(OpenCurrencyValuesMas[i]);
                     }
 
-                    double firstCurrencyValue = CurrencyValuesMas[^1];
-                    double lastCurrencyValue = CurrencyValuesMas[0];
+                    double firstCurrencyValue = OpenCurrencyValuesMas[^1];
+                    double lastCurrencyValue = OpenCurrencyValuesMas[0];
 
                     SolidColorBrush fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
                     SolidColorBrush fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
@@ -165,10 +184,15 @@ namespace OrganizationBankingSystem.MVVM.View
                     graphSeries.Stroke = fillColor;
                     graphSeries.Fill = fillColorOpacity;
 
+                    if (RequiredValues > 30)
+                    {
+                        graphSeries.PointGeometry = null;
+                    }
+
                     differencePercentValueText.Foreground = fillColor;
                     differencePercentValueText.Text = $"{numberSign}{lastCurrencyValue - firstCurrencyValue} ({lastCurrencyValue / firstCurrencyValue} %){arrow}";
 
-                    listCurrencyDates.Text = datesCurrencyLine.ToString();
+                    detailStatistics.ItemsSource = DetailStatisticsItems;
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -180,5 +204,20 @@ namespace OrganizationBankingSystem.MVVM.View
                 textBlockValueExchangeRates.Text = "Ошибка. Возможно, отсутствует выбранное значение исходной или конечной валюты или выбрана валюта, не представленная в списках валют";
             }
         }
+    }
+
+    public class DetailStatisticsItem
+    {
+        public int NumberOfDay { get; set; }
+
+        public double OpenValueCurrency { get; set; }
+
+        public double MinValueCurrency { get; set; }
+
+        public double MaxValueCurrency { get; set; }
+
+        public double CloseValueCurrency { get; set; }
+
+        public string DateCurrency { get; set; }
     }
 }

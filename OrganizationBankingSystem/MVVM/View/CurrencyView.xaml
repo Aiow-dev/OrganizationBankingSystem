@@ -35,7 +35,7 @@
                 Background="#FF282828"
                 CornerRadius="8">
                 <Grid>
-                    <StackPanel Margin="10">
+                    <StackPanel Margin="10,10,10,0">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -62,7 +62,8 @@
                             <TextBlock
                                 x:Name="differencePercentValueText"
                                 Grid.Row="2"
-                                FontSize="15"
+                                VerticalAlignment="Top"
+                                FontSize="12"
                                 Foreground="#FFF8F8F8" />
                         </Grid>
                     </StackPanel>
@@ -175,21 +176,29 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="170" />
-                                <RowDefinition Height="25" />
                             </Grid.RowDefinitions>
                             <TextBlock
                                 FontSize="15"
                                 Foreground="#FFF8F8F8"
                                 Text="Детальная статистика" />
-                            <TextBox
-                                x:Name="listCurrencyDates"
-                                BorderThickness="0"
+                            <DataGrid
+                                x:Name="detailStatistics"
                                 Grid.Row="1"
-                                FontSize="15"
-                                Foreground="#FFF8F8F8"
+                                AutoGenerateColumns="False"
                                 Background="#FF282828"
+                                BorderThickness="0"
                                 IsReadOnly="True"
-                                TextWrapping="Wrap" />
+                                ItemsSource="{Binding DetailStatisticsItems}"
+                                VerticalScrollBarVisibility="Disabled">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding NumberOfDay}" Header="№ дня" />
+                                    <DataGridTextColumn Binding="{Binding OpenValueCurrency}" Header="Открытие" />
+                                    <DataGridTextColumn Binding="{Binding MinValueCurrency}" Header="Минимум" />
+                                    <DataGridTextColumn Binding="{Binding MaxValueCurrency}" Header="Максимум" />
+                                    <DataGridTextColumn Binding="{Binding CloseValueCurrency}" Header="Закрытие" />
+                                    <DataGridTextColumn Binding="{Binding DateCurrency}" Header="Дата" />
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </Grid>
                     </StackPanel>
                 </Grid>
@@ -202,7 +211,7 @@
                 Background="#FF282828"
                 CornerRadius="8">
                 <Grid>
-                    <StackPanel Margin="10,0,0,0">
+                    <StackPanel Margin="10">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -215,50 +224,8 @@
                             <StackPanel Grid.Row="1">
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                                     <TextBox Width="165" />
-                                    <ComboBox
-                                        Width="165"
-                                        Height="35"
-                                        Margin="20,0,0,0"
-                                        Background="#FF282828"
-                                        IsEditable="True"
-                                        ToolTip="Исходная валюта">
-                                        <ComboBoxItem Content="USD" />
-                                        <ComboBoxItem Content="EUR" />
-                                        <ComboBoxItem Content="JPY" />
-                                        <ComboBoxItem Content="CAD" />
-                                        <ComboBoxItem Content="CZK" />
-                                        <ComboBoxItem Content="RUB" />
-                                        <ComboBoxItem Content="SEK" />
-                                        <ComboBoxItem Content="DKK" />
-                                        <ComboBoxItem Content="NOK" />
-                                        <ComboBoxItem Content="PLN" />
-                                        <ComboBoxItem Content="UAH" />
-                                        <ComboBoxItem Content="BTC" />
-                                    </ComboBox>
                                 </StackPanel>
-                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                    <TextBox Width="165" />
-                                    <ComboBox
-                                        Width="165"
-                                        Height="35"
-                                        Margin="20,0,0,0"
-                                        Background="#FF282828"
-                                        IsEditable="True"
-                                        ToolTip="Конечная валюта">
-                                        <ComboBoxItem Content="USD" />
-                                        <ComboBoxItem Content="EUR" />
-                                        <ComboBoxItem Content="JPY" />
-                                        <ComboBoxItem Content="CAD" />
-                                        <ComboBoxItem Content="CZK" />
-                                        <ComboBoxItem Content="RUB" />
-                                        <ComboBoxItem Content="SEK" />
-                                        <ComboBoxItem Content="DKK" />
-                                        <ComboBoxItem Content="NOK" />
-                                        <ComboBoxItem Content="PLN" />
-                                        <ComboBoxItem Content="UAH" />
-                                        <ComboBoxItem Content="BTC" />
-                                    </ComboBox>
-                                </StackPanel>
+                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal" />
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                                     <Button
                                         Width="165"
