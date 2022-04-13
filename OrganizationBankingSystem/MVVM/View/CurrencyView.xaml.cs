@@ -1,7 +1,11 @@
-﻿using LiveCharts;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using LiveCharts;
 using OrganizationBankingSystem.Core;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
@@ -66,10 +70,39 @@ namespace OrganizationBankingSystem.MVVM.View
 
         public List<DetailStatisticsItem> DetailStatisticsItems { get; set; }
 
+        public List<ListCurrencyValuesItem> ListCurrencyValuesItems { get; set; }
+
         public CurrencyView()
         {
             InitializeComponent();
+            GetListCurrencyValues();
             DataContext = this;
+        }
+
+        public void GetListCurrencyValues()
+        {
+            ListCurrencyValuesItems = new List<ListCurrencyValuesItem>();
+
+            CsvConfiguration csvConfig = new(CultureInfo.CurrentCulture)
+            {
+                HasHeaderRecord = false
+            };
+
+            using StreamReader streamReader = File.OpenText(Path.Combine(new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.Parent.FullName, "Data\\list_currency_values.csv"));
+            using CsvReader csvReader = new(streamReader, csvConfig);
+
+            while (csvReader.Read())
+            {
+                var currencyCode = csvReader.GetField(0);
+                var currencyDescription = csvReader.GetField(1);
+
+                ListCurrencyValuesItems.Add(new ListCurrencyValuesItem
+                {
+                    CurrencyCode = currencyCode,
+                    CurrencyDescription = currencyDescription
+                });
+            }
+
         }
 
         public void GetExchangeRates()
@@ -101,12 +134,12 @@ namespace OrganizationBankingSystem.MVVM.View
                         break;
                     }
 
-                    CurrencyDatesMas[requiredIndex] = date;
-
                     OpenCurrencyValuesMas[requiredIndex] = Convert.ToDouble(daysCurrency[date]["1. open"].Replace(".", ","));
                     MaxCurrencyValuesMas[requiredIndex] = Convert.ToDouble(daysCurrency[date]["2. high"].Replace(".", ","));
                     MinCurrencyValuesMas[requiredIndex] = Convert.ToDouble(daysCurrency[date]["3. low"].Replace(".", ","));
                     CloseCurrencyValuesMas[requiredIndex] = Convert.ToDouble(daysCurrency[date]["4. close"].Replace(".", ","));
+
+                    CurrencyDatesMas[requiredIndex] = date;
 
                     requiredIndex++;
                 }
@@ -129,14 +162,14 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            ComboBoxItem selectedFromCurrency = (ComboBoxItem)comboBoxFromCurrency.SelectedItem;
-            ComboBoxItem selectedToCurrency = (ComboBoxItem)comboBoxToCurrency.SelectedItem;
+            ListCurrencyValuesItem selectedFromCurrency = (ListCurrencyValuesItem)comboBoxFromCurrency.SelectedItem;
+            ListCurrencyValuesItem selectedToCurrency = (ListCurrencyValuesItem)comboBoxToCurrency.SelectedItem;
 
             if (selectedFromCurrency != null && selectedToCurrency != null)
             {
-                FromCurrency = selectedFromCurrency.Content.ToString();
-                ToCurrency = selectedToCurrency.Content.ToString();
-                RequiredValues = 50;
+                FromCurrency = selectedFromCurrency.CurrencyCode;
+                ToCurrency = selectedToCurrency.CurrencyCode;
+                RequiredValues = 30;
 
                 await GetExchangeRatesAsync();
 
@@ -177,6 +210,13 @@ namespace OrganizationBankingSystem.MVVM.View
                         arrow = "↓";
                         numberSign = "";
                     }
+                    else if (firstCurrencyValue == lastCurrencyValue)
+                    {
+                        fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
+                        fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
+                        arrow = "";
+                        numberSign = "";
+                    }
 
                     fillColorOpacity.Opacity = 0.3;
 
@@ -190,7 +230,7 @@ namespace OrganizationBankingSystem.MVVM.View
                     }
 
                     differencePercentValueText.Foreground = fillColor;
-                    differencePercentValueText.Text = $"{numberSign}{lastCurrencyValue - firstCurrencyValue} ({lastCurrencyValue / firstCurrencyValue} %){arrow}";
+                    differencePercentValueText.Text = $"{numberSign}{lastCurrencyValue - firstCurrencyValue} ({((lastCurrencyValue / firstCurrencyValue) - 1) * 100} %){arrow}";
 
                     detailStatistics.ItemsSource = DetailStatisticsItems;
                 }
@@ -219,5 +259,11 @@ namespace OrganizationBankingSystem.MVVM.View
         public double CloseValueCurrency { get; set; }
 
         public string DateCurrency { get; set; }
+    }
+
+    public class ListCurrencyValuesItem
+    {
+        public string CurrencyCode { get; set; }
+        public string CurrencyDescription { get; set; }
     }
 }

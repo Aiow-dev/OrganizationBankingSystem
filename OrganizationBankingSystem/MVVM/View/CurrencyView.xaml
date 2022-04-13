@@ -2,7 +2,7 @@
     x:Class="OrganizationBankingSystem.MVVM.View.CurrencyView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:core="clr-namespace:OrganizationBankingSystem.Core"
+    xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
     xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
@@ -96,21 +96,10 @@
                                         Height="35"
                                         Margin="20,0,0,0"
                                         Background="#FF282828"
+                                        DisplayMemberPath="CurrencyDescription"
                                         IsEditable="True"
-                                        ToolTip="Исходная валюта">
-                                        <ComboBoxItem Content="USD" />
-                                        <ComboBoxItem Content="EUR" />
-                                        <ComboBoxItem Content="JPY" />
-                                        <ComboBoxItem Content="CAD" />
-                                        <ComboBoxItem Content="CZK" />
-                                        <ComboBoxItem Content="RUB" />
-                                        <ComboBoxItem Content="SEK" />
-                                        <ComboBoxItem Content="DKK" />
-                                        <ComboBoxItem Content="NOK" />
-                                        <ComboBoxItem Content="PLN" />
-                                        <ComboBoxItem Content="UAH" />
-                                        <ComboBoxItem Content="BTC" />
-                                    </ComboBox>
+                                        ItemsSource="{Binding ListCurrencyValuesItems}"
+                                        ToolTip="Исходная валюта" />
                                 </StackPanel>
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                                     <TextBox Width="165" />
@@ -120,21 +109,10 @@
                                         Height="35"
                                         Margin="20,0,0,0"
                                         Background="#FF282828"
+                                        DisplayMemberPath="CurrencyDescription"
                                         IsEditable="True"
-                                        ToolTip="Конечная валюта">
-                                        <ComboBoxItem Content="USD" />
-                                        <ComboBoxItem Content="EUR" />
-                                        <ComboBoxItem Content="JPY" />
-                                        <ComboBoxItem Content="CAD" />
-                                        <ComboBoxItem Content="CZK" />
-                                        <ComboBoxItem Content="RUB" />
-                                        <ComboBoxItem Content="SEK" />
-                                        <ComboBoxItem Content="DKK" />
-                                        <ComboBoxItem Content="NOK" />
-                                        <ComboBoxItem Content="PLN" />
-                                        <ComboBoxItem Content="UAH" />
-                                        <ComboBoxItem Content="BTC" />
-                                    </ComboBox>
+                                        ItemsSource="{Binding ListCurrencyValuesItems}"
+                                        ToolTip="Конечная валюта" />
                                 </StackPanel>
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                                     <Button
@@ -187,6 +165,7 @@
                                 AutoGenerateColumns="False"
                                 Background="#FF282828"
                                 BorderThickness="0"
+                                CanUserResizeColumns="False"
                                 IsReadOnly="True"
                                 ItemsSource="{Binding DetailStatisticsItems}"
                                 VerticalScrollBarVisibility="Disabled">
