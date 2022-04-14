@@ -99,7 +99,7 @@ namespace OrganizationBankingSystem.MVVM.View
                 ListCurrencyValuesItems.Add(new ListCurrencyValuesItem
                 {
                     CurrencyCode = currencyCode,
-                    CurrencyDescription = currencyDescription
+                    CurrencyDescription = $"{currencyDescription} ({currencyCode})"
                 });
             }
 
@@ -146,11 +146,11 @@ namespace OrganizationBankingSystem.MVVM.View
             }
             catch (WebException)
             {
-                ValueExchangeRates = "Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет";
+                MainWindow.notifier.ShowMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет");
             }
             catch (KeyNotFoundException)
             {
-                ValueExchangeRates = "Ошибка. Возможно, на данный момент актуальный курс выбранных валют не доступен";
+                MainWindow.notifier.ShowMessage("Ошибка. Возможно, на данный момент актуальный курс выбранных валют не доступен");
             }
         }
 
@@ -241,8 +241,29 @@ namespace OrganizationBankingSystem.MVVM.View
             }
             else
             {
-                textBlockValueExchangeRates.Text = "Ошибка. Возможно, отсутствует выбранное значение исходной или конечной валюты или выбрана валюта, не представленная в списках валют";
+                MainWindow.notifier.ShowMessage("Ошибка. Возможно, отсутствует выбранное значение исходной или конечной валюты. Или выбрана валюта, не представленная в списках валют");
             }
+        }
+
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            ListCurrencyValuesItem fromCurrency = (ListCurrencyValuesItem)comboBoxFromCurrency.SelectedItem;
+            ListCurrencyValuesItem toCurrency = (ListCurrencyValuesItem)comboBoxToCurrency.SelectedItem;
+
+            if (fromCurrency != null && toCurrency != null)
+            {
+                comboBoxFromCurrency.SelectedItem = toCurrency;
+                comboBoxToCurrency.SelectedItem = fromCurrency;
+            }
+            else
+            {
+                MainWindow.notifier.ShowMessage("Ошибка. Возможно, отсутствует выбранное значение исходной или конечной валюты. Или выбрана валюта, не представленная в списках валют");
+            }
+        }
+
+        private void RadioButton_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

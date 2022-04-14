@@ -2,7 +2,6 @@
     x:Class="OrganizationBankingSystem.MVVM.View.CurrencyView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
     xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
@@ -24,7 +23,7 @@
             VerticalAlignment="Top"
             FontSize="20"
             Foreground="#FFF8F8F8"
-            Text="Обзор" />
+            Text="Обзор курсов валют" />
         <Grid Margin="10,20,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -83,10 +82,19 @@
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="170" />
                             </Grid.RowDefinitions>
-                            <TextBlock
-                                FontSize="15"
-                                Foreground="#FFF8F8F8"
-                                Text="Конвертер валют" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    FontSize="15"
+                                    Foreground="#FFF8F8F8"
+                                    Text="Конвертер валют" />
+                                <RadioButton
+                                    Height="23"
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Top"
+                                    Click="RadioButton_Click"
+                                    Content="⇅"
+                                    Style="{StaticResource MenuButtonIconsTheme}" />
+                            </StackPanel>
                             <StackPanel Grid.Row="1">
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                                     <TextBox Width="165" />
@@ -155,10 +163,18 @@
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="170" />
                             </Grid.RowDefinitions>
-                            <TextBlock
-                                FontSize="15"
-                                Foreground="#FFF8F8F8"
-                                Text="Детальная статистика" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    FontSize="15"
+                                    Foreground="#FFF8F8F8"
+                                    Text="Детальная статистика" />
+                                <RadioButton
+                                    Height="23"
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Top"
+                                    Content="⭳"
+                                    Style="{StaticResource MenuButtonIconsTheme}" Click="RadioButton_Click_1" />
+                            </StackPanel>
                             <DataGrid
                                 x:Name="detailStatistics"
                                 Grid.Row="1"
