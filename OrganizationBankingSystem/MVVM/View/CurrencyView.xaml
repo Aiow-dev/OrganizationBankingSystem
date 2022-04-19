@@ -172,8 +172,9 @@
                                     Height="23"
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Top"
+                                    Click="RadioButton_Click_1"
                                     Content="⭳"
-                                    Style="{StaticResource MenuButtonIconsTheme}" Click="RadioButton_Click_1" />
+                                    Style="{StaticResource MenuButtonIconsTheme}" />
                             </StackPanel>
                             <DataGrid
                                 x:Name="detailStatistics"

@@ -14,10 +14,16 @@ namespace OrganizationBankingSystem.Core
         public DisplayPartUI(NotificationWarn notificationWarn)
         {
             InitializeComponent();
+
             if (OperatingSystem.IsWindows())
             {
                 Bind(notificationWarn);
             }
+        }
+
+        private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Notification.Close();
         }
     }
 }
