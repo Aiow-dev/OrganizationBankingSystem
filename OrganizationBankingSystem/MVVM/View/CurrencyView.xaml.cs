@@ -5,6 +5,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using LiveCharts;
 using OrganizationBankingSystem.Core;
+using OrganizationBankingSystem.MVVM.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -98,11 +99,11 @@ namespace OrganizationBankingSystem.MVVM.View
                 HasHeaderRecord = false
             };
 
-            using StreamReader streamReader = File.OpenText(Path.Combine(new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.Parent.FullName, "Data\\list_currency_values.csv"));
-            using CsvReader csvReader = new(streamReader, csvConfig);
-
             try
             {
+                using StreamReader streamReader = File.OpenText(Path.Combine(new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.Parent.FullName, "Data\\list_currency_values.csv"));
+                using CsvReader csvReader = new(streamReader, csvConfig);
+
                 while (csvReader.Read())
                 {
                     var currencyCode = csvReader.GetField(0);
@@ -115,9 +116,13 @@ namespace OrganizationBankingSystem.MVVM.View
                     });
                 }
             }
+            catch (FileNotFoundException)
+            {
+                MainViewModel.IsFileListCurrencyDamaged = true;
+            }
             catch (CsvHelper.MissingFieldException)
             {
-                MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, произошло повреждение файла списков валют");
+                MainViewModel.IsFileListCurrencyDamaged = true;
             }
         }
 
@@ -129,6 +134,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
             //TODO: use HttpClient
             using HttpClient client = new();
+
             try
             {
                 dynamic json_data = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(new WebClient().DownloadString(queryUri));
@@ -137,6 +143,22 @@ namespace OrganizationBankingSystem.MVVM.View
                     timeSeriesDaily.Deserialize<Dictionary<string, Dictionary<string, string>>>();
 
                 int requiredIndex = 0;
+
+                int availableIndex = daysCurrency.Keys.Count;
+
+                if (RequiredValues > availableIndex)
+                {
+                    RequiredValues = availableIndex;
+                    MainWindow.notifier.ShowWarningPropertyMessage($"Указанное значение количества дней недоступно\nМаксимально доступное значение для данного курса выбранных валют: {availableIndex}");
+                }
+
+                OpenCurrencyValuesMas = new double[RequiredValues];
+                MinCurrencyValuesMas = new double[RequiredValues];
+                MaxCurrencyValuesMas = new double[RequiredValues];
+                CloseCurrencyValuesMas = new double[RequiredValues];
+                CurrencyDatesMas = new string[RequiredValues];
+
+                ValueExchangeRates = Convert.ToString(RequiredValues);
 
                 foreach (string date in daysCurrency.Keys)
                 {
@@ -180,77 +202,81 @@ namespace OrganizationBankingSystem.MVVM.View
             {
                 FromCurrency = selectedFromCurrency.CurrencyCode;
                 ToCurrency = selectedToCurrency.CurrencyCode;
-                RequiredValues = 30;
+                RequiredValues = 300;
 
-                OpenCurrencyValuesMas = new double[RequiredValues];
-                MinCurrencyValuesMas = new double[RequiredValues];
-                MaxCurrencyValuesMas = new double[RequiredValues];
-                CloseCurrencyValuesMas = new double[RequiredValues];
-                CurrencyDatesMas = new string[RequiredValues];
-
-                MainWindow.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют \nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
+                MainWindow.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
 
                 await GetExchangeRatesAsync();
 
                 Values1 = new ChartValues<double>();
                 DetailStatisticsItems = new List<DetailStatisticsItem>();
+
                 try
                 {
-                    int currencyValuesMasLength = OpenCurrencyValuesMas.Length;
-
-                    for (int i = currencyValuesMasLength - 1; i >= 0; i--)
+                    if (AllNotNull(OpenCurrencyValuesMas, MinCurrencyValuesMas, MaxCurrencyValuesMas, CloseCurrencyValuesMas))
                     {
-                        DetailStatisticsItems.Add(new DetailStatisticsItem
+                        int currencyValuesMasLength = OpenCurrencyValuesMas.Length;
+
+                        for (int i = currencyValuesMasLength - 1; i >= 0; i--)
                         {
-                            NumberOfDay = currencyValuesMasLength - i,
-                            OpenValueCurrency = OpenCurrencyValuesMas[i],
-                            MinValueCurrency = MinCurrencyValuesMas[i],
-                            MaxValueCurrency = MaxCurrencyValuesMas[i],
-                            CloseValueCurrency = CloseCurrencyValuesMas[i],
-                            DateCurrency = CurrencyDatesMas[i]
-                        });
+                            DetailStatisticsItems.Add(new DetailStatisticsItem
+                            {
+                                NumberOfDay = currencyValuesMasLength - i,
+                                OpenValueCurrency = OpenCurrencyValuesMas[i],
+                                MinValueCurrency = MinCurrencyValuesMas[i],
+                                MaxValueCurrency = MaxCurrencyValuesMas[i],
+                                CloseValueCurrency = CloseCurrencyValuesMas[i],
+                                DateCurrency = CurrencyDatesMas[i]
+                            });
 
-                        Values1.Add(OpenCurrencyValuesMas[i]);
+                            Values1.Add(OpenCurrencyValuesMas[i]);
+                        }
+
+                        double firstCurrencyValue = OpenCurrencyValuesMas[^1];
+                        double lastCurrencyValue = OpenCurrencyValuesMas[0];
+
+                        SolidColorBrush fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
+                        SolidColorBrush fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
+                        string arrow = "↑";
+                        string numberSign = "+";
+
+                        if (firstCurrencyValue > lastCurrencyValue)
+                        {
+                            fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
+                            fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
+                            arrow = "↓";
+                            numberSign = "";
+                        }
+                        else if (firstCurrencyValue == lastCurrencyValue)
+                        {
+                            fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
+                            fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
+                            arrow = "";
+                            numberSign = "";
+                        }
+
+                        fillColorOpacity.Opacity = 0.3;
+
+                        graphSeries.Values = Values1;
+                        graphSeries.Stroke = fillColor;
+                        graphSeries.Fill = fillColorOpacity;
+
+                        if (RequiredValues > 30)
+                        {
+                            graphSeries.PointGeometry = null;
+                        }
+
+                        differencePercentValueText.Foreground = fillColor;
+                        differencePercentValueText.Text = $"{numberSign}{lastCurrencyValue - firstCurrencyValue} ({((lastCurrencyValue / firstCurrencyValue) - 1) * 100} %){arrow}";
+
+                        detailStatistics.ItemsSource = DetailStatisticsItems;
+
+                        textBlockValueExchangeRates.Text = ValueExchangeRates;
                     }
-
-                    double firstCurrencyValue = OpenCurrencyValuesMas[^1];
-                    double lastCurrencyValue = OpenCurrencyValuesMas[0];
-
-                    SolidColorBrush fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
-                    SolidColorBrush fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
-                    string arrow = "↑";
-                    string numberSign = "+";
-
-                    if (firstCurrencyValue > lastCurrencyValue)
+                    else
                     {
-                        fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
-                        fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
-                        arrow = "↓";
-                        numberSign = "";
+                        MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
                     }
-                    else if (firstCurrencyValue == lastCurrencyValue)
-                    {
-                        fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
-                        fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
-                        arrow = "";
-                        numberSign = "";
-                    }
-
-                    fillColorOpacity.Opacity = 0.3;
-
-                    graphSeries.Values = Values1;
-                    graphSeries.Stroke = fillColor;
-                    graphSeries.Fill = fillColorOpacity;
-
-                    if (RequiredValues > 30)
-                    {
-                        graphSeries.PointGeometry = null;
-                    }
-
-                    differencePercentValueText.Foreground = fillColor;
-                    differencePercentValueText.Text = $"{numberSign}{lastCurrencyValue - firstCurrencyValue} ({((lastCurrencyValue / firstCurrencyValue) - 1) * 100} %){arrow}";
-
-                    detailStatistics.ItemsSource = DetailStatisticsItems;
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -279,60 +305,31 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        public void AppendCellToRow(Row row, string cellItem, CellValues dataType)
+        public static void AppendCellToRow(Row row, string cellItem, CellValues dataType)
         {
-            row.Append(new Cell()
+            if (dataType == CellValues.Number)
             {
-                CellValue = new CellValue(cellItem),
-                DataType = dataType
-            });
+                row.Append(new Cell()
+                {
+                    CellValue = new CellValue(Convert.ToDouble(cellItem)),
+                    DataType = dataType
+                });
+            }
+            else
+            {
+                row.Append(new Cell()
+                {
+                    CellValue = new CellValue(cellItem),
+                    DataType = dataType
+                });
+            }
         }
 
         private void RadioButton_Click_1(object sender, RoutedEventArgs e)
         {
-            /* System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-             saveFileDialog.InitialDirectory = "C:";
-             saveFileDialog.Title = "Экспорт детальной статистики в Excel";
-             saveFileDialog.FileName = $"{FromCurrency}_to_{ToCurrency}_detail_statistics_report";
-             saveFileDialog.Filter = "Excel Files(2003)|*.xls|Excel Files(2007)|*.xlsx";
-
-             if (saveFileDialog.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
-             {
-                 try
-                 {
-                     Microsoft.Office.Interop.Excel.Application excelApp = new();
-
-                     excelApp.get_Workbooks();
-
-                     for (int i = 1; i < detailStatistics.Columns.Count + 1; i++)
-                     {
-                         excelApp.get_Cells = detailStatistics.Columns[i - 1].Header;
-                     }
-
-                     for (int i = 0; i < detailStatistics.Items.Count; i++)
-                     {
-                         for (int j = 0; j < detailStatistics.Columns.Count; j++)
-                         {
-                             excelApp.get_Cells().Item[i + 2, j + 1] = detailStatistics.Items[i].ToString();
-                         }
-                     }
-
-                     excelApp.get_ActiveWorkbook().SaveCopyAs(saveFileDialog.FileName.ToString());
-                     excelApp.get_ActiveWorkbook().set_Saved(true);
-                     excelApp.Quit();
-                 }
-                 catch (FileNotFoundException)
-                 {
-                     MainWindow.notifier.ShowMessage("Ошибка. Возможно, на вашем компьютерном устройстве отсутствует, имеет неподдерживаемую версию или неисправно программное обеспечение Microsoft Excel");
-                 }
-                 catch (InvalidCastException)
-                 {
-                     MainWindow.notifier.ShowMessage("Ошибка. Возможно, на вашем компьютерном устройстве отсутствует или имеет неподдерживаемую версию программное обеспечение Microsoft Excel");
-                 }
-             }*/
             if (detailStatistics.HasItems)
             {
-                System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+                System.Windows.Forms.SaveFileDialog saveFileDialog = new();
                 saveFileDialog.InitialDirectory = "C:";
                 saveFileDialog.Title = "Экспорт детальной статистики в Excel";
                 saveFileDialog.FileName = $"{FromCurrency}_to_{ToCurrency}_detail_statistics_report";
@@ -379,48 +376,12 @@ namespace OrganizationBankingSystem.MVVM.View
                         {
                             Row row = new();
 
-                            /*                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.NumberOfDay), CellValues.Number);
-                                                        AppendCellToRow(row, Convert.ToString(detailStatisticsItem.OpenValueCurrency), CellValues.Number);
-                                                        AppendCellToRow(row, Convert.ToString(detailStatisticsItem.MinValueCurrency), CellValues.Number);
-                                                        AppendCellToRow(row, Convert.ToString(detailStatisticsItem.MaxValueCurrency), CellValues.Number);
-                                                        AppendCellToRow(row, Convert.ToString(detailStatisticsItem.CloseValueCurrency), CellValues.Number);
-                                                        AppendCellToRow(row, detailStatisticsItem.DateCurrency, CellValues.String);*/
-
-                            row.Append(new Cell()
-                            {
-                                CellValue = new CellValue(detailStatisticsItem.NumberOfDay),
-                                DataType = CellValues.Number
-                            });
-
-                            row.Append(new Cell()
-                            {
-                                CellValue = new CellValue(detailStatisticsItem.OpenValueCurrency),
-                                DataType = CellValues.Number
-                            });
-
-                            row.Append(new Cell()
-                            {
-                                CellValue = new CellValue(detailStatisticsItem.MinValueCurrency),
-                                DataType = CellValues.Number
-                            });
-
-                            row.Append(new Cell()
-                            {
-                                CellValue = new CellValue(detailStatisticsItem.MaxValueCurrency),
-                                DataType = CellValues.Number
-                            });
-
-                            row.Append(new Cell()
-                            {
-                                CellValue = new CellValue(detailStatisticsItem.CloseValueCurrency),
-                                DataType = CellValues.Number
-                            });
-
-                            row.Append(new Cell()
-                            {
-                                CellValue = new CellValue(detailStatisticsItem.DateCurrency),
-                                DataType = CellValues.String
-                            });
+                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.NumberOfDay), CellValues.Number);
+                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.OpenValueCurrency), CellValues.Number);
+                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.MinValueCurrency), CellValues.Number);
+                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.MaxValueCurrency), CellValues.Number);
+                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.CloseValueCurrency), CellValues.Number);
+                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.DateCurrency), CellValues.String);
 
                             sheetData.AppendChild(row);
                         }
@@ -429,6 +390,8 @@ namespace OrganizationBankingSystem.MVVM.View
                         spreadSheetDocument.Save();
 
                         spreadSheetDocument.Close();
+
+                        MainWindow.notifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
                     }
                     catch (IOException)
                     {

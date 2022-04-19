@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Core\close.png" />
+    <None Remove="Core\competed.png" />
     <None Remove="Core\error.png" />
     <None Remove="Core\question.png" />
     <None Remove="Core\warning.png" />
@@ -54,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Core\close.png" />
+    <Resource Include="Core\competed.png" />
     <Resource Include="Core\error.png" />
     <Resource Include="Core\question.png" />
     <Resource Include="Core\warning.png" />

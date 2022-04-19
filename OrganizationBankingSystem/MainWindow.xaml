@@ -61,7 +61,7 @@
                                     <DoubleAnimation
                                         Storyboard.TargetName="borderContent"
                                         Storyboard.TargetProperty="Width"
-                                        From="839"
+                                        From="840"
                                         To="958"
                                         Duration="0:0:0:1" />
                                 </Storyboard>
@@ -81,7 +81,7 @@
                                         Storyboard.TargetName="borderContent"
                                         Storyboard.TargetProperty="Width"
                                         From="958"
-                                        To="839"
+                                        To="840"
                                         Duration="0:0:0:1" />
                                 </Storyboard>
                             </BeginStoryboard>
@@ -225,7 +225,7 @@
                 x:Name="borderContent"
                 Grid.RowSpan="2"
                 Grid.Column="1"
-                Width="837"
+                Width="840"
                 Background="#FF1A1919"
                 CornerRadius="0,8,8,0" />
             <ContentControl

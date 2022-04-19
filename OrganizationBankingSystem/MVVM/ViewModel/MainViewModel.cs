@@ -5,8 +5,13 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
     class MainViewModel : ObservableObject
     {
         public RelayCommand DashboardViewCommand { get; set; }
+
         public RelayCommand BankAccountViewCommand { get; set; }
+
         public RelayCommand CurrencyViewCommand { get; set; }
+
+        public static bool IsFileListCurrencyDamaged { get; set; }
+
         public DashboardViewModel DashboardVM;
         public BankAccountViewModel BankAccountVM;
         public CurrencyViewModel CurrencyVM;
@@ -21,6 +26,7 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
                 OnPropertyChanged();
             }
         }
+
         public MainViewModel()
         {
             DashboardVM = new DashboardViewModel();
@@ -42,6 +48,11 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
             CurrencyViewCommand = new RelayCommand(o =>
             {
                 CurrentView = CurrencyVM;
+
+                if (IsFileListCurrencyDamaged)
+                {
+                    MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или поврежден файл списков валют (файл был удален или неккоректно изменен)");
+                }
             }
             );
         }

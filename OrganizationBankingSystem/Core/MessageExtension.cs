@@ -18,5 +18,10 @@ namespace OrganizationBankingSystem.Core
         {
             notifier.Notify(() => new NotificationErr(message));
         }
+
+        public static void ShowCompletedPropertyMessage(this Notifier notifier, string message)
+        {
+            notifier.Notify(() => new NotificationComp(message));
+        }
     }
 }
