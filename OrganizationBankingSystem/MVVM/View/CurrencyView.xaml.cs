@@ -202,7 +202,7 @@ namespace OrganizationBankingSystem.MVVM.View
             {
                 FromCurrency = selectedFromCurrency.CurrencyCode;
                 ToCurrency = selectedToCurrency.CurrencyCode;
-                RequiredValues = 300;
+                RequiredValues = 30;
 
                 MainWindow.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
 

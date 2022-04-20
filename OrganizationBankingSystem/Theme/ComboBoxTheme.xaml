@@ -11,7 +11,6 @@
                                 Background="#FF323232"
                                 CornerRadius="3,0,0,3"
                                 Focusable="False">
-                                <ScrollViewer x:Name="scrollViewerTextBox" />
                             </Border>
                         </Grid>
                     </ControlTemplate>

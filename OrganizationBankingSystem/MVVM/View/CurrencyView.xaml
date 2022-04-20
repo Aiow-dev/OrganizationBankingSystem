@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
     xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
     d:DataContext="{d:DesignInstance local:CurrencyView}"
     d:DesignHeight="542.764"
     d:DesignWidth="800"
@@ -97,7 +98,7 @@
                             </StackPanel>
                             <StackPanel Grid.Row="1">
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                    <TextBox Width="165" />
+                                    <TextBox Width="120" />
                                     <ComboBox
                                         x:Name="comboBoxFromCurrency"
                                         Width="165"
@@ -108,9 +109,16 @@
                                         ItemsSource="{Binding ListCurrencyValuesItems}"
                                         Style="{StaticResource ComboBoxTheme}"
                                         ToolTip="Исходная валюта" />
+                                    <RadioButton
+                                        Width="20"
+                                        Height="20"
+                                        Margin="5,0,0,0"
+                                        Content="☆"
+                                        FontSize="17"
+                                        Style="{StaticResource StarButtonTheme}" />
                                 </StackPanel>
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                    <TextBox Width="165" />
+                                    <TextBox Width="120" />
                                     <ComboBox
                                         x:Name="comboBoxToCurrency"
                                         Width="165"
@@ -123,6 +131,13 @@
                                         ItemsSource="{Binding ListCurrencyValuesItems}"
                                         Style="{StaticResource ComboBoxTheme}"
                                         ToolTip="Конечная валюта" />
+                                    <RadioButton
+                                        Width="20"
+                                        Height="20"
+                                        Margin="5,0,0,0"
+                                        Content="☆"
+                                        FontSize="17"
+                                        Style="{StaticResource StarButtonTheme}" />
                                 </StackPanel>
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                                     <Button

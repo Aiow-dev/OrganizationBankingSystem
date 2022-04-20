@@ -15,14 +15,6 @@
     <None Remove="Core\warning_black.png" />
     <None Remove="Core\warning_blue.png" />
     <None Remove="Core\warning_flat.png" />
-    <None Remove="MVVM\View\Bank5.png" />
-    <None Remove="MVVM\View\coin_dollar.png" />
-    <None Remove="MVVM\View\dollar2.png" />
-    <None Remove="MVVM\View\dollar_coin.png" />
-    <None Remove="MVVM\View\dollar_money.png" />
-    <None Remove="MVVM\View\dollar_square.png" />
-    <None Remove="MVVM\View\exchange_rates.png" />
-    <None Remove="MVVM\View\money.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,7 +33,6 @@
     <Folder Include="Images\" />
     <Folder Include="MVVM\Model\" />
     <Folder Include="Data\" />
-    <Folder Include="UserReports\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,14 +53,6 @@
     <Resource Include="Core\warning_black.png" />
     <Resource Include="Core\warning_blue.png" />
     <Resource Include="Core\warning_flat.png" />
-    <Resource Include="MVVM\View\Bank5.png" />
-    <Resource Include="MVVM\View\coin_dollar.png" />
-    <Resource Include="MVVM\View\dollar2.png" />
-    <Resource Include="MVVM\View\dollar_coin.png" />
-    <Resource Include="MVVM\View\dollar_money.png" />
-    <Resource Include="MVVM\View\dollar_square.png" />
-    <Resource Include="MVVM\View\exchange_rates.png" />
-    <Resource Include="MVVM\View\money.png" />
   </ItemGroup>
 
 </Project>
