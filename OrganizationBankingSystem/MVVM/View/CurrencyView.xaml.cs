@@ -267,29 +267,29 @@ namespace OrganizationBankingSystem.MVVM.View
                 GraphValues.Add(currencyValuesMas[i]);
             }
 
-            return new Tuple<double, double>(GraphValues[^1], GraphValues[0]);
+            return new Tuple<double, double>(GraphValues[0], GraphValues[^1]);
         }
 
         private void RenderingGraph(double firstCurrencyValue, double lastCurrencyValue)
         {
             int requiredPointGeometrySize = ValidateNumberTextInput(8, 15, graphPointGeometrySize.Text, "1", "2");
 
-            SolidColorBrush fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
-            SolidColorBrush fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
+            Brush fillColor = buttonColorUp.Background.Clone();
+            Brush fillColorOpacity = buttonColorUp.Background.Clone();
             string arrow = "↑";
             string numberSign = "+";
 
             if (firstCurrencyValue > lastCurrencyValue)
             {
-                fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
-                fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
+                fillColor = buttonColorDown.Background.Clone();
+                fillColorOpacity = buttonColorDown.Background.Clone();
                 arrow = "↓";
                 numberSign = "";
             }
             else if (firstCurrencyValue == lastCurrencyValue)
             {
-                fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
-                fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
+                fillColor = buttonColorEquals.Background.Clone();
+                fillColorOpacity = buttonColorEquals.Background.Clone();
                 arrow = "";
                 numberSign = "";
             }
@@ -474,6 +474,38 @@ namespace OrganizationBankingSystem.MVVM.View
         private void NumberValuesGraphPreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             e.Handled = _regex.IsMatch(e.Text);
+        }
+
+        private static readonly Regex _regexDouble = new(@"[^0-9].,+");
+
+        private void DoubleNumberValuesGraphPreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = _regexDouble.IsMatch(e.Text);
+        }
+
+        private void RadioButton_Click_2(object sender, RoutedEventArgs e)
+        {
+            comboBoxFromCurrency.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("CurrencyDescription",
+                System.ComponentModel.ListSortDirection.Ascending));
+        }
+
+        private void RadioButton_Click_3(object sender, RoutedEventArgs e)
+        {
+            comboBoxToCurrency.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("CurrencyDescription",
+                System.ComponentModel.ListSortDirection.Ascending));
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.ColorDialog colorDialog = new();
+
+            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                System.Drawing.Color selectedColor = colorDialog.Color;
+
+                Button button = (Button)sender;
+                button.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(selectedColor.R, selectedColor.G, selectedColor.B));
+            }
         }
     }
 }
