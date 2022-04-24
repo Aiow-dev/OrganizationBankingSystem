@@ -2,7 +2,6 @@
     x:Class="OrganizationBankingSystem.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:OrganizationBankingSystem"
     xmlns:view="clr-namespace:OrganizationBankingSystem.MVVM.View"
     xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
     StartupUri="MainWindow.xaml">
@@ -15,7 +14,7 @@
                 <ResourceDictionary Source="Theme/ComboBoxTheme.xaml" />
                 <ResourceDictionary Source="Theme/TextBlockHideAnimationTheme.xaml" />
                 <ResourceDictionary Source="Theme/DataGridTheme.xaml" />
-                <ResourceDictionary Source="Theme/StarButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/StarButtonTheme.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>

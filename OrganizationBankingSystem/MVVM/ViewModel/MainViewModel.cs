@@ -2,7 +2,7 @@
 
 namespace OrganizationBankingSystem.MVVM.ViewModel
 {
-    class MainViewModel : ObservableObject
+    internal class MainViewModel : ObservableObject
     {
         public RelayCommand DashboardViewCommand { get; set; }
 

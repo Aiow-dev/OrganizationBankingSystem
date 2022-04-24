@@ -7,13 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Core\close.png" />
     <None Remove="Core\competed.png" />
     <None Remove="Core\error.png" />
     <None Remove="Core\question.png" />
-    <None Remove="Core\warning.png" />
-    <None Remove="Core\warning_black.png" />
-    <None Remove="Core\warning_blue.png" />
     <None Remove="Core\warning_flat.png" />
   </ItemGroup>
 
@@ -32,7 +28,6 @@
   <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="MVVM\Model\" />
-    <Folder Include="Data\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,17 +36,14 @@
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.3.0" />
     <PackageReference Include="ToastNotifications.Messages.Net5" Version="3.0.1" />
     <PackageReference Include="ToastNotifications.Net5" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Core\close.png" />
     <Resource Include="Core\competed.png" />
     <Resource Include="Core\error.png" />
     <Resource Include="Core\question.png" />
-    <Resource Include="Core\warning.png" />
-    <Resource Include="Core\warning_black.png" />
-    <Resource Include="Core\warning_blue.png" />
     <Resource Include="Core\warning_flat.png" />
   </ItemGroup>
 

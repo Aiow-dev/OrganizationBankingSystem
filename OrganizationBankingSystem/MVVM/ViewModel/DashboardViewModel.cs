@@ -1,6 +1,6 @@
 ﻿namespace OrganizationBankingSystem.MVVM.ViewModel
 {
-    class DashboardViewModel
+    internal class DashboardViewModel
     {
         public DashboardViewModel()
         {

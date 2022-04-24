@@ -1,6 +1,6 @@
 ﻿namespace OrganizationBankingSystem.MVVM.ViewModel
 {
-    class CurrencyViewModel
+    internal class CurrencyViewModel
     {
     }
 }

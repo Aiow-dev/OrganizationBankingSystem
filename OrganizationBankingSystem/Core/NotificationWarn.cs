@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Runtime.Versioning;
 using ToastNotifications.Core;
 
 namespace OrganizationBankingSystem.Core
 {
-    [SupportedOSPlatform("windows")]
     public class NotificationWarn : NotificationBase, INotifyPropertyChanged
     {
         private DisplayPartUI _displayPartUI;
@@ -19,9 +17,12 @@ namespace OrganizationBankingSystem.Core
         }
 
         private string _message;
-        public new string Message { get { return _message; } set { _message = value; OnPropertyChanged(); } }
+
+        public new string Message
+        { get { return _message; } set { _message = value; OnPropertyChanged(); } }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;

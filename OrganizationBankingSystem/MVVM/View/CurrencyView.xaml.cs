@@ -5,6 +5,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using LiveCharts;
 using OrganizationBankingSystem.Core;
+using OrganizationBankingSystem.Data;
 using OrganizationBankingSystem.MVVM.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,7 +32,7 @@ namespace OrganizationBankingSystem.MVVM.View
         private string _toCurrency;
         private string _valueExchangeRates;
 
-        public ChartValues<double> Values1 { get; set; }
+        public ChartValues<double> GraphValues { get; set; }
 
         public int RequiredValues { get; set; }
 
@@ -43,6 +45,7 @@ namespace OrganizationBankingSystem.MVVM.View
                 else _toCurrency = " ";
             }
         }
+
         public string FromCurrency
         {
             get => _fromCurrency; set
@@ -52,6 +55,7 @@ namespace OrganizationBankingSystem.MVVM.View
                 else _fromCurrency = " ";
             }
         }
+
         public string ValueExchangeRates
         {
             get => _valueExchangeRates; set
@@ -192,6 +196,119 @@ namespace OrganizationBankingSystem.MVVM.View
             await Task.Run(() => GetExchangeRates());
         }
 
+        private static int ValidateNumberTextInput(int defaultTextInputValue, int maxTextInputValue, string textFromInput, string warningMessage, string warningMessageExtend)
+        {
+            try
+            {
+                int textFromInputValue = Convert.ToInt32(textFromInput);
+
+                if (textFromInputValue < maxTextInputValue)
+                {
+                    return textFromInputValue;
+                }
+                else
+                {
+                    return defaultTextInputValue;
+                }
+            }
+            catch (FormatException)
+            {
+                MainWindow.notifier.ShowWarningPropertyMessage(warningMessage);
+                return defaultTextInputValue;
+            }
+            catch (OverflowException)
+            {
+                MainWindow.notifier.ShowWarningPropertyMessage(warningMessageExtend);
+                return defaultTextInputValue;
+            }
+        }
+
+        private double[] GetCurrencyValuesMasFromTypeGraph()
+        {
+            ComboBoxItem typeGraph = (ComboBoxItem)comboBoxTypeGraph.SelectedItem;
+
+            if (typeGraph != null)
+            {
+                string typeGraphContent = typeGraph.Content.ToString();
+
+                return typeGraphContent switch
+                {
+                    "График открытых значений" => OpenCurrencyValuesMas,
+                    "График минимальных значений" => MinCurrencyValuesMas,
+                    "График максимальных значений" => MaxCurrencyValuesMas,
+                    "График закрытых значений" => CloseCurrencyValuesMas,
+                    _ => OpenCurrencyValuesMas,
+                };
+            }
+            else
+            {
+                return OpenCurrencyValuesMas;
+            }
+        }
+
+        private Tuple<double, double> SetValuesGraph()
+        {
+            int currencyValuesMasLength = OpenCurrencyValuesMas.Length;
+
+            double[] currencyValuesMas = GetCurrencyValuesMasFromTypeGraph();
+
+            for (int i = currencyValuesMasLength - 1; i >= 0; i--)
+            {
+                DetailStatisticsItems.Add(new DetailStatisticsItem
+                {
+                    NumberOfDay = currencyValuesMasLength - i,
+                    OpenValueCurrency = OpenCurrencyValuesMas[i],
+                    MinValueCurrency = MinCurrencyValuesMas[i],
+                    MaxValueCurrency = MaxCurrencyValuesMas[i],
+                    CloseValueCurrency = CloseCurrencyValuesMas[i],
+                    DateCurrency = CurrencyDatesMas[i]
+                });
+
+                GraphValues.Add(currencyValuesMas[i]);
+            }
+
+            return new Tuple<double, double>(GraphValues[^1], GraphValues[0]);
+        }
+
+        private void RenderingGraph(double firstCurrencyValue, double lastCurrencyValue)
+        {
+            int requiredPointGeometrySize = ValidateNumberTextInput(8, 15, graphPointGeometrySize.Text, "1", "2");
+
+            SolidColorBrush fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
+            SolidColorBrush fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
+            string arrow = "↑";
+            string numberSign = "+";
+
+            if (firstCurrencyValue > lastCurrencyValue)
+            {
+                fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
+                fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
+                arrow = "↓";
+                numberSign = "";
+            }
+            else if (firstCurrencyValue == lastCurrencyValue)
+            {
+                fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
+                fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
+                arrow = "";
+                numberSign = "";
+            }
+
+            fillColorOpacity.Opacity = 0.3;
+
+            graphSeries.Values = GraphValues;
+            graphSeries.Stroke = fillColor;
+            graphSeries.Fill = fillColorOpacity;
+
+            graphSeries.PointGeometrySize = requiredPointGeometrySize;
+
+            differencePercentValueText.Foreground = fillColor;
+            differencePercentValueText.Text = $"{numberSign}{lastCurrencyValue - firstCurrencyValue} ({((lastCurrencyValue / firstCurrencyValue) - 1) * 100} %){arrow}";
+
+            detailStatistics.ItemsSource = DetailStatisticsItems;
+
+            textBlockValueExchangeRates.Text = ValueExchangeRates;
+        }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -202,76 +319,23 @@ namespace OrganizationBankingSystem.MVVM.View
             {
                 FromCurrency = selectedFromCurrency.CurrencyCode;
                 ToCurrency = selectedToCurrency.CurrencyCode;
-                RequiredValues = 30;
+
+                RequiredValues = ValidateNumberTextInput(30, 1000, numberValuesGraph.Text, "1", "2");
 
                 MainWindow.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
 
                 await GetExchangeRatesAsync();
 
-                Values1 = new ChartValues<double>();
+                GraphValues = new ChartValues<double>();
                 DetailStatisticsItems = new List<DetailStatisticsItem>();
 
                 try
                 {
                     if (AllNotNull(OpenCurrencyValuesMas, MinCurrencyValuesMas, MaxCurrencyValuesMas, CloseCurrencyValuesMas))
                     {
-                        int currencyValuesMasLength = OpenCurrencyValuesMas.Length;
+                        Tuple<double, double> tupleFirstLastCurrencyValues = SetValuesGraph();
 
-                        for (int i = currencyValuesMasLength - 1; i >= 0; i--)
-                        {
-                            DetailStatisticsItems.Add(new DetailStatisticsItem
-                            {
-                                NumberOfDay = currencyValuesMasLength - i,
-                                OpenValueCurrency = OpenCurrencyValuesMas[i],
-                                MinValueCurrency = MinCurrencyValuesMas[i],
-                                MaxValueCurrency = MaxCurrencyValuesMas[i],
-                                CloseValueCurrency = CloseCurrencyValuesMas[i],
-                                DateCurrency = CurrencyDatesMas[i]
-                            });
-
-                            Values1.Add(OpenCurrencyValuesMas[i]);
-                        }
-
-                        double firstCurrencyValue = OpenCurrencyValuesMas[^1];
-                        double lastCurrencyValue = OpenCurrencyValuesMas[0];
-
-                        SolidColorBrush fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
-                        SolidColorBrush fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFA1CCA5");
-                        string arrow = "↑";
-                        string numberSign = "+";
-
-                        if (firstCurrencyValue > lastCurrencyValue)
-                        {
-                            fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
-                            fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFD21F3C");
-                            arrow = "↓";
-                            numberSign = "";
-                        }
-                        else if (firstCurrencyValue == lastCurrencyValue)
-                        {
-                            fillColor = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
-                            fillColorOpacity = (SolidColorBrush)new BrushConverter().ConvertFrom("#FF7D8491");
-                            arrow = "";
-                            numberSign = "";
-                        }
-
-                        fillColorOpacity.Opacity = 0.3;
-
-                        graphSeries.Values = Values1;
-                        graphSeries.Stroke = fillColor;
-                        graphSeries.Fill = fillColorOpacity;
-
-                        if (RequiredValues > 30)
-                        {
-                            graphSeries.PointGeometry = null;
-                        }
-
-                        differencePercentValueText.Foreground = fillColor;
-                        differencePercentValueText.Text = $"{numberSign}{lastCurrencyValue - firstCurrencyValue} ({((lastCurrencyValue / firstCurrencyValue) - 1) * 100} %){arrow}";
-
-                        detailStatistics.ItemsSource = DetailStatisticsItems;
-
-                        textBlockValueExchangeRates.Text = ValueExchangeRates;
+                        RenderingGraph(tupleFirstLastCurrencyValues.Item1, tupleFirstLastCurrencyValues.Item2);
                     }
                     else
                     {
@@ -330,7 +394,7 @@ namespace OrganizationBankingSystem.MVVM.View
             if (detailStatistics.HasItems)
             {
                 System.Windows.Forms.SaveFileDialog saveFileDialog = new();
-                saveFileDialog.InitialDirectory = "C:";
+                saveFileDialog.InitialDirectory = Syroot.Windows.IO.KnownFolders.Downloads.Path;
                 saveFileDialog.Title = "Экспорт детальной статистики в Excel";
                 saveFileDialog.FileName = $"{FromCurrency}_to_{ToCurrency}_detail_statistics_report";
                 saveFileDialog.Filter = "|*.xlsx";
@@ -404,26 +468,12 @@ namespace OrganizationBankingSystem.MVVM.View
                 MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Детальная статистика и график курсов валют не построены");
             }
         }
-    }
 
-    public class DetailStatisticsItem
-    {
-        public int NumberOfDay { get; set; }
+        private static readonly Regex _regex = new(@"[^0-9]+");
 
-        public double OpenValueCurrency { get; set; }
-
-        public double MinValueCurrency { get; set; }
-
-        public double MaxValueCurrency { get; set; }
-
-        public double CloseValueCurrency { get; set; }
-
-        public string DateCurrency { get; set; }
-    }
-
-    public class ListCurrencyValuesItem
-    {
-        public string CurrencyCode { get; set; }
-        public string CurrencyDescription { get; set; }
+        private void NumberValuesGraphPreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = _regex.IsMatch(e.Text);
+        }
     }
 }

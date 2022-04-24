@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace OrganizationBankingSystem.Core
 {
-    class ObservableObject : INotifyPropertyChanged
+    internal class ObservableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

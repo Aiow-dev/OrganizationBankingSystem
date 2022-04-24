@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OrganizationBankingSystem.MVVM.ViewModel
+﻿namespace OrganizationBankingSystem.MVVM.ViewModel
 {
-    class BankAccountViewModel
+    internal class BankAccountViewModel
     {
     }
 }
