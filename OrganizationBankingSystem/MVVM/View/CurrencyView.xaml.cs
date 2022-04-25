@@ -9,6 +9,7 @@ using OrganizationBankingSystem.Data;
 using OrganizationBankingSystem.MVVM.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -76,6 +77,8 @@ namespace OrganizationBankingSystem.MVVM.View
         public double[] CloseCurrencyValuesMas { get; set; }
 
         public string[] CurrencyDatesMas { get; set; }
+
+        public double MaxCurrencyValue { get; set; }
 
         public List<DetailStatisticsItem> DetailStatisticsItems { get; set; }
 
@@ -248,9 +251,9 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private Tuple<double, double> SetValuesGraph()
         {
-            int currencyValuesMasLength = OpenCurrencyValuesMas.Length;
-
             double[] currencyValuesMas = GetCurrencyValuesMasFromTypeGraph();
+
+            int currencyValuesMasLength = currencyValuesMas.Length;
 
             for (int i = currencyValuesMasLength - 1; i >= 0; i--)
             {
@@ -265,6 +268,30 @@ namespace OrganizationBankingSystem.MVVM.View
                 });
 
                 GraphValues.Add(currencyValuesMas[i]);
+            }
+
+            MaxCurrencyValue = GraphValues.Max();
+
+            try
+            {
+                Regex regexSpaces = new(@"\s+");
+                string firstCurrencyNumberText = regexSpaces.Replace(firstCurrencyNumber.Text.Replace(".", ","), "");
+
+                if (firstCurrencyNumberText.Length > 0)
+                {
+                    int positionFirstComma = 1 + firstCurrencyNumberText.IndexOf(',');
+                    string firstCurrencyNumberTextOneComma = string.Concat(firstCurrencyNumberText.AsSpan(0, positionFirstComma),
+                        firstCurrencyNumberText[positionFirstComma..].Replace(",", string.Empty));
+
+                    double firstCurrencyNumberValue = Convert.ToDouble(firstCurrencyNumberTextOneComma);
+                    firstCurrencyNumber.Text = firstCurrencyNumberValue.ToString();
+
+                    textBlockValueExchangeRates.Text = $"{firstCurrencyNumberValue * GraphValues[^1]}";
+                }
+            }
+            catch (FormatException)
+            {
+                MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Введено некорректное значение. Возможно, значение не содержит цифр или не представлено числом");
             }
 
             return new Tuple<double, double>(GraphValues[0], GraphValues[^1]);
@@ -302,12 +329,22 @@ namespace OrganizationBankingSystem.MVVM.View
 
             graphSeries.PointGeometrySize = requiredPointGeometrySize;
 
+            graphAxisSectionMax.Value = MaxCurrencyValue;
+            graphAxisSectionMax.Stroke = fillColor;
+
+            if ((bool)toggleCheckBoxMaxValueCurrency.IsChecked)
+            {
+                graphAxisSectionMax.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                graphAxisSectionMax.Visibility = Visibility.Collapsed;
+            }
+
             differencePercentValueText.Foreground = fillColor;
             differencePercentValueText.Text = $"{numberSign}{lastCurrencyValue - firstCurrencyValue} ({((lastCurrencyValue / firstCurrencyValue) - 1) * 100} %){arrow}";
 
             detailStatistics.ItemsSource = DetailStatisticsItems;
-
-            textBlockValueExchangeRates.Text = ValueExchangeRates;
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -476,7 +513,7 @@ namespace OrganizationBankingSystem.MVVM.View
             e.Handled = _regex.IsMatch(e.Text);
         }
 
-        private static readonly Regex _regexDouble = new(@"[^0-9].,+");
+        private static readonly Regex _regexDouble = new(@"[^0-9.,]+");
 
         private void DoubleNumberValuesGraphPreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
@@ -485,13 +522,17 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void RadioButton_Click_2(object sender, RoutedEventArgs e)
         {
+            comboBoxFromCurrency.Items.SortDescriptions.Clear();
+
             comboBoxFromCurrency.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("CurrencyDescription",
                 System.ComponentModel.ListSortDirection.Ascending));
         }
 
         private void RadioButton_Click_3(object sender, RoutedEventArgs e)
         {
-            comboBoxToCurrency.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("CurrencyDescription",
+            comboBoxFromCurrency.Items.SortDescriptions.Clear();
+
+            comboBoxFromCurrency.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("CurrencyCode",
                 System.ComponentModel.ListSortDirection.Ascending));
         }
 
@@ -506,6 +547,13 @@ namespace OrganizationBankingSystem.MVVM.View
                 Button button = (Button)sender;
                 button.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(selectedColor.R, selectedColor.G, selectedColor.B));
             }
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+
+            e.Handled = true;
         }
     }
 }

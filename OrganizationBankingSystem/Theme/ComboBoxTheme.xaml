@@ -115,6 +115,11 @@
         </Setter>
     </Style>
     <Style x:Key="ComboBoxItemTheme" TargetType="{x:Type ComboBoxItem}">
+        <Style.Resources>
+            <Style TargetType="{x:Type ScrollViewer}">
+                <Setter Property="Background" Value="Green" />
+            </Style>
+        </Style.Resources>
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />

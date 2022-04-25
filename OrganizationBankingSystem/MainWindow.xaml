@@ -10,8 +10,8 @@
     Height="600"
     AllowsTransparency="True"
     Background="Transparent"
-    MouseLeftButtonDown="WindowMouseLeftButtonDown"
     Loaded="Window_Loaded"
+    MouseLeftButtonDown="WindowMouseLeftButtonDown"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
@@ -34,61 +34,55 @@
                 <RowDefinition Height="65" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Border
-                Width="15"
-                Height="15"
-                Margin="15,25,0,10"
+            <ToggleButton
+                Width="25"
+                Height="25"
+                Margin="10"
                 HorizontalAlignment="Left"
-                Background="#FFF8F8F8"
-                CornerRadius="2">
-                <Border.Clip>
-                    <RectangleGeometry Rect="0, 0, 15, 15" />
-                </Border.Clip>
-                <ToggleButton
-                    Background="Transparent"
-                    BorderThickness="0"
-                    IsChecked="False">
-                    <ToggleButton.Triggers>
-                        <EventTrigger RoutedEvent="ToggleButton.Checked">
-                            <BeginStoryboard>
-                                <Storyboard x:Name="HideStackPanel">
-                                    <DoubleAnimation
-                                        Storyboard.TargetName="stackPanelMenu"
-                                        Storyboard.TargetProperty="Width"
-                                        From="150"
-                                        To="32"
-                                        Duration="0:0:0.5" />
-                                    <DoubleAnimation
-                                        Storyboard.TargetName="borderContent"
-                                        Storyboard.TargetProperty="Width"
-                                        From="840"
-                                        To="958"
-                                        Duration="0:0:0:1" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="ToggleButton.Unchecked">
-                            <BeginStoryboard>
-                                <Storyboard x:Name="ShowStackPanel">
-                                    <DoubleAnimation
-                                        BeginTime="0:0:0.5"
-                                        Storyboard.TargetName="stackPanelMenu"
-                                        Storyboard.TargetProperty="Width"
-                                        From="32"
-                                        To="150"
-                                        Duration="0:0:0.5" />
-                                    <DoubleAnimation
-                                        Storyboard.TargetName="borderContent"
-                                        Storyboard.TargetProperty="Width"
-                                        From="958"
-                                        To="840"
-                                        Duration="0:0:0:1" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </ToggleButton.Triggers>
-                </ToggleButton>
-            </Border>
+                FontSize="11"
+                HorizontalContentAlignment="Center"
+                IsChecked="False"
+                Style="{StaticResource ToggleButtonTheme}">
+                <ToggleButton.Triggers>
+                    <EventTrigger RoutedEvent="ToggleButton.Checked">
+                        <BeginStoryboard>
+                            <Storyboard x:Name="HideStackPanel">
+                                <DoubleAnimation
+                                    Storyboard.TargetName="stackPanelMenu"
+                                    Storyboard.TargetProperty="Width"
+                                    From="150"
+                                    To="32"
+                                    Duration="0:0:0.5" />
+                                <DoubleAnimation
+                                    Storyboard.TargetName="borderContent"
+                                    Storyboard.TargetProperty="Width"
+                                    From="840"
+                                    To="956"
+                                    Duration="0:0:0:1" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                        <BeginStoryboard>
+                            <Storyboard x:Name="ShowStackPanel">
+                                <DoubleAnimation
+                                    BeginTime="0:0:0.5"
+                                    Storyboard.TargetName="stackPanelMenu"
+                                    Storyboard.TargetProperty="Width"
+                                    From="32"
+                                    To="150"
+                                    Duration="0:0:0.5" />
+                                <DoubleAnimation
+                                    Storyboard.TargetName="borderContent"
+                                    Storyboard.TargetProperty="Width"
+                                    From="956"
+                                    To="840"
+                                    Duration="0:0:0:1" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </ToggleButton.Triggers>
+            </ToggleButton>
             <StackPanel
                 x:Name="stackPanelMenu"
                 Grid.Row="1"

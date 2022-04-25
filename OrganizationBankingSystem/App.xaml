@@ -17,6 +17,10 @@
                 <ResourceDictionary Source="Theme/StarButtonTheme.xaml" />
                 <ResourceDictionary Source="Theme/TextBoxTheme.xaml" />
                 <ResourceDictionary Source="Theme/ButtonTheme.xaml" />
+                <ResourceDictionary Source="Theme/TooltipTheme.xaml" />
+                <ResourceDictionary Source="Theme/ToggleButtonTheme.xaml" />
+                <ResourceDictionary Source="Theme/CheckBoxTheme.xaml" />
+                <ResourceDictionary Source="Theme/ToggleCheckBoxTheme.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>
