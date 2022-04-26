@@ -31,7 +31,7 @@
                     VerticalAlignment="Bottom"
                     FontSize="8"
                     Foreground="#FF282828"
-                    Text="❌" />
+                    Text="❌" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" />
                 <Image
                     Grid.Row="1"
                     Width="35"

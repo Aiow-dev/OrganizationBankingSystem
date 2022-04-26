@@ -80,6 +80,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         public double MaxCurrencyValue { get; set; }
 
+        public bool IsOnlineMode { get; set; }
+
         public List<DetailStatisticsItem> DetailStatisticsItems { get; set; }
 
         public List<ListCurrencyValuesItem> ListCurrencyValuesItems { get; set; }
@@ -89,7 +91,28 @@ namespace OrganizationBankingSystem.MVVM.View
             InitializeComponent();
 
             GetListCurrencyValues();
+
+            CheckSetOnlineMode();
+
             DataContext = this;
+        }
+
+        private void CheckSetOnlineMode()
+        {
+            if (MainWindow.CheckInternetConnection())
+            {
+                textBoxConnectionMode.Text = "Онлайн режим";
+                textBoxConnectionMode.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(188, 219, 255));
+
+                IsOnlineMode = true;
+            }
+            else
+            {
+                textBoxConnectionMode.Text = "Офлайн режим";
+                textBoxConnectionMode.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 241, 208));
+
+                IsOnlineMode = false;
+            }
         }
 
         public static bool AllNotNull(params object[] objects)
@@ -249,6 +272,69 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
+        private static string ReplaceSpaces(string textSpaces)
+        {
+            Regex regexSpaces = new(@"\s+");
+
+            return regexSpaces.Replace(textSpaces, string.Empty);
+        }
+
+        private static string FormatNumbers(string textFormatNumbers)
+        {
+            Regex regexCommasPoints = new(@"[,.]+");
+
+            return regexCommasPoints.Replace(ReplaceSpaces(textFormatNumbers), string.Empty);
+        }
+
+        private static double FormatTextToDouble(string formatText)
+        {
+            try
+            {
+                string replaceFormatText = ReplaceSpaces(formatText.Replace(".", ","));
+
+                if (replaceFormatText.Length > 0)
+                {
+                    int positionFirstComma = 1 + replaceFormatText.IndexOf(',');
+                    string replaceSubsequentCommasText = string.Concat(replaceFormatText.AsSpan(0, positionFirstComma),
+                        replaceFormatText[positionFirstComma..].Replace(",", string.Empty));
+
+                    return Convert.ToDouble(replaceSubsequentCommasText);
+                }
+            }
+            catch (FormatException)
+            {
+                MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Введено некорректное значение. Возможно, значение не содержит цифр или не представлено числом");
+            }
+
+            return 1.0;
+        }
+
+        private static double ConvertCurrencyValues(double numberUnit, double unitCost)
+        {
+            return numberUnit * unitCost;
+        }
+
+        private void SetConvertCurrencyValue(double unitCost = 1.0, bool includeSecondCurrencyValue = false)
+        {
+            double firstFormatCurrencyValue = FormatTextToDouble(firstCurrencyNumber.Text);
+            firstCurrencyNumber.Text = firstFormatCurrencyValue.ToString();
+            double convertCurrencyValuesResult;
+
+            if (includeSecondCurrencyValue)
+            {
+                double secondFormatCurrencyValue = FormatTextToDouble(unitCostCurrencyValue.Text);
+                unitCostCurrencyValue.Text = secondFormatCurrencyValue.ToString();
+
+                convertCurrencyValuesResult = ConvertCurrencyValues(firstFormatCurrencyValue, secondFormatCurrencyValue);
+            }
+            else
+            {
+                convertCurrencyValuesResult = ConvertCurrencyValues(firstFormatCurrencyValue, unitCost);
+            }
+
+            textBlockValueExchangeRates.Text = convertCurrencyValuesResult.ToString();
+        }
+
         private Tuple<double, double> SetValuesGraph()
         {
             double[] currencyValuesMas = GetCurrencyValuesMasFromTypeGraph();
@@ -272,26 +358,21 @@ namespace OrganizationBankingSystem.MVVM.View
 
             MaxCurrencyValue = GraphValues.Max();
 
-            try
+            if (FormatNumbers(firstCurrencyNumber.Text) != string.Empty)
             {
-                Regex regexSpaces = new(@"\s+");
-                string firstCurrencyNumberText = regexSpaces.Replace(firstCurrencyNumber.Text.Replace(".", ","), "");
 
-                if (firstCurrencyNumberText.Length > 0)
+                if (unitCostCurrencyValue.Text == string.Empty)
                 {
-                    int positionFirstComma = 1 + firstCurrencyNumberText.IndexOf(',');
-                    string firstCurrencyNumberTextOneComma = string.Concat(firstCurrencyNumberText.AsSpan(0, positionFirstComma),
-                        firstCurrencyNumberText[positionFirstComma..].Replace(",", string.Empty));
-
-                    double firstCurrencyNumberValue = Convert.ToDouble(firstCurrencyNumberTextOneComma);
-                    firstCurrencyNumber.Text = firstCurrencyNumberValue.ToString();
-
-                    textBlockValueExchangeRates.Text = $"{firstCurrencyNumberValue * GraphValues[^1]}";
+                    SetConvertCurrencyValue(GraphValues[^1]);
+                }
+                else
+                {
+                    SetConvertCurrencyValue(includeSecondCurrencyValue: true);
                 }
             }
-            catch (FormatException)
+            else
             {
-                MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Введено некорректное значение. Возможно, значение не содержит цифр или не представлено числом");
+                firstCurrencyNumber.Text = string.Empty;
             }
 
             return new Tuple<double, double>(GraphValues[0], GraphValues[^1]);
@@ -311,14 +392,14 @@ namespace OrganizationBankingSystem.MVVM.View
                 fillColor = buttonColorDown.Background.Clone();
                 fillColorOpacity = buttonColorDown.Background.Clone();
                 arrow = "↓";
-                numberSign = "";
+                numberSign = string.Empty;
             }
             else if (firstCurrencyValue == lastCurrencyValue)
             {
                 fillColor = buttonColorEquals.Background.Clone();
                 fillColorOpacity = buttonColorEquals.Background.Clone();
-                arrow = "";
-                numberSign = "";
+                arrow = string.Empty;
+                numberSign = string.Empty;
             }
 
             fillColorOpacity.Opacity = 0.3;
@@ -357,31 +438,45 @@ namespace OrganizationBankingSystem.MVVM.View
                 FromCurrency = selectedFromCurrency.CurrencyCode;
                 ToCurrency = selectedToCurrency.CurrencyCode;
 
-                RequiredValues = ValidateNumberTextInput(30, 1000, numberValuesGraph.Text, "1", "2");
+                CheckSetOnlineMode();
 
-                MainWindow.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
-
-                await GetExchangeRatesAsync();
-
-                GraphValues = new ChartValues<double>();
-                DetailStatisticsItems = new List<DetailStatisticsItem>();
-
-                try
+                if (IsOnlineMode)
                 {
-                    if (AllNotNull(OpenCurrencyValuesMas, MinCurrencyValuesMas, MaxCurrencyValuesMas, CloseCurrencyValuesMas))
-                    {
-                        Tuple<double, double> tupleFirstLastCurrencyValues = SetValuesGraph();
+                    RequiredValues = ValidateNumberTextInput(30, 1000, numberValuesGraph.Text, "1", "2");
 
-                        RenderingGraph(tupleFirstLastCurrencyValues.Item1, tupleFirstLastCurrencyValues.Item2);
-                    }
-                    else
+                    MainWindow.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
+
+                    await GetExchangeRatesAsync();
+
+                    GraphValues = new ChartValues<double>();
+                    DetailStatisticsItems = new List<DetailStatisticsItem>();
+
+                    try
                     {
-                        MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
+                        if (AllNotNull(OpenCurrencyValuesMas, MinCurrencyValuesMas, MaxCurrencyValuesMas, CloseCurrencyValuesMas))
+                        {
+                            Tuple<double, double> tupleFirstLastCurrencyValues = SetValuesGraph();
+
+                            RenderingGraph(tupleFirstLastCurrencyValues.Item1, tupleFirstLastCurrencyValues.Item2);
+                        }
+                        else
+                        {
+                            MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
+                        }
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Неверное количество значений");
                     }
                 }
-                catch (ArgumentOutOfRangeException)
+                else
                 {
-                    MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Неверное количество значений");
+                    graphSeries.Values = new ChartValues<double>();
+                    differencePercentValueText.Text = string.Empty;
+
+                    detailStatistics.ItemsSource = new List<DetailStatisticsItem>();
+
+                    SetConvertCurrencyValue(includeSecondCurrencyValue: true);
                 }
             }
             else

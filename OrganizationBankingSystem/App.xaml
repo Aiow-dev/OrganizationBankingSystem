@@ -10,7 +10,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Theme/MenuButtonTheme.xaml" />
                 <ResourceDictionary Source="Theme/MenuButtonIconsTheme.xaml" />
-                <ResourceDictionary Source="Theme/TextBlockTheme.xaml" />
                 <ResourceDictionary Source="Theme/ComboBoxTheme.xaml" />
                 <ResourceDictionary Source="Theme/TextBlockHideAnimationTheme.xaml" />
                 <ResourceDictionary Source="Theme/DataGridTheme.xaml" />
@@ -21,6 +20,7 @@
                 <ResourceDictionary Source="Theme/ToggleButtonTheme.xaml" />
                 <ResourceDictionary Source="Theme/CheckBoxTheme.xaml" />
                 <ResourceDictionary Source="Theme/ToggleCheckBoxTheme.xaml" />
+                <ResourceDictionary Source="Theme/TextBlockTheme.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>

@@ -12,5 +12,10 @@ namespace OrganizationBankingSystem.Core
             InitializeComponent();
             Bind(notificationComp);
         }
+
+        private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Notification.Close();
+        }
     }
 }
