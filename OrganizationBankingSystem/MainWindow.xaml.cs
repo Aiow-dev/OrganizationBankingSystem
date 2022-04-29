@@ -1,6 +1,6 @@
 ﻿using OrganizationBankingSystem.Core;
+using OrganizationBankingSystem.Core.Helpers;
 using System;
-using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Input;
 using ToastNotifications;
@@ -19,25 +19,6 @@ namespace OrganizationBankingSystem
             InitializeComponent();
         }
 
-        public static bool CheckInternetConnection()
-        {
-            try
-            {
-                if (!NetworkInterface.GetIsNetworkAvailable())
-                {
-                    return false;
-                }
-
-                Ping ping = new();
-                PingReply pingReply = ping.Send("google.com", 1000, new byte[32], new PingOptions());
-                return (pingReply.Status == IPStatus.Success);
-            }
-            catch (PingException)
-            {
-                return false;
-            }
-        }
-
         private void WindowMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
@@ -45,7 +26,7 @@ namespace OrganizationBankingSystem
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!CheckInternetConnection())
+            if (!NetworkHelpers.CheckInternetConnection())
             {
                 notifier.ShowWarningPropertyMessage("Отсутствует или является нестабильным подключение к сети Интернет. Это может повлиять на работу некоторых функций приложения");
             }

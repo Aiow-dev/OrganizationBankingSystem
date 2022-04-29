@@ -5,6 +5,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using LiveCharts;
 using OrganizationBankingSystem.Core;
+using OrganizationBankingSystem.Core.Helpers;
 using OrganizationBankingSystem.Data;
 using OrganizationBankingSystem.MVVM.ViewModel;
 using System;
@@ -99,7 +100,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void CheckSetOnlineMode()
         {
-            if (MainWindow.CheckInternetConnection())
+            if (NetworkHelpers.CheckInternetConnection())
             {
                 textBoxConnectionMode.Text = "Онлайн режим";
                 textBoxConnectionMode.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(188, 219, 255));
@@ -113,11 +114,6 @@ namespace OrganizationBankingSystem.MVVM.View
 
                 IsOnlineMode = false;
             }
-        }
-
-        public static bool AllNotNull(params object[] objects)
-        {
-            return objects.All(s => s != null);
         }
 
         public void GetListCurrencyValues()
@@ -222,33 +218,6 @@ namespace OrganizationBankingSystem.MVVM.View
             await Task.Run(() => GetExchangeRates());
         }
 
-        private static int ValidateNumberTextInput(int defaultTextInputValue, int maxTextInputValue, string textFromInput, string warningMessage, string warningMessageExtend)
-        {
-            try
-            {
-                int textFromInputValue = Convert.ToInt32(textFromInput);
-
-                if (textFromInputValue < maxTextInputValue)
-                {
-                    return textFromInputValue;
-                }
-                else
-                {
-                    return defaultTextInputValue;
-                }
-            }
-            catch (FormatException)
-            {
-                MainWindow.notifier.ShowWarningPropertyMessage(warningMessage);
-                return defaultTextInputValue;
-            }
-            catch (OverflowException)
-            {
-                MainWindow.notifier.ShowWarningPropertyMessage(warningMessageExtend);
-                return defaultTextInputValue;
-            }
-        }
-
         private double[] GetCurrencyValuesMasFromTypeGraph()
         {
             ComboBoxItem typeGraph = (ComboBoxItem)comboBoxTypeGraph.SelectedItem;
@@ -272,43 +241,6 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        private static string ReplaceSpaces(string textSpaces)
-        {
-            Regex regexSpaces = new(@"\s+");
-
-            return regexSpaces.Replace(textSpaces, string.Empty);
-        }
-
-        private static string FormatNumbers(string textFormatNumbers)
-        {
-            Regex regexCommasPoints = new(@"[,.]+");
-
-            return regexCommasPoints.Replace(ReplaceSpaces(textFormatNumbers), string.Empty);
-        }
-
-        private static double FormatTextToDouble(string formatText)
-        {
-            try
-            {
-                string replaceFormatText = ReplaceSpaces(formatText.Replace(".", ","));
-
-                if (replaceFormatText.Length > 0)
-                {
-                    int positionFirstComma = 1 + replaceFormatText.IndexOf(',');
-                    string replaceSubsequentCommasText = string.Concat(replaceFormatText.AsSpan(0, positionFirstComma),
-                        replaceFormatText[positionFirstComma..].Replace(",", string.Empty));
-
-                    return Convert.ToDouble(replaceSubsequentCommasText);
-                }
-            }
-            catch (FormatException)
-            {
-                MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Введено некорректное значение. Возможно, значение не содержит цифр или не представлено числом");
-            }
-
-            return 1.0;
-        }
-
         private static double ConvertCurrencyValues(double numberUnit, double unitCost)
         {
             return numberUnit * unitCost;
@@ -316,13 +248,13 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void SetConvertCurrencyValue(double unitCost = 1.0, bool includeSecondCurrencyValue = false)
         {
-            double firstFormatCurrencyValue = FormatTextToDouble(firstCurrencyNumber.Text);
+            double firstFormatCurrencyValue = Formaters.FormatTextToDouble(firstCurrencyNumber.Text);
             firstCurrencyNumber.Text = firstFormatCurrencyValue.ToString();
             double convertCurrencyValuesResult;
 
             if (includeSecondCurrencyValue)
             {
-                double secondFormatCurrencyValue = FormatTextToDouble(unitCostCurrencyValue.Text);
+                double secondFormatCurrencyValue = Formaters.FormatTextToDouble(unitCostCurrencyValue.Text);
                 unitCostCurrencyValue.Text = secondFormatCurrencyValue.ToString();
 
                 convertCurrencyValuesResult = ConvertCurrencyValues(firstFormatCurrencyValue, secondFormatCurrencyValue);
@@ -358,9 +290,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
             MaxCurrencyValue = GraphValues.Max();
 
-            if (FormatNumbers(firstCurrencyNumber.Text) != string.Empty)
+            if (Formaters.FormatNumbers(firstCurrencyNumber.Text) != string.Empty)
             {
-
                 if (unitCostCurrencyValue.Text == string.Empty)
                 {
                     SetConvertCurrencyValue(GraphValues[^1]);
@@ -380,29 +311,29 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void RenderingGraph(double firstCurrencyValue, double lastCurrencyValue)
         {
-            int requiredPointGeometrySize = ValidateNumberTextInput(8, 15, graphPointGeometrySize.Text, "1", "2");
+            int requiredPointGeometrySize = ValidatorNumber.ValidateNumberTextInput(8, 15, graphPointGeometrySize.Text);
 
-            Brush fillColor = buttonColorUp.Background.Clone();
+            Brush fillColor = buttonStrokeColorUp.Background.Clone();
             Brush fillColorOpacity = buttonColorUp.Background.Clone();
             string arrow = "↑";
             string numberSign = "+";
 
             if (firstCurrencyValue > lastCurrencyValue)
             {
-                fillColor = buttonColorDown.Background.Clone();
+                fillColor = buttonStrokeColorDown.Background.Clone();
                 fillColorOpacity = buttonColorDown.Background.Clone();
                 arrow = "↓";
                 numberSign = string.Empty;
             }
             else if (firstCurrencyValue == lastCurrencyValue)
             {
-                fillColor = buttonColorEquals.Background.Clone();
+                fillColor = buttonStrokeColorEquals.Background.Clone();
                 fillColorOpacity = buttonColorEquals.Background.Clone();
                 arrow = string.Empty;
                 numberSign = string.Empty;
             }
 
-            fillColorOpacity.Opacity = 0.3;
+            fillColorOpacity.Opacity = 1.0 - (ValidatorNumber.ValidateNumberTextInput(70, 101, numberPercentOpacityGraph.Text) / 100.0);
 
             graphSeries.Values = GraphValues;
             graphSeries.Stroke = fillColor;
@@ -433,7 +364,7 @@ namespace OrganizationBankingSystem.MVVM.View
             ListCurrencyValuesItem selectedFromCurrency = (ListCurrencyValuesItem)comboBoxFromCurrency.SelectedItem;
             ListCurrencyValuesItem selectedToCurrency = (ListCurrencyValuesItem)comboBoxToCurrency.SelectedItem;
 
-            if (AllNotNull(selectedFromCurrency, selectedToCurrency))
+            if (ValidatorObject.AllNotNull(selectedFromCurrency, selectedToCurrency))
             {
                 FromCurrency = selectedFromCurrency.CurrencyCode;
                 ToCurrency = selectedToCurrency.CurrencyCode;
@@ -442,7 +373,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
                 if (IsOnlineMode)
                 {
-                    RequiredValues = ValidateNumberTextInput(30, 1000, numberValuesGraph.Text, "1", "2");
+                    RequiredValues = ValidatorNumber.ValidateNumberTextInput(30, 1000, numberValuesGraph.Text);
 
                     MainWindow.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
 
@@ -453,7 +384,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
                     try
                     {
-                        if (AllNotNull(OpenCurrencyValuesMas, MinCurrencyValuesMas, MaxCurrencyValuesMas, CloseCurrencyValuesMas))
+                        if (ValidatorObject.AllNotNull(OpenCurrencyValuesMas, MinCurrencyValuesMas, MaxCurrencyValuesMas, CloseCurrencyValuesMas))
                         {
                             Tuple<double, double> tupleFirstLastCurrencyValues = SetValuesGraph();
 
@@ -501,26 +432,6 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        public static void AppendCellToRow(Row row, string cellItem, CellValues dataType)
-        {
-            if (dataType == CellValues.Number)
-            {
-                row.Append(new Cell()
-                {
-                    CellValue = new CellValue(Convert.ToDouble(cellItem)),
-                    DataType = dataType
-                });
-            }
-            else
-            {
-                row.Append(new Cell()
-                {
-                    CellValue = new CellValue(cellItem),
-                    DataType = dataType
-                });
-            }
-        }
-
         private void RadioButton_Click_1(object sender, RoutedEventArgs e)
         {
             if (detailStatistics.HasItems)
@@ -559,12 +470,9 @@ namespace OrganizationBankingSystem.MVVM.View
 
                         Row rowHeader = new();
 
-                        AppendCellToRow(rowHeader, "Номер дня", CellValues.String);
-                        AppendCellToRow(rowHeader, "Открытие", CellValues.String);
-                        AppendCellToRow(rowHeader, "Минимум", CellValues.String);
-                        AppendCellToRow(rowHeader, "Максимум", CellValues.String);
-                        AppendCellToRow(rowHeader, "Закрытие", CellValues.String);
-                        AppendCellToRow(rowHeader, "Дата", CellValues.String);
+                        DocumentHelpers.AppendCellsToRow(rowHeader,
+                            new string[6] {"Номер дня", "Открытие", "Минимум",
+                                "Максимум", "Закрытие", "Дата"}, CellValues.String);
 
                         sheetData.AppendChild(rowHeader);
 
@@ -572,12 +480,12 @@ namespace OrganizationBankingSystem.MVVM.View
                         {
                             Row row = new();
 
-                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.NumberOfDay), CellValues.Number);
-                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.OpenValueCurrency), CellValues.Number);
-                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.MinValueCurrency), CellValues.Number);
-                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.MaxValueCurrency), CellValues.Number);
-                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.CloseValueCurrency), CellValues.Number);
-                            AppendCellToRow(row, Convert.ToString(detailStatisticsItem.DateCurrency), CellValues.String);
+                            DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.NumberOfDay), CellValues.Number);
+                            DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.OpenValueCurrency), CellValues.Number);
+                            DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.MinValueCurrency), CellValues.Number);
+                            DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.MaxValueCurrency), CellValues.Number);
+                            DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.CloseValueCurrency), CellValues.Number);
+                            DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.DateCurrency), CellValues.String);
 
                             sheetData.AppendChild(row);
                         }
@@ -601,11 +509,11 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        private static readonly Regex _regex = new(@"[^0-9]+");
+        private static readonly Regex _regexNumber = new(@"[^0-9]+");
 
         private void NumberValuesGraphPreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            e.Handled = _regex.IsMatch(e.Text);
+            e.Handled = _regexNumber.IsMatch(e.Text);
         }
 
         private static readonly Regex _regexDouble = new(@"[^0-9.,]+");
@@ -631,7 +539,7 @@ namespace OrganizationBankingSystem.MVVM.View
                 System.ComponentModel.ListSortDirection.Ascending));
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void ColorDialogSetBackground(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.ColorDialog colorDialog = new();
 
@@ -649,6 +557,25 @@ namespace OrganizationBankingSystem.MVVM.View
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
 
             e.Handled = true;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            numberValuesGraph.Text = string.Empty;
+            graphPointGeometrySize.Text = string.Empty;
+
+            comboBoxTypeGraph.SelectedIndex = -1;
+
+            buttonColorUp.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(161, 204, 165));
+            buttonColorDown.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(210, 31, 60));
+            buttonColorEquals.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(125, 132, 145));
+
+            buttonStrokeColorUp.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(161, 204, 165));
+            buttonStrokeColorDown.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(210, 31, 60));
+            buttonStrokeColorEquals.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(125, 132, 145));
+
+            toggleCheckBoxMaxValueCurrency.IsChecked = false;
+            numberPercentOpacityGraph.Text = string.Empty;
         }
     }
 }

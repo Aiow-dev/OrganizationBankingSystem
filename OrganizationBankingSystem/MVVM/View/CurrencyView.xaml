@@ -524,7 +524,7 @@
                                             Width="20"
                                             Height="20"
                                             Background="#FFA1CCA5"
-                                            Click="Button_Click_1"
+                                            Click="ColorDialogSetBackground"
                                             Style="{StaticResource ButtonTheme}">
                                             <Button.ToolTip>
                                                 <ToolTip Content="Цвет повышения графика" Style="{StaticResource TooltipTheme}" />
@@ -536,7 +536,7 @@
                                             Height="20"
                                             Margin="10,0,0,0"
                                             Background="#FFD21F3C"
-                                            Click="Button_Click_1"
+                                            Click="ColorDialogSetBackground"
                                             Style="{StaticResource ButtonTheme}">
                                             <Button.ToolTip>
                                                 <ToolTip Content="Цвет понижения графика" Style="{StaticResource TooltipTheme}" />
@@ -548,10 +548,46 @@
                                             Height="20"
                                             Margin="10,0,0,0"
                                             Background="#FF7D8491"
-                                            Click="Button_Click_1"
+                                            Click="ColorDialogSetBackground"
                                             Style="{StaticResource ButtonTheme}">
                                             <Button.ToolTip>
                                                 <ToolTip Content="Цвет равенства графика" Style="{StaticResource TooltipTheme}" />
+                                            </Button.ToolTip>
+                                        </Button>
+                                        <Button
+                                            x:Name="buttonStrokeColorUp"
+                                            Width="20"
+                                            Height="20"
+                                            Margin="10,0,0,0"
+                                            Background="#FFA1CCA5"
+                                            Click="ColorDialogSetBackground"
+                                            Style="{StaticResource ButtonTheme}">
+                                            <Button.ToolTip>
+                                                <ToolTip Content="Цвет линии повышения графика" Style="{StaticResource TooltipTheme}" />
+                                            </Button.ToolTip>
+                                        </Button>
+                                        <Button
+                                            x:Name="buttonStrokeColorDown"
+                                            Width="20"
+                                            Height="20"
+                                            Margin="10,0,0,0"
+                                            Background="#FFD21F3C"
+                                            Click="ColorDialogSetBackground"
+                                            Style="{StaticResource ButtonTheme}">
+                                            <Button.ToolTip>
+                                                <ToolTip Content="Цвет линии понижения графика" Style="{StaticResource TooltipTheme}" />
+                                            </Button.ToolTip>
+                                        </Button>
+                                        <Button
+                                            x:Name="buttonStrokeColorEquals"
+                                            Width="20"
+                                            Height="20"
+                                            Margin="10,0,0,0"
+                                            Background="#FF7D8491"
+                                            Click="ColorDialogSetBackground"
+                                            Style="{StaticResource ButtonTheme}">
+                                            <Button.ToolTip>
+                                                <ToolTip Content="Цвет линии равенства графика" Style="{StaticResource TooltipTheme}" />
                                             </Button.ToolTip>
                                         </Button>
                                     </StackPanel>
@@ -572,6 +608,45 @@
                                         Content="Показывать максимальное значение"
                                         FontSize="12"
                                         Foreground="DarkGray" />
+                                </StackPanel>
+                                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                    <Grid>
+                                        <TextBox
+                                            x:Name="numberPercentOpacityGraph"
+                                            Width="179"
+                                            Height="35"
+                                            Padding="3,0,0,3"
+                                            PreviewTextInput="NumberValuesGraphPreviewTextInput"
+                                            Style="{StaticResource TextBoxTheme}" />
+                                        <TextBlock
+                                            Width="179"
+                                            Padding="5,0,0,5"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Foreground="DarkGray"
+                                            IsHitTestVisible="False"
+                                            Text="Прозрачность графика (%)">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=numberPercentOpacityGraph}" Value="">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+                                    <Button
+                                        Margin="10,0,0,0"
+                                        Width="172"
+                                        Height="35"
+                                        Background="#FFFFF1D0"
+                                        BorderThickness="0,0,0,0"
+                                        Content="Сбросить все значения"
+                                        Foreground="#FF323232"
+                                        Style="{StaticResource ButtonTheme}" Click="Button_Click_1" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
