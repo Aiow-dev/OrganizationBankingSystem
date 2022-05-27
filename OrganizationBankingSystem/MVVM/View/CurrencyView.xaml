@@ -102,7 +102,7 @@
                                     Height="23"
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Top"
-                                    Click="RadioButton_Click"
+                                    Click="SwapValuesComboBox"
                                     Content="⇅"
                                     Style="{StaticResource MenuButtonIconsTheme}">
                                     <RadioButton.ToolTip>
@@ -196,7 +196,7 @@
                                     <RadioButton
                                         Width="25"
                                         Height="25"
-                                        Click="RadioButton_Click_2"
+                                        Click="SortCurrencyDescriptionValuesComboBox"
                                         Content="⇆"
                                         FontSize="15"
                                         Style="{StaticResource MenuButtonIconsTheme}">
@@ -280,7 +280,7 @@
                                     <RadioButton
                                         Width="25"
                                         Height="25"
-                                        Click="RadioButton_Click_3"
+                                        Click="SortCurrencyCodeValuesComboBox"
                                         Content="⇆"
                                         FontSize="15"
                                         Style="{StaticResource MenuButtonIconsTheme}">
@@ -297,22 +297,20 @@
                                         Width="120"
                                         Background="#FF323232"
                                         BorderThickness="0,0,0,0"
-                                        Click="Button_Click"
+                                        Click="GetCurrencyValue"
                                         Content="Получить значение"
                                         Foreground="DarkGray"
                                         Style="{StaticResource ButtonTheme}" />
-                                    <Grid Height="35" Margin="10,0,0,0">
+                                    <Grid Margin="10,0,0,0">
                                         <TextBox
                                             x:Name="textBlockValueExchangeRates"
-                                            Width="185"
+                                            Width="190"
+                                            Height="35"
                                             Padding="3,0,0,3"
-                                            VerticalAlignment="Stretch"
-                                            Cursor="Arrow"
-                                            IsReadOnly="True"
                                             PreviewTextInput="DoubleNumberValuesGraphPreviewTextInput"
                                             Style="{StaticResource TextBoxTheme}" />
                                         <TextBlock
-                                            Width="185"
+                                            Width="190"
                                             Padding="5,0,0,5"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
@@ -374,7 +372,7 @@
                                     Height="23"
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Top"
-                                    Click="RadioButton_Click_1"
+                                    Click="ExportStatisticsToSpreadsheetDocument"
                                     Content="⭳"
                                     Style="{StaticResource MenuButtonIconsTheme}">
                                     <RadioButton.ToolTip>
@@ -454,16 +452,16 @@
                                             </TextBlock.Style>
                                         </TextBlock>
                                     </Grid>
-                                    <Grid Margin="10,0,0,0">
+                                    <Grid Margin="5,0,0,0">
                                         <TextBox
                                             x:Name="graphPointGeometrySize"
-                                            Width="173"
+                                            Width="175"
                                             Height="35"
                                             Padding="3,0,0,3"
                                             PreviewTextInput="NumberValuesGraphPreviewTextInput"
                                             Style="{StaticResource TextBoxTheme}" />
                                         <TextBlock
-                                            Width="173"
+                                            Width="175"
                                             Padding="5,0,0,5"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
@@ -524,6 +522,7 @@
                                             Width="20"
                                             Height="20"
                                             Background="#FFA1CCA5"
+                                            BorderThickness="0"
                                             Click="ColorDialogSetBackground"
                                             Style="{StaticResource ButtonTheme}">
                                             <Button.ToolTip>
@@ -536,6 +535,7 @@
                                             Height="20"
                                             Margin="10,0,0,0"
                                             Background="#FFD21F3C"
+                                            BorderThickness="0"
                                             Click="ColorDialogSetBackground"
                                             Style="{StaticResource ButtonTheme}">
                                             <Button.ToolTip>
@@ -548,6 +548,7 @@
                                             Height="20"
                                             Margin="10,0,0,0"
                                             Background="#FF7D8491"
+                                            BorderThickness="0"
                                             Click="ColorDialogSetBackground"
                                             Style="{StaticResource ButtonTheme}">
                                             <Button.ToolTip>
@@ -560,6 +561,7 @@
                                             Height="20"
                                             Margin="10,0,0,0"
                                             Background="#FFA1CCA5"
+                                            BorderThickness="0"
                                             Click="ColorDialogSetBackground"
                                             Style="{StaticResource ButtonTheme}">
                                             <Button.ToolTip>
@@ -572,6 +574,7 @@
                                             Height="20"
                                             Margin="10,0,0,0"
                                             Background="#FFD21F3C"
+                                            BorderThickness="0"
                                             Click="ColorDialogSetBackground"
                                             Style="{StaticResource ButtonTheme}">
                                             <Button.ToolTip>
@@ -584,6 +587,7 @@
                                             Height="20"
                                             Margin="10,0,0,0"
                                             Background="#FF7D8491"
+                                            BorderThickness="0"
                                             Click="ColorDialogSetBackground"
                                             Style="{StaticResource ButtonTheme}">
                                             <Button.ToolTip>
@@ -606,6 +610,25 @@
                                     <Label
                                         VerticalAlignment="Center"
                                         Content="Показывать максимальное значение"
+                                        FontSize="12"
+                                        Foreground="DarkGray" />
+                                    <Button
+                                        x:Name="buttonColorMaxValue"
+                                        Width="20"
+                                        Height="20"
+                                        Background="Transparent"
+                                        BorderBrush="Gray"
+                                        BorderThickness="1"
+                                        Click="ColorDialogSetMaxValueBackground"
+                                        Style="{StaticResource ButtonTheme}"
+                                        Tag="DefaultColor">
+                                        <Button.ToolTip>
+                                            <ToolTip Content="Цвет повышения графика" Style="{StaticResource TooltipTheme}" />
+                                        </Button.ToolTip>
+                                    </Button>
+                                    <Label
+                                        VerticalAlignment="Center"
+                                        Content="Цвет линии"
                                         FontSize="12"
                                         Foreground="DarkGray" />
                                 </StackPanel>
@@ -639,14 +662,15 @@
                                         </TextBlock>
                                     </Grid>
                                     <Button
-                                        Margin="10,0,0,0"
                                         Width="172"
                                         Height="35"
+                                        Margin="10,0,0,0"
                                         Background="#FFFFF1D0"
                                         BorderThickness="0,0,0,0"
+                                        Click="ResetParametersGraph"
                                         Content="Сбросить все значения"
                                         Foreground="#FF323232"
-                                        Style="{StaticResource ButtonTheme}" Click="Button_Click_1" />
+                                        Style="{StaticResource ButtonTheme}" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

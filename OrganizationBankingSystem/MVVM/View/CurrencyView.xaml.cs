@@ -83,6 +83,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         public bool IsOnlineMode { get; set; }
 
+        public bool IsSetMaxValueColor { get; set; }
+
         public List<DetailStatisticsItem> DetailStatisticsItems { get; set; }
 
         public List<ListCurrencyValuesItem> ListCurrencyValuesItems { get; set; }
@@ -154,8 +156,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         public void GetExchangeRates()
         {
-            string QUERY_URL = "https://www.alphavantage.co/query?function=FX_DAILY&from_symbol="
-                + FromCurrency + "&to_symbol=" + ToCurrency + "&apikey=64SWH72PQKF16IA1";
+            string QUERY_URL = $"{Properties.Settings.Default.serviceUri}&from_symbol={FromCurrency}&to_symbol={ToCurrency}" +
+                $"&apikey={ServiceManager.ServiceManager.GetServiceKey()}";
             Uri queryUri = new(QUERY_URL);
 
             //TODO: use HttpClient
@@ -171,11 +173,15 @@ namespace OrganizationBankingSystem.MVVM.View
                 int requiredIndex = 0;
 
                 int availableIndex = daysCurrency.Keys.Count;
-
                 if (RequiredValues > availableIndex)
                 {
                     RequiredValues = availableIndex;
-                    MainWindow.notifier.ShowWarningPropertyMessage($"Указанное значение количества дней недоступно\nМаксимально доступное значение для данного курса выбранных валют: {availableIndex}");
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        NotifierHelper.notifier.ShowWarningPropertyMessage($"Указанное значение количества дней недоступно\nМаксимально доступное значение для данного курса выбранных валют: {availableIndex}");
+
+                    });
                 }
 
                 OpenCurrencyValuesMas = new double[RequiredValues];
@@ -205,17 +211,18 @@ namespace OrganizationBankingSystem.MVVM.View
             }
             catch (WebException)
             {
-                MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет");
+                Dispatcher.Invoke(() =>
+                {
+                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет");
+                });
             }
             catch (KeyNotFoundException)
             {
-                MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, на данный момент актуальный курс выбранных валют не доступен");
+                Dispatcher.Invoke(() =>
+                {
+                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, на данный момент актуальный курс выбранных валют не доступен");
+                });
             }
-        }
-
-        public async Task GetExchangeRatesAsync()
-        {
-            await Task.Run(() => GetExchangeRates());
         }
 
         private double[] GetCurrencyValuesMasFromTypeGraph()
@@ -248,20 +255,28 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void SetConvertCurrencyValue(double unitCost = 1.0, bool includeSecondCurrencyValue = false)
         {
-            double firstFormatCurrencyValue = Formaters.FormatTextToDouble(firstCurrencyNumber.Text);
-            firstCurrencyNumber.Text = firstFormatCurrencyValue.ToString();
             double convertCurrencyValuesResult;
 
-            if (includeSecondCurrencyValue)
+            if (Formaters.FormatNumbers(firstCurrencyNumber.Text).Length > 0)
             {
-                double secondFormatCurrencyValue = Formaters.FormatTextToDouble(unitCostCurrencyValue.Text);
-                unitCostCurrencyValue.Text = secondFormatCurrencyValue.ToString();
+                double firstFormatCurrencyValue = Formaters.FormatTextToDouble(firstCurrencyNumber.Text);
+                firstCurrencyNumber.Text = firstFormatCurrencyValue.ToString();
 
-                convertCurrencyValuesResult = ConvertCurrencyValues(firstFormatCurrencyValue, secondFormatCurrencyValue);
+                if (includeSecondCurrencyValue)
+                {
+                    double secondFormatCurrencyValue = Formaters.FormatTextToDouble(unitCostCurrencyValue.Text);
+                    unitCostCurrencyValue.Text = secondFormatCurrencyValue.ToString();
+
+                    convertCurrencyValuesResult = ConvertCurrencyValues(firstFormatCurrencyValue, secondFormatCurrencyValue);
+                }
+                else
+                {
+                    convertCurrencyValuesResult = ConvertCurrencyValues(firstFormatCurrencyValue, unitCost);
+                }
             }
             else
             {
-                convertCurrencyValuesResult = ConvertCurrencyValues(firstFormatCurrencyValue, unitCost);
+                convertCurrencyValuesResult = unitCost;
             }
 
             textBlockValueExchangeRates.Text = convertCurrencyValuesResult.ToString();
@@ -292,7 +307,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
             if (Formaters.FormatNumbers(firstCurrencyNumber.Text) != string.Empty)
             {
-                if (unitCostCurrencyValue.Text == string.Empty)
+                if (Formaters.FormatNumbers(unitCostCurrencyValue.Text) == string.Empty)
                 {
                     SetConvertCurrencyValue(GraphValues[^1]);
                 }
@@ -342,7 +357,15 @@ namespace OrganizationBankingSystem.MVVM.View
             graphSeries.PointGeometrySize = requiredPointGeometrySize;
 
             graphAxisSectionMax.Value = MaxCurrencyValue;
-            graphAxisSectionMax.Stroke = fillColor;
+
+            if (IsSetMaxValueColor)
+            {
+                graphAxisSectionMax.Stroke = buttonColorMaxValue.Background.Clone();
+            }
+            else
+            {
+                graphAxisSectionMax.Stroke = fillColor;
+            }
 
             if ((bool)toggleCheckBoxMaxValueCurrency.IsChecked)
             {
@@ -359,7 +382,7 @@ namespace OrganizationBankingSystem.MVVM.View
             detailStatistics.ItemsSource = DetailStatisticsItems;
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void GetCurrencyValue(object sender, RoutedEventArgs e)
         {
             ListCurrencyValuesItem selectedFromCurrency = (ListCurrencyValuesItem)comboBoxFromCurrency.SelectedItem;
             ListCurrencyValuesItem selectedToCurrency = (ListCurrencyValuesItem)comboBoxToCurrency.SelectedItem;
@@ -375,9 +398,9 @@ namespace OrganizationBankingSystem.MVVM.View
                 {
                     RequiredValues = ValidatorNumber.ValidateNumberTextInput(30, 1000, numberValuesGraph.Text);
 
-                    MainWindow.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
+                    NotifierHelper.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
 
-                    await GetExchangeRatesAsync();
+                    await Task.Run(GetExchangeRates);
 
                     GraphValues = new ChartValues<double>();
                     DetailStatisticsItems = new List<DetailStatisticsItem>();
@@ -392,12 +415,12 @@ namespace OrganizationBankingSystem.MVVM.View
                         }
                         else
                         {
-                            MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
+                            NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
                         }
                     }
                     catch (ArgumentOutOfRangeException)
                     {
-                        MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Неверное количество значений");
+                        NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Неверное количество значений");
                     }
                 }
                 else
@@ -407,16 +430,25 @@ namespace OrganizationBankingSystem.MVVM.View
 
                     detailStatistics.ItemsSource = new List<DetailStatisticsItem>();
 
-                    SetConvertCurrencyValue(includeSecondCurrencyValue: true);
+                    NotifierHelper.notifier.ShowInformationPropertyMessage($"1: {firstCurrencyNumber.Text}\n2: {unitCostCurrencyValue.Text}");
+
+                    if (Formaters.FormatNumbers(unitCostCurrencyValue.Text).Length > 0)
+                    {
+                        SetConvertCurrencyValue(includeSecondCurrencyValue: true);
+                    }
+                    else
+                    {
+                        SetConvertCurrencyValue();
+                    }
                 }
             }
             else
             {
-                MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, в списках валют не выбраны или выбраны валюты, не содержащиеся в них");
+                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, в списках валют не выбраны или выбраны валюты, не содержащиеся в них");
             }
         }
 
-        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        private void SwapValuesComboBox(object sender, RoutedEventArgs e)
         {
             ListCurrencyValuesItem fromCurrency = (ListCurrencyValuesItem)comboBoxFromCurrency.SelectedItem;
             ListCurrencyValuesItem toCurrency = (ListCurrencyValuesItem)comboBoxToCurrency.SelectedItem;
@@ -428,11 +460,11 @@ namespace OrganizationBankingSystem.MVVM.View
             }
             else
             {
-                MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует выбранное значение исходной или конечной валюты. Или выбрана валюта, не представленная в списках валют");
+                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует выбранное значение исходной или конечной валюты. Или выбрана валюта, не представленная в списках валют");
             }
         }
 
-        private void RadioButton_Click_1(object sender, RoutedEventArgs e)
+        private void ExportStatisticsToSpreadsheetDocument(object sender, RoutedEventArgs e)
         {
             if (detailStatistics.HasItems)
             {
@@ -495,17 +527,17 @@ namespace OrganizationBankingSystem.MVVM.View
 
                         spreadSheetDocument.Close();
 
-                        MainWindow.notifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
+                        NotifierHelper.notifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
                     }
                     catch (IOException)
                     {
-                        MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, данный файл занят другим процессом или уже открыт в Microsoft Excel");
+                        NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, данный файл занят другим процессом или уже открыт в Microsoft Excel");
                     }
                 }
             }
             else
             {
-                MainWindow.notifier.ShowErrorPropertyMessage("Ошибка. Детальная статистика и график курсов валют не построены");
+                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Детальная статистика и график курсов валют не построены");
             }
         }
 
@@ -523,7 +555,7 @@ namespace OrganizationBankingSystem.MVVM.View
             e.Handled = _regexDouble.IsMatch(e.Text);
         }
 
-        private void RadioButton_Click_2(object sender, RoutedEventArgs e)
+        private void SortCurrencyDescriptionValuesComboBox(object sender, RoutedEventArgs e)
         {
             comboBoxFromCurrency.Items.SortDescriptions.Clear();
 
@@ -531,7 +563,7 @@ namespace OrganizationBankingSystem.MVVM.View
                 System.ComponentModel.ListSortDirection.Ascending));
         }
 
-        private void RadioButton_Click_3(object sender, RoutedEventArgs e)
+        private void SortCurrencyCodeValuesComboBox(object sender, RoutedEventArgs e)
         {
             comboBoxFromCurrency.Items.SortDescriptions.Clear();
 
@@ -548,7 +580,25 @@ namespace OrganizationBankingSystem.MVVM.View
                 System.Drawing.Color selectedColor = colorDialog.Color;
 
                 Button button = (Button)sender;
+
                 button.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(selectedColor.R, selectedColor.G, selectedColor.B));
+            }
+        }
+
+        private void ColorDialogSetMaxValueBackground(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.ColorDialog colorDialog = new();
+
+            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                System.Drawing.Color selectedColor = colorDialog.Color;
+
+                Button button = (Button)sender;
+
+                button.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(selectedColor.R, selectedColor.G, selectedColor.B));
+                button.BorderThickness = new Thickness(0);
+
+                IsSetMaxValueColor = true;
             }
         }
 
@@ -559,7 +609,7 @@ namespace OrganizationBankingSystem.MVVM.View
             e.Handled = true;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void ResetParametersGraph(object sender, RoutedEventArgs e)
         {
             numberValuesGraph.Text = string.Empty;
             graphPointGeometrySize.Text = string.Empty;
@@ -573,6 +623,9 @@ namespace OrganizationBankingSystem.MVVM.View
             buttonStrokeColorUp.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(161, 204, 165));
             buttonStrokeColorDown.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(210, 31, 60));
             buttonStrokeColorEquals.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(125, 132, 145));
+
+            buttonColorMaxValue.Background = new SolidColorBrush(System.Windows.Media.Colors.Transparent);
+            buttonColorMaxValue.BorderThickness = new Thickness(1);
 
             toggleCheckBoxMaxValueCurrency.IsChecked = false;
             numberPercentOpacityGraph.Text = string.Empty;
