@@ -2,9 +2,9 @@
     x:Class="OrganizationBankingSystem.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:OrganizationBankingSystem.Core.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:OrganizationBankingSystem"
-    xmlns:converters="clr-namespace:OrganizationBankingSystem.Core.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
     Width="1000"
@@ -21,7 +21,10 @@
         <viewModel:MainViewModel />
     </Window.DataContext>
 
-    <Border Width="1000" x:Name="WindowBorder" CornerRadius="8">
+    <Border
+        x:Name="WindowBorder"
+        Width="1000"
+        CornerRadius="8">
         <Border.Background>
             <SolidColorBrush Opacity="0.83" Color="#FF1A1919" />
         </Border.Background>
@@ -35,14 +38,14 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <ToggleButton
+                x:Name="ToggleButtonHidePanel"
                 Width="25"
                 Height="25"
                 Margin="10"
                 HorizontalAlignment="Left"
-                FontSize="11"
                 HorizontalContentAlignment="Center"
+                FontSize="11"
                 IsChecked="False"
-                x:Name="ToggleButtonHidePanel"
                 Style="{StaticResource ToggleButtonTheme}">
                 <ToggleButton.Triggers>
                     <EventTrigger RoutedEvent="ToggleButton.Checked">
@@ -244,7 +247,8 @@
                                 Width="12"
                                 Height="12"
                                 Background="#FFF8F8F8"
-                                CornerRadius="10">
+                                CornerRadius="10"
+                                MouseLeftButtonDown="ShutdownApplication">
                                 <TextBlock
                                     Margin="0,1,0,-1"
                                     HorizontalAlignment="Center"
@@ -258,7 +262,8 @@
                                 Height="12"
                                 Margin="7,0,0,0"
                                 Background="#FFF8F8F8"
-                                CornerRadius="10">
+                                CornerRadius="10"
+                                MouseLeftButtonDown="MinimizeWindow">
                                 <TextBlock
                                     Margin="0,1,0,-1"
                                     HorizontalAlignment="Center"
@@ -273,13 +278,13 @@
                                 Margin="7,0,0,0"
                                 Background="#FFF8F8F8"
                                 CornerRadius="10">
-                                <TextBlock
+                                <ToggleButton
                                     HorizontalAlignment="Center"
                                     FontSize="8"
-                                    Foreground="#FF282828"
                                     FontWeight="Bold"
-                                    Style="{StaticResource TextBlockHideAnimationTheme}"
-                                    Text="🡼" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" />
+                                    IsChecked="False"
+                                    Click="ResizeWindow"
+                                    Style="{StaticResource ToggleButtonHideAnimationTheme}" />
                             </Border>
                         </StackPanel>
                     </StackPanel>

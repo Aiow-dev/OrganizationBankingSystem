@@ -30,7 +30,7 @@ namespace OrganizationBankingSystem
             }
         }
 
-        private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void MaximizeWindow()
         {
             Application.Current.MainWindow.WindowState = WindowState.Maximized;
 
@@ -41,15 +41,15 @@ namespace OrganizationBankingSystem
             borderContent.Width = SystemParameters.PrimaryScreenWidth - 160;
             borderContent.CornerRadius = new CornerRadius(0);
 
-            int increaseWidthValue = 44;
+            int decreaseWidthValue = 44;
 
             if (ToggleButtonHidePanel.IsChecked == false)
             {
-                increaseWidthValue = 160;
+                decreaseWidthValue = 160;
             }
 
             DoubleAnimation borderContentAnimation = new(borderContent.Width,
-                SystemParameters.PrimaryScreenWidth - increaseWidthValue,
+                SystemParameters.PrimaryScreenWidth - decreaseWidthValue,
                 new Duration(TimeSpan.FromSeconds(1)));
 
             Storyboard.SetTargetName(borderContentAnimation, borderContent.Name);
@@ -59,6 +59,59 @@ namespace OrganizationBankingSystem
             myStoryboard.Children.Add(borderContentAnimation);
 
             myStoryboard.Begin(ToggleButtonHidePanel);
+        }
+
+        private void NormalizeWindow()
+        {
+            Application.Current.MainWindow.WindowState = WindowState.Normal;
+
+            WindowBorder.Width = 1000;
+            WindowBorder.Height = 600;
+            WindowBorder.CornerRadius = new CornerRadius(10);
+
+            borderContent.Width = 840;
+            borderContent.CornerRadius = new CornerRadius(10);
+
+            int borderContentWidth = 956;
+
+            if (ToggleButtonHidePanel.IsChecked == false)
+            {
+                borderContentWidth = 840;
+            }
+
+            DoubleAnimation borderContentAnimation = new(borderContent.Width,
+                borderContentWidth,
+                new Duration(TimeSpan.FromSeconds(1)));
+
+            Storyboard.SetTargetName(borderContentAnimation, borderContent.Name);
+            Storyboard.SetTargetProperty(borderContentAnimation, new PropertyPath(WidthProperty));
+
+            Storyboard myStoryboard = new();
+            myStoryboard.Children.Add(borderContentAnimation);
+
+            myStoryboard.Begin(ToggleButtonHidePanel);
+        }
+
+        private void ResizeWindow(object sender, RoutedEventArgs e)
+        {
+            if (Application.Current.MainWindow.WindowState != WindowState.Maximized)
+            {
+                MaximizeWindow();
+            }
+            else
+            {
+                NormalizeWindow();
+            }
+        }
+
+        private void MinimizeWindow(object sender, MouseButtonEventArgs e)
+        {
+            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+
+        private void ShutdownApplication(object sender, MouseButtonEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }
