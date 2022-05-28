@@ -19,13 +19,24 @@ namespace OrganizationBankingSystem.Core
         private string _message;
 
         public new string Message
-        { get { return _message; } set { _message = value; OnPropertyChanged(); } }
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                _message = value;
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
+
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }

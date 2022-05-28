@@ -36,7 +36,7 @@
                 <Image
                     Grid.Row="1"
                     Width="35"
-                    Source="/Core/competed.png" />
+                    Source="/Core/completed.png" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="1"

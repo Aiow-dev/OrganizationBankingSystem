@@ -45,10 +45,10 @@
                                 FontSize="15"
                                 Foreground="#FFF8F8F8"
                                 Text="График курсов валют" />
-                            <lvc:CartesianChart x:Name="graph" Grid.Row="1">
+                            <lvc:CartesianChart Grid.Row="1">
                                 <lvc:CartesianChart.Series>
                                     <lvc:LineSeries
-                                        x:Name="graphSeries"
+                                        x:Name="GraphSeries"
                                         Grid.Row="1"
                                         Stroke="#FFA1CCA5"
                                         Values="{Binding GraphValues}">
@@ -58,10 +58,10 @@
                                     </lvc:LineSeries>
                                 </lvc:CartesianChart.Series>
                                 <lvc:CartesianChart.AxisY>
-                                    <lvc:Axis x:Name="graphAxis">
+                                    <lvc:Axis>
                                         <lvc:Axis.Sections>
                                             <lvc:AxisSection
-                                                x:Name="graphAxisSectionMax"
+                                                x:Name="GraphAxisSectionMax"
                                                 Stroke="#FFA1CCA5"
                                                 StrokeThickness="2"
                                                 Visibility="Hidden" />
@@ -70,7 +70,7 @@
                                 </lvc:CartesianChart.AxisY>
                             </lvc:CartesianChart>
                             <TextBlock
-                                x:Name="differencePercentValueText"
+                                x:Name="DifferencePercentValueText"
                                 Grid.Row="2"
                                 VerticalAlignment="Top"
                                 FontSize="12"
@@ -110,7 +110,7 @@
                                     </RadioButton.ToolTip>
                                 </RadioButton>
                                 <TextBox
-                                    x:Name="textBoxConnectionMode"
+                                    x:Name="TextBoxConnectionMode"
                                     Height="23"
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Top"
@@ -125,7 +125,7 @@
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                                     <Grid>
                                         <TextBox
-                                            x:Name="firstCurrencyNumber"
+                                            x:Name="FirstCurrencyNumber"
                                             Width="120"
                                             Height="35"
                                             Padding="3,0,0,3"
@@ -143,7 +143,7 @@
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=firstCurrencyNumber}" Value="">
+                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=FirstCurrencyNumber}" Value="">
                                                             <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -153,7 +153,7 @@
                                     </Grid>
                                     <Grid Height="35" Margin="10,0,0,0">
                                         <ComboBox
-                                            x:Name="comboBoxFromCurrency"
+                                            x:Name="ComboBoxFromCurrency"
                                             Width="185"
                                             DisplayMemberPath="CurrencyDescription"
                                             ItemContainerStyle="{StaticResource ComboBoxItemTheme}"
@@ -170,10 +170,10 @@
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Style.Setters>
                                                         <Setter Property="Foreground" Value="#FFF8F8F8" />
-                                                        <Setter Property="Text" Value="{Binding Path=SelectedItem.CurrencyDescription, ElementName=comboBoxFromCurrency}" />
+                                                        <Setter Property="Text" Value="{Binding Path=SelectedItem.CurrencyDescription, ElementName=ComboBoxFromCurrency}" />
                                                     </Style.Setters>
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ElementName=comboBoxFromCurrency, Path=SelectedItem}" Value="{x:Null}">
+                                                        <DataTrigger Binding="{Binding ElementName=ComboBoxFromCurrency, Path=SelectedItem}" Value="{x:Null}">
                                                             <Setter Property="Foreground" Value="DarkGray" />
                                                             <Setter Property="Text" Value="Исходная валюта" />
                                                         </DataTrigger>
@@ -208,7 +208,7 @@
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                                     <Grid>
                                         <TextBox
-                                            x:Name="unitCostCurrencyValue"
+                                            x:Name="UnitCostCurrencyValue"
                                             Width="120"
                                             Height="35"
                                             Padding="3,0,0,3"
@@ -227,7 +227,7 @@
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=unitCostCurrencyValue}" Value="">
+                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=UnitCostCurrencyValue}" Value="">
                                                             <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -237,7 +237,7 @@
                                     </Grid>
                                     <Grid Height="35" Margin="10,0,0,0">
                                         <ComboBox
-                                            x:Name="comboBoxToCurrency"
+                                            x:Name="ComboBoxToCurrency"
                                             Width="185"
                                             DisplayMemberPath="CurrencyDescription"
                                             ItemContainerStyle="{StaticResource ComboBoxItemTheme}"
@@ -254,10 +254,10 @@
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Style.Setters>
                                                         <Setter Property="Foreground" Value="#FFF8F8F8" />
-                                                        <Setter Property="Text" Value="{Binding Path=SelectedItem.CurrencyDescription, ElementName=comboBoxToCurrency}" />
+                                                        <Setter Property="Text" Value="{Binding Path=SelectedItem.CurrencyDescription, ElementName=ComboBoxToCurrency}" />
                                                     </Style.Setters>
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ElementName=comboBoxToCurrency, Path=SelectedItem}" Value="{x:Null}">
+                                                        <DataTrigger Binding="{Binding ElementName=ComboBoxToCurrency, Path=SelectedItem}" Value="{x:Null}">
                                                             <Setter Property="Foreground" Value="DarkGray" />
                                                             <Setter Property="Text" Value="Конечная валюта" />
                                                         </DataTrigger>
@@ -303,7 +303,7 @@
                                         Style="{StaticResource ButtonTheme}" />
                                     <Grid Margin="10,0,0,0">
                                         <TextBox
-                                            x:Name="textBlockValueExchangeRates"
+                                            x:Name="TextBlockValueExchangeRates"
                                             Width="190"
                                             Height="35"
                                             Padding="3,0,0,3"
@@ -321,7 +321,7 @@
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=textBlockValueExchangeRates}" Value="">
+                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=TextBlockValueExchangeRates}" Value="">
                                                             <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -381,14 +381,17 @@
                                 </RadioButton>
                             </StackPanel>
                             <DataGrid
-                                x:Name="detailStatistics"
+                                x:Name="DetailStatistics"
                                 Grid.Row="1"
                                 AutoGenerateColumns="False"
                                 Background="#FF282828"
                                 BorderThickness="0"
                                 CanUserResizeColumns="False"
+                                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderTheme}"
                                 IsReadOnly="True"
                                 ItemsSource="{Binding DetailStatisticsItems}"
+                                RowStyle="{StaticResource DataGridRowTheme}"
+                                Style="{StaticResource DataGridTheme}"
                                 VerticalScrollBarVisibility="Disabled">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding NumberOfDay}" Header="№ дня" />
@@ -426,7 +429,7 @@
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                                     <Grid>
                                         <TextBox
-                                            x:Name="numberValuesGraph"
+                                            x:Name="NumberValuesGraph"
                                             Width="179"
                                             Height="35"
                                             Padding="3,0,0,3"
@@ -444,7 +447,7 @@
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=numberValuesGraph}" Value="">
+                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=NumberValuesGraph}" Value="">
                                                             <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -454,7 +457,7 @@
                                     </Grid>
                                     <Grid Margin="5,0,0,0">
                                         <TextBox
-                                            x:Name="graphPointGeometrySize"
+                                            x:Name="GraphPointGeometrySize"
                                             Width="175"
                                             Height="35"
                                             Padding="3,0,0,3"
@@ -472,7 +475,7 @@
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Setter Property="Visibility" Value="Collapsed" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=graphPointGeometrySize}" Value="">
+                                                        <DataTrigger Binding="{Binding Path=Text, ElementName=GraphPointGeometrySize}" Value="">
                                                             <Setter Property="Visibility" Value="Visible" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -484,7 +487,7 @@
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
                                     <Grid Height="35">
                                         <ComboBox
-                                            x:Name="comboBoxTypeGraph"
+                                            x:Name="ComboBoxTypeGraph"
                                             Width="179"
                                             ItemContainerStyle="{StaticResource ComboBoxItemTheme}"
                                             Style="{StaticResource ComboBoxTheme}">
@@ -504,10 +507,10 @@
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Style.Setters>
                                                         <Setter Property="Foreground" Value="#FFF8F8F8" />
-                                                        <Setter Property="Text" Value="{Binding Path=SelectedItem.Content, ElementName=comboBoxTypeGraph}" />
+                                                        <Setter Property="Text" Value="{Binding Path=SelectedItem.Content, ElementName=ComboBoxTypeGraph}" />
                                                     </Style.Setters>
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ElementName=comboBoxTypeGraph, Path=SelectedItem}" Value="{x:Null}">
+                                                        <DataTrigger Binding="{Binding ElementName=ComboBoxTypeGraph, Path=SelectedItem}" Value="{x:Null}">
                                                             <Setter Property="Foreground" Value="DarkGray" />
                                                             <Setter Property="Text" Value="Тип графика" />
                                                         </DataTrigger>
@@ -606,10 +609,14 @@
                                         Height="20"
                                         Background="#FF323232"
                                         IsChecked="False"
-                                        Style="{StaticResource ToggleCheckBoxTheme}" />
+                                        Style="{StaticResource ToggleCheckBoxTheme}">
+                                        <ToggleButton.ToolTip>
+                                            <ToolTip Content="Отображать линию максимального значения валюты" Style="{StaticResource TooltipTheme}" />
+                                        </ToggleButton.ToolTip>
+                                    </ToggleButton>
                                     <Label
                                         VerticalAlignment="Center"
-                                        Content="Показывать максимальное значение"
+                                        Content="Линия максимального значения"
                                         FontSize="12"
                                         Foreground="DarkGray" />
                                     <Button
@@ -623,7 +630,7 @@
                                         Style="{StaticResource ButtonTheme}"
                                         Tag="DefaultColor">
                                         <Button.ToolTip>
-                                            <ToolTip Content="Цвет повышения графика" Style="{StaticResource TooltipTheme}" />
+                                            <ToolTip Content="Цвет линии максимального значения графика" Style="{StaticResource TooltipTheme}" />
                                         </Button.ToolTip>
                                     </Button>
                                     <Label

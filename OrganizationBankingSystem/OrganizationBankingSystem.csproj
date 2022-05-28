@@ -8,14 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Core\competed.png" />
+    <None Remove="Core\completed.png" />
     <None Remove="Core\error.png" />
     <None Remove="Core\question.png" />
     <None Remove="Core\warning_flat.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
     <Folder Include="MVVM\Model\" />
   </ItemGroup>
 
@@ -34,7 +33,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Core\competed.png" />
+    <Resource Include="Core\completed.png" />
     <Resource Include="Core\error.png" />
     <Resource Include="Core\question.png" />
     <Resource Include="Core\warning_flat.png" />

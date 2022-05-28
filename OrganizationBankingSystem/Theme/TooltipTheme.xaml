@@ -11,7 +11,8 @@
                             Margin="3"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            ToolTipService.ShowDuration="10000" />
+                            TextBlock.Foreground="DarkGray"
+                            ToolTipService.ShowDuration="2000" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
