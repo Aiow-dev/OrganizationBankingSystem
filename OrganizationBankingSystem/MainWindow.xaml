@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:OrganizationBankingSystem"
+    xmlns:converters="clr-namespace:OrganizationBankingSystem.Core.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
     Width="1000"
@@ -12,7 +13,6 @@
     Background="Transparent"
     Loaded="Window_Loaded"
     MouseLeftButtonDown="WindowMouseLeftButtonDown"
-    ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
@@ -21,7 +21,7 @@
         <viewModel:MainViewModel />
     </Window.DataContext>
 
-    <Border Width="1000" CornerRadius="8">
+    <Border Width="1000" x:Name="WindowBorder" CornerRadius="8">
         <Border.Background>
             <SolidColorBrush Opacity="0.83" Color="#FF1A1919" />
         </Border.Background>
@@ -42,6 +42,7 @@
                 FontSize="11"
                 HorizontalContentAlignment="Center"
                 IsChecked="False"
+                x:Name="ToggleButtonHidePanel"
                 Style="{StaticResource ToggleButtonTheme}">
                 <ToggleButton.Triggers>
                     <EventTrigger RoutedEvent="ToggleButton.Checked">
@@ -56,8 +57,8 @@
                                 <DoubleAnimation
                                     Storyboard.TargetName="borderContent"
                                     Storyboard.TargetProperty="Width"
-                                    From="840"
-                                    To="956"
+                                    From="{Binding Path=Width, ElementName=borderContent}"
+                                    To="{Binding Path=Width, ElementName=WindowBorder, Converter={converters:DecreaseConverter}, ConverterParameter='44'}"
                                     Duration="0:0:0:1" />
                             </Storyboard>
                         </BeginStoryboard>
@@ -75,8 +76,8 @@
                                 <DoubleAnimation
                                     Storyboard.TargetName="borderContent"
                                     Storyboard.TargetProperty="Width"
-                                    From="956"
-                                    To="840"
+                                    From="{Binding Path=Width, ElementName=borderContent}"
+                                    To="{Binding Path=Width, ElementName=WindowBorder, Converter={converters:DecreaseConverter}, ConverterParameter='160'}"
                                     Duration="0:0:0:1" />
                             </Storyboard>
                         </BeginStoryboard>
@@ -276,8 +277,9 @@
                                     HorizontalAlignment="Center"
                                     FontSize="8"
                                     Foreground="#FF282828"
+                                    FontWeight="Bold"
                                     Style="{StaticResource TextBlockHideAnimationTheme}"
-                                    Text="🡼" />
+                                    Text="🡼" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" />
                             </Border>
                         </StackPanel>
                     </StackPanel>
