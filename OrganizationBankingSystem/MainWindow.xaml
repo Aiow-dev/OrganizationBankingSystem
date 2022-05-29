@@ -7,10 +7,12 @@
     xmlns:local="clr-namespace:OrganizationBankingSystem"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
+    Title="DolphinBank"
     Width="1000"
     Height="600"
     AllowsTransparency="True"
     Background="Transparent"
+    Icon="/bank_logo_application.png"
     Loaded="Window_Loaded"
     MouseLeftButtonDown="WindowMouseLeftButtonDown"
     WindowStartupLocation="CenterScreen"
@@ -37,11 +39,17 @@
                 <RowDefinition Height="65" />
                 <RowDefinition />
             </Grid.RowDefinitions>
+            <TextBlock
+                Height="20"
+                Margin="15,5,0,0"
+                VerticalAlignment="Top">
+                <Path Data="M 0.861 4.889 C 0.7787 3.4853 1.782 1.615 3.872 0.855 C 6.554 -0.221 8.211 0.624 8.244 0.526 C 12.115 -0.188 12.012 0.949 12.094 1.035 C 12.098 1.115 12.084 1.177 12 1.249 C 11.614 1.444 11.175 1.518 10.943 2.06 C 11.1347 2.2843 14.083 4.79 11.556 10.505 C 12.732 11.383 12.577 13.044 12.577 12.998 C 12.491 13.14 12.33 13.091 12.224 12.779 C 11.853 12.241 11.77 12.371 11.232 12.176 C 11.133 12.126 11.012 12.024 10.873 11.761 C 10.518 12.117 10.212 12.172 9.847 12.188 C 9.311 12.297 9.334 12.745 9.256 12.745 C 8.85 12.794 8.941 10.857 10.581 10.465 C 10.706 10.741 10.694 5.507 7.687 4.786 C 7.633 5.865 7.597 7.144 6.339 5.716 C 6.154 5.879 6.403 7.223 6.026 7.301 C 5.571 7.358 4.654 6.533 4.633 5.097 C 3.055 5.495 0.297 8.026 -0.158 6.711 C -0.272 6.355 0.105 5.716 0.859 4.891" Fill="#FFF8F8F8" />
+            </TextBlock>
             <ToggleButton
                 x:Name="ToggleButtonHidePanel"
                 Width="25"
                 Height="25"
-                Margin="10"
+                Margin="10,15,10,0"
                 HorizontalAlignment="Left"
                 HorizontalContentAlignment="Center"
                 FontSize="11"
@@ -280,10 +288,10 @@
                                 CornerRadius="10">
                                 <ToggleButton
                                     HorizontalAlignment="Center"
+                                    Click="ResizeWindow"
                                     FontSize="8"
                                     FontWeight="Bold"
                                     IsChecked="False"
-                                    Click="ResizeWindow"
                                     Style="{StaticResource ToggleButtonHideAnimationTheme}" />
                             </Border>
                         </StackPanel>

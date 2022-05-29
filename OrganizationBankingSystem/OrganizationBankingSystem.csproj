@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="bank_logo_application.png" />
     <None Remove="Core\completed.png" />
     <None Remove="Core\error.png" />
     <None Remove="Core\question.png" />
@@ -33,6 +34,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="bank_logo_application.png" />
     <Resource Include="Core\completed.png" />
     <Resource Include="Core\error.png" />
     <Resource Include="Core\question.png" />

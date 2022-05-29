@@ -377,8 +377,16 @@ namespace OrganizationBankingSystem.MVVM.View
             DetailStatistics.ItemsSource = DetailStatisticsItems;
         }
 
+        readonly System.Windows.Forms.Timer timer = new();
+
         private async void GetCurrencyValue(object sender, RoutedEventArgs e)
         {
+            timer.Interval = 2000;
+            timer.Tick += TimerTick;
+            timer.Start();
+
+            ButtonGetCurrencyValue.IsEnabled = false;
+
             ListCurrencyValuesItem selectedFromCurrency = (ListCurrencyValuesItem)ComboBoxFromCurrency.SelectedItem;
             ListCurrencyValuesItem selectedToCurrency = (ListCurrencyValuesItem)ComboBoxToCurrency.SelectedItem;
 
@@ -444,6 +452,12 @@ namespace OrganizationBankingSystem.MVVM.View
             {
                 NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, в списках валют не выбраны или выбраны валюты, не содержащиеся в них");
             }
+        }
+
+        private void TimerTick(object sender, EventArgs e)
+        {
+            ButtonGetCurrencyValue.IsEnabled = true;
+            timer.Stop();
         }
 
         private void SwapValuesComboBox(object sender, RoutedEventArgs e)
