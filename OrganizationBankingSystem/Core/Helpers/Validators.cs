@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace OrganizationBankingSystem.Core.Helpers
 {
@@ -14,6 +15,9 @@ namespace OrganizationBankingSystem.Core.Helpers
 
     public static class ValidatorNumber
     {
+        private static readonly Regex _regexNumber = new(@"[^0-9]+");
+        private static readonly Regex _regexDouble = new(@"[^0-9.,]+");
+
         public static int ValidateNumberTextInput(int defaultTextInputValue, int maxTextInputValue, string textFromInput)
         {
             try
@@ -37,6 +41,16 @@ namespace OrganizationBankingSystem.Core.Helpers
             {
                 return defaultTextInputValue;
             }
+        }
+
+        public static bool IsNumberText(string text)
+        {
+            return _regexNumber.IsMatch(text);
+        }
+
+        public static bool IsDoubleNumberText(string text)
+        {
+            return _regexDouble.IsMatch(text);
         }
     }
 }

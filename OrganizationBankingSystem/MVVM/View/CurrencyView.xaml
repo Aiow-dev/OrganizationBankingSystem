@@ -7,8 +7,6 @@
     xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DataContext="{d:DesignInstance local:CurrencyView}"
-    d:DesignHeight="542.764"
-    d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid Width="Auto" Margin="10,0,10,0">
         <Grid.ColumnDefinitions>
@@ -24,21 +22,20 @@
             FontSize="20"
             Foreground="#FFF8F8F8"
             Text="Обзор курсов валют" />
-        <Grid Margin="10,20,10,0">
+        <Grid Margin="10,40,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="0.6*" />
             </Grid.ColumnDefinitions>
             <Border
-                Height="225"
                 Background="#FF282828"
                 CornerRadius="8">
                 <Grid>
-                    <StackPanel Margin="10,10,10,0">
+                    <Grid x:Name="stackPanel" Margin="10,10,10,0">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
-                                <RowDefinition Height="170" />
+                                <RowDefinition Height="*" />
                                 <RowDefinition Height="25" />
                             </Grid.RowDefinitions>
                             <TextBlock
@@ -76,12 +73,11 @@
                                 FontSize="12"
                                 Foreground="#FFF8F8F8" />
                         </Grid>
-                    </StackPanel>
+                    </Grid>
                 </Grid>
             </Border>
             <Border
                 Grid.Column="1"
-                Height="225"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Stretch"
                 Background="#FF282828"
@@ -349,21 +345,20 @@
                 </Grid>
             </Border>
         </Grid>
-        <Grid Grid.Row="1" Margin="10,20,10,0">
+        <Grid Grid.Row="1" Margin="10,20,10,15">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.0*" />
                 <ColumnDefinition Width="0.6*" />
             </Grid.ColumnDefinitions>
             <Border
-                Height="225"
                 Background="#FF282828"
                 CornerRadius="8">
                 <Grid>
-                    <StackPanel Margin="10">
+                    <Grid Margin="10">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
-                                <RowDefinition Height="170" />
+                                <RowDefinition Height="0.85*" />
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock
@@ -375,6 +370,7 @@
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Top"
                                     Click="ExportStatisticsToSpreadsheetDocument"
+                                    x:Name="ButtonExportStatistics"
                                     Content="⭳"
                                     Style="{StaticResource MenuButtonIconsTheme}">
                                     <RadioButton.ToolTip>
@@ -405,13 +401,12 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>
-                    </StackPanel>
+                    </Grid>
                 </Grid>
             </Border>
             <Border
                 Grid.Column="1"
                 Width="381"
-                Height="225"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Stretch"
                 Background="#FF282828"
@@ -676,9 +671,10 @@
                                         Margin="10,0,0,0"
                                         Background="#FFFFF1D0"
                                         BorderThickness="0,0,0,0"
-                                        Click="ResetParametersGraph"
+                                        Click="ResetGraphParameters"
                                         Content="Сбросить все значения"
                                         Foreground="#FF323232"
+                                        x:Name="ButtonResetGraphParameters"
                                         Style="{StaticResource ButtonTheme}" />
                                 </StackPanel>
                             </StackPanel>

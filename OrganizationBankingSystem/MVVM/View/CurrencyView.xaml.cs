@@ -17,7 +17,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -474,6 +473,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void ExportStatisticsToSpreadsheetDocument(object sender, RoutedEventArgs e)
         {
+            ElementHelper.DisableElement(ButtonExportStatistics, 1500);
+
             if (DetailStatistics.HasItems)
             {
                 System.Windows.Forms.SaveFileDialog saveFileDialog = new();
@@ -548,18 +549,14 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        private static readonly Regex _regexNumber = new(@"[^0-9]+");
-
         private void NumberValuesGraphPreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            e.Handled = _regexNumber.IsMatch(e.Text);
+            e.Handled = ValidatorNumber.IsNumberText(e.Text);
         }
-
-        private static readonly Regex _regexDouble = new(@"[^0-9.,]+");
 
         private void DoubleNumberValuesGraphPreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            e.Handled = _regexDouble.IsMatch(e.Text);
+            e.Handled = ValidatorNumber.IsDoubleNumberText(e.Text);
         }
 
         private void SortCurrencyDescriptionValuesComboBox(object sender, RoutedEventArgs e)
@@ -614,8 +611,10 @@ namespace OrganizationBankingSystem.MVVM.View
             e.Handled = true;
         }
 
-        private void ResetParametersGraph(object sender, RoutedEventArgs e)
+        private void ResetGraphParameters(object sender, RoutedEventArgs e)
         {
+            ElementHelper.DisableElement(ButtonResetGraphParameters, 1000);
+
             NumberValuesGraph.Text = string.Empty;
             GraphPointGeometrySize.Text = string.Empty;
 
