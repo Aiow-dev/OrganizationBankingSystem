@@ -92,6 +92,16 @@ namespace OrganizationBankingSystem
             myStoryboard.Begin(ToggleButtonHidePanel);
         }
 
+        private static void SetMinimizedWindow()
+        {
+            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+
+        private static void SetShutdownApplication()
+        {
+            Application.Current.Shutdown();
+        }
+
         private void ResizeWindow(object sender, RoutedEventArgs e)
         {
             if (Application.Current.MainWindow.WindowState != WindowState.Maximized)
@@ -106,12 +116,38 @@ namespace OrganizationBankingSystem
 
         private void MinimizeWindow(object sender, MouseButtonEventArgs e)
         {
-            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+            SetMinimizedWindow();
         }
 
         private void ShutdownApplication(object sender, MouseButtonEventArgs e)
         {
+            SetShutdownApplication();
+        }
+
+        private void MenuMaximizeWindow(object sender, RoutedEventArgs e)
+        {
+            MaximizeWindow();
+        }
+
+        private void MenuNormalizeWindow(object sender, RoutedEventArgs e)
+        {
+            NormalizeWindow();
+        }
+
+        private void MenuMinimizeWindow(object sender, RoutedEventArgs e)
+        {
+            SetMinimizedWindow();
+        }
+
+        private void MenuRestartApplication(object sender, RoutedEventArgs e)
+        {
             Application.Current.Shutdown();
+            System.Windows.Forms.Application.Restart();
+        }
+
+        private void MenuShutdownApplication(object sender, RoutedEventArgs e)
+        {
+            SetShutdownApplication();
         }
     }
 }

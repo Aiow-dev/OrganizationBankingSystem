@@ -21,7 +21,8 @@
                 <ResourceDictionary Source="Theme/CheckBoxTheme.xaml" />
                 <ResourceDictionary Source="Theme/ToggleCheckBoxTheme.xaml" />
                 <ResourceDictionary Source="Theme/TextBlockTheme.xaml" />
-                <ResourceDictionary Source="Theme/ToggleButtonHideAnimationTheme.xaml"/>
+                <ResourceDictionary Source="Theme/ToggleButtonHideAnimationTheme.xaml" />
+                <ResourceDictionary Source="Theme/MenuItemTheme.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>

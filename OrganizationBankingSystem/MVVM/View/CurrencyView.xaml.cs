@@ -377,15 +377,59 @@ namespace OrganizationBankingSystem.MVVM.View
             DetailStatistics.ItemsSource = DetailStatisticsItems;
         }
 
-        readonly System.Windows.Forms.Timer timer = new();
+        private async Task GetCurrencyValueOnlineMode()
+        {
+            int DEFAULT_REQUIRED_VALUES = 30;
+            int MAX_REQUIRED_VALUES = 360;
+
+            RequiredValues = ValidatorNumber.ValidateNumberTextInput(DEFAULT_REQUIRED_VALUES, MAX_REQUIRED_VALUES, NumberValuesGraph.Text);
+
+            NotifierHelper.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
+
+            await Task.Run(GetExchangeRates);
+
+            GraphValues = new ChartValues<double>();
+            DetailStatisticsItems = new List<DetailStatisticsItem>();
+
+            try
+            {
+                if (ValidatorObject.AllNotNull(OpenCurrencyValuesMas, MinCurrencyValuesMas, MaxCurrencyValuesMas, CloseCurrencyValuesMas))
+                {
+                    Tuple<double, double> tupleFirstLastCurrencyValues = SetValuesGraph();
+
+                    RenderingGraph(tupleFirstLastCurrencyValues.Item1, tupleFirstLastCurrencyValues.Item2);
+                }
+                else
+                {
+                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
+                }
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Неверное количество значений");
+            }
+        }
+
+        private void GetCurrencyValueOfflineMode()
+        {
+            GraphSeries.Values = new ChartValues<double>();
+            DifferencePercentValueText.Text = string.Empty;
+
+            DetailStatistics.ItemsSource = new List<DetailStatisticsItem>();
+
+            if (Formaters.FormatNumbers(UnitCostCurrencyValue.Text).Length > 0)
+            {
+                SetConvertCurrencyValue(includeSecondCurrencyValue: true);
+            }
+            else
+            {
+                SetConvertCurrencyValue();
+            }
+        }
 
         private async void GetCurrencyValue(object sender, RoutedEventArgs e)
         {
-            timer.Interval = 2000;
-            timer.Tick += TimerTick;
-            timer.Start();
-
-            ButtonGetCurrencyValue.IsEnabled = false;
+            ElementHelper.DisableElement(ButtonGetCurrencyValue, 2000);
 
             ListCurrencyValuesItem selectedFromCurrency = (ListCurrencyValuesItem)ComboBoxFromCurrency.SelectedItem;
             ListCurrencyValuesItem selectedToCurrency = (ListCurrencyValuesItem)ComboBoxToCurrency.SelectedItem;
@@ -399,65 +443,17 @@ namespace OrganizationBankingSystem.MVVM.View
 
                 if (IsOnlineMode)
                 {
-                    int DEFAULT_REQUIRED_VALUES = 30;
-                    int MAX_REQUIRED_VALUES = 360;
-
-                    RequiredValues = ValidatorNumber.ValidateNumberTextInput(DEFAULT_REQUIRED_VALUES, MAX_REQUIRED_VALUES, NumberValuesGraph.Text);
-
-                    NotifierHelper.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
-
-                    await Task.Run(GetExchangeRates);
-
-                    GraphValues = new ChartValues<double>();
-                    DetailStatisticsItems = new List<DetailStatisticsItem>();
-
-                    try
-                    {
-                        if (ValidatorObject.AllNotNull(OpenCurrencyValuesMas, MinCurrencyValuesMas, MaxCurrencyValuesMas, CloseCurrencyValuesMas))
-                        {
-                            Tuple<double, double> tupleFirstLastCurrencyValues = SetValuesGraph();
-
-                            RenderingGraph(tupleFirstLastCurrencyValues.Item1, tupleFirstLastCurrencyValues.Item2);
-                        }
-                        else
-                        {
-                            NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
-                        }
-                    }
-                    catch (ArgumentOutOfRangeException)
-                    {
-                        NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Неверное количество значений");
-                    }
+                    await GetCurrencyValueOnlineMode();
                 }
                 else
                 {
-                    GraphSeries.Values = new ChartValues<double>();
-                    DifferencePercentValueText.Text = string.Empty;
-
-                    DetailStatistics.ItemsSource = new List<DetailStatisticsItem>();
-
-                    NotifierHelper.notifier.ShowInformationPropertyMessage($"1: {FirstCurrencyNumber.Text}\n2: {UnitCostCurrencyValue.Text}");
-
-                    if (Formaters.FormatNumbers(UnitCostCurrencyValue.Text).Length > 0)
-                    {
-                        SetConvertCurrencyValue(includeSecondCurrencyValue: true);
-                    }
-                    else
-                    {
-                        SetConvertCurrencyValue();
-                    }
+                    GetCurrencyValueOfflineMode();
                 }
             }
             else
             {
                 NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, в списках валют не выбраны или выбраны валюты, не содержащиеся в них");
             }
-        }
-
-        private void TimerTick(object sender, EventArgs e)
-        {
-            ButtonGetCurrencyValue.IsEnabled = true;
-            timer.Stop();
         }
 
         private void SwapValuesComboBox(object sender, RoutedEventArgs e)
