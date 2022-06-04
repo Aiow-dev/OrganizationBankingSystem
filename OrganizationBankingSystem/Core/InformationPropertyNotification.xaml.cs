@@ -13,7 +13,7 @@ namespace OrganizationBankingSystem.Core
             Bind(notificationInfo);
         }
 
-        private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void CloseInformationNotification(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Notification.Close();
         }

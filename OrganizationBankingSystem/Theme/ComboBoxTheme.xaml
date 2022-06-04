@@ -115,11 +115,6 @@
         </Setter>
     </Style>
     <Style x:Key="ComboBoxItemTheme" TargetType="{x:Type ComboBoxItem}">
-        <Style.Resources>
-            <Style TargetType="{x:Type ScrollViewer}">
-                <Setter Property="Background" Value="Green" />
-            </Style>
-        </Style.Resources>
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
@@ -143,8 +138,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="True">
-                            <Setter TargetName="borderComboBoxItem" Property="Background" Value="#FFA1CCA5" />
-                            <Setter TargetName="textBlockComboBoxItem" Property="Foreground" Value="#FF323232" />
+                            <Setter TargetName="borderComboBoxItem" Property="Background" Value="#FF3F3E3E" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

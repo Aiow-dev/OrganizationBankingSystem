@@ -87,15 +87,15 @@
                         <BeginStoryboard>
                             <Storyboard x:Name="HideStackPanel">
                                 <DoubleAnimation
-                                    Storyboard.TargetName="stackPanelMenu"
+                                    Storyboard.TargetName="StackPanelMenu"
                                     Storyboard.TargetProperty="Width"
                                     From="150"
                                     To="32"
                                     Duration="0:0:0.5" />
                                 <DoubleAnimation
-                                    Storyboard.TargetName="borderContent"
+                                    Storyboard.TargetName="BorderContent"
                                     Storyboard.TargetProperty="Width"
-                                    From="{Binding Path=Width, ElementName=borderContent}"
+                                    From="{Binding Path=Width, ElementName=BorderContent}"
                                     To="{Binding Path=Width, ElementName=WindowBorder, Converter={converters:DecreaseConverter}, ConverterParameter='44'}"
                                     Duration="0:0:0:1" />
                             </Storyboard>
@@ -106,15 +106,15 @@
                             <Storyboard x:Name="ShowStackPanel">
                                 <DoubleAnimation
                                     BeginTime="0:0:0.5"
-                                    Storyboard.TargetName="stackPanelMenu"
+                                    Storyboard.TargetName="StackPanelMenu"
                                     Storyboard.TargetProperty="Width"
                                     From="32"
                                     To="150"
                                     Duration="0:0:0.5" />
                                 <DoubleAnimation
-                                    Storyboard.TargetName="borderContent"
+                                    Storyboard.TargetName="BorderContent"
                                     Storyboard.TargetProperty="Width"
-                                    From="{Binding Path=Width, ElementName=borderContent}"
+                                    From="{Binding Path=Width, ElementName=BorderContent}"
                                     To="{Binding Path=Width, ElementName=WindowBorder, Converter={converters:DecreaseConverter}, ConverterParameter='160'}"
                                     Duration="0:0:0:1" />
                             </Storyboard>
@@ -123,7 +123,7 @@
                 </ToggleButton.Triggers>
             </ToggleButton>
             <StackPanel
-                x:Name="stackPanelMenu"
+                x:Name="StackPanelMenu"
                 Grid.Row="1"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Left">
@@ -255,14 +255,14 @@
                 </Grid>
             </StackPanel>
             <Border
-                x:Name="borderContent"
+                x:Name="BorderContent"
                 Grid.RowSpan="2"
                 Grid.Column="1"
                 Width="840"
                 Background="#FF1A1919"
                 CornerRadius="0,8,8,0" />
             <ContentControl
-                x:Name="contentControl"
+                x:Name="ContentControl"
                 Grid.Row="1"
                 Grid.Column="1"
                 Width="Auto"
@@ -272,7 +272,6 @@
                 <Grid Width="Auto">
                     <StackPanel Width="Auto" Margin="10">
                         <StackPanel
-                            x:Name="stackPanelWindowButtons"
                             Height="12"
                             Margin="0,5,20,0"
                             HorizontalAlignment="Right"
@@ -314,6 +313,7 @@
                                 Background="#FFF8F8F8"
                                 CornerRadius="10">
                                 <ToggleButton
+                                    x:Name="ButtonResizeWindow"
                                     HorizontalAlignment="Center"
                                     Click="ResizeWindow"
                                     FontSize="8"

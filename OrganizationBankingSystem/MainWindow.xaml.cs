@@ -38,8 +38,8 @@ namespace OrganizationBankingSystem
             WindowBorder.Height = SystemParameters.PrimaryScreenHeight;
             WindowBorder.CornerRadius = new CornerRadius(0);
 
-            borderContent.Width = SystemParameters.PrimaryScreenWidth - 160;
-            borderContent.CornerRadius = new CornerRadius(0);
+            BorderContent.Width = SystemParameters.PrimaryScreenWidth - 160;
+            BorderContent.CornerRadius = new CornerRadius(0);
 
             int decreaseWidthValue = 44;
 
@@ -48,15 +48,15 @@ namespace OrganizationBankingSystem
                 decreaseWidthValue = 160;
             }
 
-            DoubleAnimation borderContentAnimation = new(borderContent.Width,
+            DoubleAnimation BorderContentAnimation = new(BorderContent.Width,
                 SystemParameters.PrimaryScreenWidth - decreaseWidthValue,
                 new Duration(TimeSpan.FromSeconds(1)));
 
-            Storyboard.SetTargetName(borderContentAnimation, borderContent.Name);
-            Storyboard.SetTargetProperty(borderContentAnimation, new PropertyPath(WidthProperty));
+            Storyboard.SetTargetName(BorderContentAnimation, BorderContent.Name);
+            Storyboard.SetTargetProperty(BorderContentAnimation, new PropertyPath(WidthProperty));
 
             Storyboard myStoryboard = new();
-            myStoryboard.Children.Add(borderContentAnimation);
+            myStoryboard.Children.Add(BorderContentAnimation);
 
             myStoryboard.Begin(ToggleButtonHidePanel);
         }
@@ -69,25 +69,25 @@ namespace OrganizationBankingSystem
             WindowBorder.Height = 600;
             WindowBorder.CornerRadius = new CornerRadius(10);
 
-            borderContent.Width = 840;
-            borderContent.CornerRadius = new CornerRadius(10);
+            BorderContent.Width = 840;
+            BorderContent.CornerRadius = new CornerRadius(10);
 
-            int borderContentWidth = 956;
+            int BorderContentWidth = 956;
 
             if (ToggleButtonHidePanel.IsChecked == false)
             {
-                borderContentWidth = 840;
+                BorderContentWidth = 840;
             }
 
-            DoubleAnimation borderContentAnimation = new(borderContent.Width,
-                borderContentWidth,
+            DoubleAnimation BorderContentAnimation = new(BorderContent.Width,
+                BorderContentWidth,
                 new Duration(TimeSpan.FromSeconds(1)));
 
-            Storyboard.SetTargetName(borderContentAnimation, borderContent.Name);
-            Storyboard.SetTargetProperty(borderContentAnimation, new PropertyPath(WidthProperty));
+            Storyboard.SetTargetName(BorderContentAnimation, BorderContent.Name);
+            Storyboard.SetTargetProperty(BorderContentAnimation, new PropertyPath(WidthProperty));
 
             Storyboard myStoryboard = new();
-            myStoryboard.Children.Add(borderContentAnimation);
+            myStoryboard.Children.Add(BorderContentAnimation);
 
             myStoryboard.Begin(ToggleButtonHidePanel);
         }
@@ -127,11 +127,15 @@ namespace OrganizationBankingSystem
         private void MenuMaximizeWindow(object sender, RoutedEventArgs e)
         {
             MaximizeWindow();
+
+            ButtonResizeWindow.IsChecked = true;
         }
 
         private void MenuNormalizeWindow(object sender, RoutedEventArgs e)
         {
             NormalizeWindow();
+
+            ButtonResizeWindow.IsChecked = false;
         }
 
         private void MenuMinimizeWindow(object sender, RoutedEventArgs e)

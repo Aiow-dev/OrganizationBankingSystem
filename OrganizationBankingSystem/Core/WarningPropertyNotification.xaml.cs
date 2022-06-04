@@ -21,7 +21,7 @@ namespace OrganizationBankingSystem.Core
             }
         }
 
-        private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void CloseWarningNotification(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Notification.Close();
         }

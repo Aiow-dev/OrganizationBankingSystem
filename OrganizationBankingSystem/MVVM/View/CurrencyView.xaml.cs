@@ -327,32 +327,32 @@ namespace OrganizationBankingSystem.MVVM.View
         {
             int requiredPointGeometrySize = ValidatorNumber.ValidateNumberTextInput(8, 15, GraphPointGeometrySize.Text);
 
-            Brush fillColor = buttonStrokeColorUp.Background.Clone();
-            Brush fillColorOpacity = buttonColorUp.Background.Clone();
+            Brush fillColor = ButtonStrokeColorUp.Background.Clone();
+            Brush fillColorOpacity = ButtonColorUp.Background.Clone();
             string arrow = "↑";
             string numberSign = "+";
 
-            double TOLERANCE = 0.01;
+            const double TOLERANCE = 0.01;
 
             if (firstCurrencyValue > lastCurrencyValue)
             {
-                fillColor = buttonStrokeColorDown.Background.Clone();
-                fillColorOpacity = buttonColorDown.Background.Clone();
+                fillColor = ButtonStrokeColorDown.Background.Clone();
+                fillColorOpacity = ButtonColorDown.Background.Clone();
                 arrow = "↓";
                 numberSign = string.Empty;
             }
             else if (Math.Abs(firstCurrencyValue - lastCurrencyValue) < TOLERANCE)
             {
-                fillColor = buttonStrokeColorEquals.Background.Clone();
-                fillColorOpacity = buttonColorEquals.Background.Clone();
+                fillColor = ButtonStrokeColorEquals.Background.Clone();
+                fillColorOpacity = ButtonColorEquals.Background.Clone();
                 arrow = string.Empty;
                 numberSign = string.Empty;
             }
 
-            int DEFAULT_OPACITY = 70;
-            int MAX_OPACITY = 101;
+            const int DEFAULT_OPACITY = 70;
+            const int MAX_OPACITY = 101;
 
-            fillColorOpacity.Opacity = 1.0 - (ValidatorNumber.ValidateNumberTextInput(DEFAULT_OPACITY, MAX_OPACITY, numberPercentOpacityGraph.Text) / 100.0);
+            fillColorOpacity.Opacity = 1.0 - (ValidatorNumber.ValidateNumberTextInput(DEFAULT_OPACITY, MAX_OPACITY, NumberPercentOpacityGraph.Text) / 100.0);
 
             GraphSeries.Values = GraphValues;
             GraphSeries.Stroke = fillColor;
@@ -362,10 +362,10 @@ namespace OrganizationBankingSystem.MVVM.View
 
             GraphAxisSectionMax.Value = MaxCurrencyValue;
 
-            GraphAxisSectionMax.Stroke = IsSetMaxValueColor ? buttonColorMaxValue.Background.Clone() : fillColor;
+            GraphAxisSectionMax.Stroke = IsSetMaxValueColor ? ButtonColorMaxValue.Background.Clone() : fillColor;
 
-            bool showMaxValueCurrency = toggleCheckBoxMaxValueCurrency.IsChecked.HasValue
-                && toggleCheckBoxMaxValueCurrency.IsChecked.Value
+            bool showMaxValueCurrency = ToggleCheckBoxMaxValueCurrency.IsChecked.HasValue
+                && ToggleCheckBoxMaxValueCurrency.IsChecked.Value
 ;
 
             GraphAxisSectionMax.Visibility = showMaxValueCurrency ? Visibility.Visible : Visibility.Collapsed;
@@ -378,8 +378,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async Task GetCurrencyValueOnlineMode()
         {
-            int DEFAULT_REQUIRED_VALUES = 30;
-            int MAX_REQUIRED_VALUES = 360;
+            const int DEFAULT_REQUIRED_VALUES = 30;
+            const int MAX_REQUIRED_VALUES = 360;
 
             RequiredValues = ValidatorNumber.ValidateNumberTextInput(DEFAULT_REQUIRED_VALUES, MAX_REQUIRED_VALUES, NumberValuesGraph.Text);
 
@@ -620,19 +620,19 @@ namespace OrganizationBankingSystem.MVVM.View
 
             ComboBoxTypeGraph.SelectedIndex = -1;
 
-            buttonColorUp.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(161, 204, 165));
-            buttonColorDown.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(210, 31, 60));
-            buttonColorEquals.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(125, 132, 145));
+            ButtonColorUp.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(161, 204, 165));
+            ButtonColorDown.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(210, 31, 60));
+            ButtonColorEquals.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(125, 132, 145));
 
-            buttonStrokeColorUp.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(161, 204, 165));
-            buttonStrokeColorDown.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(210, 31, 60));
-            buttonStrokeColorEquals.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(125, 132, 145));
+            ButtonStrokeColorUp.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(161, 204, 165));
+            ButtonStrokeColorDown.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(210, 31, 60));
+            ButtonStrokeColorEquals.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(125, 132, 145));
 
-            buttonColorMaxValue.Background = new SolidColorBrush(System.Windows.Media.Colors.Transparent);
-            buttonColorMaxValue.BorderThickness = new Thickness(1);
+            ButtonColorMaxValue.Background = new SolidColorBrush(System.Windows.Media.Colors.Transparent);
+            ButtonColorMaxValue.BorderThickness = new Thickness(1);
 
-            toggleCheckBoxMaxValueCurrency.IsChecked = false;
-            numberPercentOpacityGraph.Text = string.Empty;
+            ToggleCheckBoxMaxValueCurrency.IsChecked = false;
+            NumberPercentOpacityGraph.Text = string.Empty;
         }
     }
 }

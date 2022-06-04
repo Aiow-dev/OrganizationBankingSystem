@@ -31,7 +31,7 @@
                     VerticalAlignment="Bottom"
                     FontSize="8"
                     Foreground="#FF282828"
-                    MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"
+                    MouseLeftButtonDown="CloseWarningNotification"
                     Text="❌" />
                 <Image
                     Grid.Row="1"
