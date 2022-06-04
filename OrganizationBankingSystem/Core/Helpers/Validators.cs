@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 
 namespace OrganizationBankingSystem.Core.Helpers
 {
-
     public static class ValidatorObject
     {
         public static bool AllNotNull(params object[] objects)

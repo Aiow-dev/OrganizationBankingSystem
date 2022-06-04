@@ -1,11 +1,11 @@
 ﻿<UserControl
     x:Class="OrganizationBankingSystem.MVVM.View.CurrencyView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
-    xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
     d:DataContext="{d:DesignInstance local:CurrencyView}"
     mc:Ignorable="d">
     <Grid Width="Auto" Margin="10,0,10,0">
@@ -86,7 +86,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="*" />
-                                <RowDefinition Height="0.2*"/>
+                                <RowDefinition Height="0.2*" />
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock
@@ -333,6 +333,7 @@
                                         CornerRadius="3"
                                         MouseEnter="ChangeBackgroundEnterBelarusBank"
                                         MouseLeave="ChangeBackgroundLeaveBelarusBank"
+                                        x:Name="BelarusBankBorder"
                                         MouseLeftButtonDown="GetCurrencyValueBelarusBank">
                                         <Border.Background>
                                             <VisualBrush>

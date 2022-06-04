@@ -181,7 +181,6 @@ namespace OrganizationBankingSystem.MVVM.View
                     Dispatcher.Invoke(() =>
                     {
                         NotifierHelper.notifier.ShowWarningPropertyMessage($"Указанное значение количества дней недоступно\nМаксимально доступное значение для данного курса выбранных валют: {availableIndex}");
-
                     });
                 }
 
@@ -459,18 +458,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void SwapValuesComboBox(object sender, RoutedEventArgs e)
         {
-            ListCurrencyValuesItem fromCurrency = (ListCurrencyValuesItem)ComboBoxFromCurrency.SelectedItem;
-            ListCurrencyValuesItem toCurrency = (ListCurrencyValuesItem)ComboBoxToCurrency.SelectedItem;
-
-            if (fromCurrency != null && toCurrency != null)
-            {
-                ComboBoxFromCurrency.SelectedItem = toCurrency;
-                ComboBoxToCurrency.SelectedItem = fromCurrency;
-            }
-            else
-            {
-                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует выбранное значение исходной или конечной валюты. Или выбрана валюта, не представленная в списках валют");
-            }
+            ComboBoxHelper.SwapValuesComboBox(ComboBoxFromCurrency, ComboBoxToCurrency,
+                "Ошибка. Возможно, отсутствует выбранное значение исходной или конечной валюты. Или выбрана валюта, не представленная в списках валют");
         }
 
         private void ExportStatisticsToSpreadsheetDocument(object sender, RoutedEventArgs e)
@@ -563,18 +552,12 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void SortCurrencyDescriptionValuesComboBox(object sender, RoutedEventArgs e)
         {
-            ComboBoxFromCurrency.Items.SortDescriptions.Clear();
-
-            ComboBoxFromCurrency.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("CurrencyDescription",
-                System.ComponentModel.ListSortDirection.Ascending));
+            ComboBoxHelper.SortValuesComboBox(ComboBoxFromCurrency, "CurrencyDescription");
         }
 
         private void SortCurrencyCodeValuesComboBox(object sender, RoutedEventArgs e)
         {
-            ComboBoxFromCurrency.Items.SortDescriptions.Clear();
-
-            ComboBoxFromCurrency.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("CurrencyCode",
-                System.ComponentModel.ListSortDirection.Ascending));
+            ComboBoxHelper.SortValuesComboBox(ComboBoxFromCurrency, "CurrencyCode");
         }
 
         private void ColorDialogSetBackground(object sender, RoutedEventArgs e)
@@ -637,38 +620,22 @@ namespace OrganizationBankingSystem.MVVM.View
             NumberPercentOpacityGraph.Text = string.Empty;
         }
 
-        private void GetExchangeRatesBelarusbank()
-        {
-            string QUERY_URL = $"{Properties.Settings.Default.belarusBankServiceUri}?city=Брест";
-            Uri queryUri = new(QUERY_URL);
-
-            try
-            {
-                List<JsonElement> jsonData = JsonSerializer.Deserialize<List<JsonElement>>(new WebClient().DownloadString(queryUri));
-
-                ValueExchangeRates = jsonData[0].Deserialize<Dictionary<string, string>>()["USD_in"];
-            }
-            catch (WebException)
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет");
-                });
-            }
-            catch (KeyNotFoundException)
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, на данный момент актуальный курс выбранной валюты не доступен");
-                });
-            }
-        }
-
         private async void GetCurrencyValueBelarusBank(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            await Task.Run(GetExchangeRatesBelarusbank);
+            ElementHelper.DisableElement(BelarusBankBorder, 3000);
 
-            TextBlockValueExchangeRates.Text = ValueExchangeRates;
+            NotifierHelper.notifier.ShowInformationPropertyMessage($"Идет процесс получения курса валют Беларусбанка...\nВалюта: USD\nОтделение: г. Брест, пр. Партизанский, отделение 100/1050");
+
+            string responseValueExchangeRates = await Task.Run(BelarusBankHelper.GetExchangeRates);
+
+            if (responseValueExchangeRates.Equals("Not defined"))
+            {
+                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет.\nВозможно, на данный момент актуальный курс выбранных валют не доступен");
+            }
+            else
+            {
+                TextBlockValueExchangeRates.Text = responseValueExchangeRates;
+            }
         }
 
         private void ChangeBackgroundEnterBelarusBank(object sender, System.Windows.Input.MouseEventArgs e)

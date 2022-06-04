@@ -6,6 +6,12 @@ namespace OrganizationBankingSystem.Core.Helpers
     {
         private static readonly System.Windows.Forms.Timer _timer = new();
 
+        private static void TimerTick(FrameworkElement frameworkElement)
+        {
+            frameworkElement.IsEnabled = true;
+            _timer.Stop();
+        }
+
         public static void DisableElement(FrameworkElement frameworkElement, int interval)
         {
             _timer.Interval = interval;
@@ -13,12 +19,6 @@ namespace OrganizationBankingSystem.Core.Helpers
             _timer.Start();
 
             frameworkElement.IsEnabled = false;
-        }
-
-        private static void TimerTick(FrameworkElement frameworkElement)
-        {
-            frameworkElement.IsEnabled = true;
-            _timer.Stop();
         }
     }
 }

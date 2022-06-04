@@ -21,7 +21,7 @@ namespace OrganizationBankingSystem.Core.Converters
             throw new NotImplementedException();
         }
 
-        #endregion
+        #endregion IValueConverter Members
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
