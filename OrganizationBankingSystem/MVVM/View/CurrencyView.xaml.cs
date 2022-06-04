@@ -15,7 +15,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
@@ -160,18 +159,21 @@ namespace OrganizationBankingSystem.MVVM.View
             Uri queryUri = new(QUERY_URL);
 
             //TODO: use HttpClient
-            using HttpClient client = new();
+            /*using HttpClient client = new();*/
 
             try
             {
-                dynamic json_data = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(new WebClient().DownloadString(queryUri));
-                JsonElement timeSeriesDaily = json_data["Time Series FX (Daily)"];
+                dynamic jsonData = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(new WebClient().DownloadString(queryUri));
+
+                JsonElement timeSeriesDaily = jsonData["Time Series FX (Daily)"];
+
                 Dictionary<string, Dictionary<string, string>> daysCurrency =
                     timeSeriesDaily.Deserialize<Dictionary<string, Dictionary<string, string>>>();
 
                 int requiredIndex = 0;
 
                 int availableIndex = daysCurrency.Keys.Count;
+
                 if (RequiredValues > availableIndex)
                 {
                     RequiredValues = availableIndex;
@@ -188,8 +190,6 @@ namespace OrganizationBankingSystem.MVVM.View
                 MaxCurrencyValuesMas = new double[RequiredValues];
                 CloseCurrencyValuesMas = new double[RequiredValues];
                 CurrencyDatesMas = new string[RequiredValues];
-
-                ValueExchangeRates = Convert.ToString(RequiredValues);
 
                 foreach (string date in daysCurrency.Keys)
                 {
@@ -397,6 +397,8 @@ namespace OrganizationBankingSystem.MVVM.View
                     Tuple<double, double> tupleFirstLastCurrencyValues = SetValuesGraph();
 
                     RenderingGraph(tupleFirstLastCurrencyValues.Item1, tupleFirstLastCurrencyValues.Item2);
+
+                    TextBlockValueExchangeRates.Text = OpenCurrencyValuesMas[0].ToString();
                 }
                 else
                 {
@@ -633,6 +635,50 @@ namespace OrganizationBankingSystem.MVVM.View
 
             ToggleCheckBoxMaxValueCurrency.IsChecked = false;
             NumberPercentOpacityGraph.Text = string.Empty;
+        }
+
+        private void GetExchangeRatesBelarusbank()
+        {
+            string QUERY_URL = $"{Properties.Settings.Default.belarusBankServiceUri}?city=Брест";
+            Uri queryUri = new(QUERY_URL);
+
+            try
+            {
+                List<JsonElement> jsonData = JsonSerializer.Deserialize<List<JsonElement>>(new WebClient().DownloadString(queryUri));
+
+                ValueExchangeRates = jsonData[0].Deserialize<Dictionary<string, string>>()["USD_in"];
+            }
+            catch (WebException)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет");
+                });
+            }
+            catch (KeyNotFoundException)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, на данный момент актуальный курс выбранной валюты не доступен");
+                });
+            }
+        }
+
+        private async void GetCurrencyValueBelarusBank(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            await Task.Run(GetExchangeRatesBelarusbank);
+
+            TextBlockValueExchangeRates.Text = ValueExchangeRates;
+        }
+
+        private void ChangeBackgroundEnterBelarusBank(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            BelarusBankBorderRectangle.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(3, 166, 75));
+        }
+
+        private void ChangeBackgroundLeaveBelarusBank(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            BelarusBankBorderRectangle.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 148, 66));
         }
     }
 }

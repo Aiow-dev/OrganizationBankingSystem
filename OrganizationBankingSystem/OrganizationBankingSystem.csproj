@@ -13,6 +13,7 @@
     <None Remove="Core\error.png" />
     <None Remove="Core\question.png" />
     <None Remove="Core\warning_flat.png" />
+    <None Remove="MVVM\View\belarusbank_logo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +41,7 @@
     <Resource Include="Core\error.png" />
     <Resource Include="Core\question.png" />
     <Resource Include="Core\warning_flat.png" />
+    <Resource Include="MVVM\View\belarusbank_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">

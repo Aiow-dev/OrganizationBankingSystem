@@ -85,7 +85,8 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
-                                <RowDefinition Height="170" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="0.2*"/>
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock
@@ -325,16 +326,25 @@
                                         </TextBlock>
                                     </Grid>
                                 </StackPanel>
-                                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
-                                    <TextBlock Foreground="DarkGray" Text="Данные предоставлены Alpha Vantage" />
-                                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">
-                                        <Hyperlink
-                                            Foreground="DarkGray"
-                                            NavigateUri="https://www.alphavantage.co/"
-                                            RequestNavigate="Hyperlink_RequestNavigate">
-                                            Перейти
-                                        </Hyperlink>
-                                    </TextBlock>
+                                <StackPanel Margin="0,10,0,0" Grid.Row="2" Orientation="Horizontal">
+                                    <Border
+                                        Width="25"
+                                        Height="25"
+                                        CornerRadius="3"
+                                        MouseEnter="ChangeBackgroundEnterBelarusBank"
+                                        MouseLeave="ChangeBackgroundLeaveBelarusBank"
+                                        MouseLeftButtonDown="GetCurrencyValueBelarusBank">
+                                        <Border.Background>
+                                            <VisualBrush>
+                                                <VisualBrush.Visual>
+                                                    <Grid Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Border}}, Mode=OneWay}" Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Border}}, Mode=OneWay}">
+                                                        <Rectangle x:Name="BelarusBankBorderRectangle" Fill="#FF03A64B" />
+                                                        <Image Source="/MVVM/View/belarusbank_logo.png" />
+                                                    </Grid>
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </Border.Background>
+                                    </Border>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

@@ -31,5 +31,14 @@ namespace OrganizationBankingSystem.Properties {
                 return ((string)(this["serviceUri"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://belarusbank.by/api/kursExchange")]
+        public string belarusBankServiceUri {
+            get {
+                return ((string)(this["belarusBankServiceUri"]));
+            }
+        }
     }
 }

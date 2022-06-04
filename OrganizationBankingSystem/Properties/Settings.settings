@@ -5,5 +5,8 @@
     <Setting Name="serviceUri" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://www.alphavantage.co/query?function=FX_DAILY</Value>
     </Setting>
+    <Setting Name="belarusBankServiceUri" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://belarusbank.by/api/kursExchange</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
