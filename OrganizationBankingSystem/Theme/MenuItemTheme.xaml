@@ -1,8 +1,9 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="MenuItemTheme" TargetType="{x:Type MenuItem}">
-        <Setter Property="Background" Value="#FF282828" />
-        <Setter Property="Foreground" Value="#FFF8F8F8" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Style.Setters>
+            <Setter Property="Background" Value="#FF282828" />
+            <Setter Property="Foreground" Value="#FFF8F8F8" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style.Setters>
     </Style>
 </ResourceDictionary>
