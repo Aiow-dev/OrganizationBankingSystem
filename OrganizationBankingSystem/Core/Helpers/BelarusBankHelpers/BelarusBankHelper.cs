@@ -3,11 +3,22 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
 
-namespace OrganizationBankingSystem.Core.Helpers
+namespace OrganizationBankingSystem.Core.Helpers.BelarusBank
 {
+    public enum TypeOperation
+    {
+        PURCHASE,
+        SALE
+    }
+
     public static class BelarusBankHelper
     {
-        public static string GetExchangeRates()
+        private static string ConvertTypeOperation(TypeOperation typeOperation)
+        {
+            return typeOperation == TypeOperation.PURCHASE ? "in" : "out";
+        }
+
+        public static string GetExchangeRates(string currencyCode = "USD", TypeOperation typeOperation = TypeOperation.PURCHASE)
         {
             string QUERY_URL = $"{Properties.Settings.Default.belarusBankServiceUri}?city=Брест";
 
@@ -17,7 +28,7 @@ namespace OrganizationBankingSystem.Core.Helpers
             {
                 List<JsonElement> jsonData = JsonSerializer.Deserialize<List<JsonElement>>(new WebClient().DownloadString(queryUri));
 
-                return jsonData[0].Deserialize<Dictionary<string, string>>()["USD_in"];
+                return jsonData[0].Deserialize<Dictionary<string, string>>()[$"{currencyCode}_{ConvertTypeOperation(typeOperation)}"];
             }
             catch (WebException)
             {

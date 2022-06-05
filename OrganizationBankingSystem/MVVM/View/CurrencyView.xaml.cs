@@ -5,12 +5,13 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using LiveCharts;
 using OrganizationBankingSystem.Core;
+using OrganizationBankingSystem.Core.Converters;
 using OrganizationBankingSystem.Core.Helpers;
+using OrganizationBankingSystem.Core.Helpers.BelarusBank;
 using OrganizationBankingSystem.Data;
 using OrganizationBankingSystem.MVVM.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -246,11 +247,6 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        private static double ConvertCurrencyValues(double numberUnit, double unitCost)
-        {
-            return numberUnit * unitCost;
-        }
-
         private void SetConvertCurrencyValue(double unitCost = 1.0, bool includeSecondCurrencyValue = false)
         {
             double convertCurrencyValuesResult;
@@ -265,11 +261,11 @@ namespace OrganizationBankingSystem.MVVM.View
                     double secondFormatCurrencyValue = Formaters.FormatTextToDouble(UnitCostCurrencyValue.Text);
                     UnitCostCurrencyValue.Text = secondFormatCurrencyValue.ToString();
 
-                    convertCurrencyValuesResult = ConvertCurrencyValues(firstFormatCurrencyValue, secondFormatCurrencyValue);
+                    convertCurrencyValuesResult = CurrencyValueConverter.ConvertCurrencyValues(firstFormatCurrencyValue, secondFormatCurrencyValue);
                 }
                 else
                 {
-                    convertCurrencyValuesResult = ConvertCurrencyValues(firstFormatCurrencyValue, unitCost);
+                    convertCurrencyValuesResult = CurrencyValueConverter.ConvertCurrencyValues(firstFormatCurrencyValue, unitCost);
                 }
             }
             else
@@ -316,7 +312,7 @@ namespace OrganizationBankingSystem.MVVM.View
             }
             else
             {
-                FirstCurrencyNumber.Text = string.Empty;
+                TextBlockValueExchangeRates.Text = Convert.ToString(GraphValues[^1]);
             }
 
             return new Tuple<double, double>(GraphValues[0], GraphValues[^1]);
@@ -396,8 +392,6 @@ namespace OrganizationBankingSystem.MVVM.View
                     Tuple<double, double> tupleFirstLastCurrencyValues = SetValuesGraph();
 
                     RenderingGraph(tupleFirstLastCurrencyValues.Item1, tupleFirstLastCurrencyValues.Item2);
-
-                    TextBlockValueExchangeRates.Text = OpenCurrencyValuesMas[0].ToString();
                 }
                 else
                 {
@@ -417,7 +411,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
             DetailStatistics.ItemsSource = new List<DetailStatisticsItem>();
 
-            if (Formaters.FormatNumbers(UnitCostCurrencyValue.Text).Length > 0)
+            if (Formaters.FormatNumbers(UnitCostCurrencyValue.Text) != string.Empty)
             {
                 SetConvertCurrencyValue(includeSecondCurrencyValue: true);
             }
@@ -589,13 +583,6 @@ namespace OrganizationBankingSystem.MVVM.View
             IsSetMaxValueColor = true;
         }
 
-        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
-
-            e.Handled = true;
-        }
-
         private void ResetGraphParameters(object sender, RoutedEventArgs e)
         {
             ElementHelper.DisableElement(ButtonResetGraphParameters, 1000);
@@ -620,13 +607,28 @@ namespace OrganizationBankingSystem.MVVM.View
             NumberPercentOpacityGraph.Text = string.Empty;
         }
 
-        private async void GetCurrencyValueBelarusBank(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async Task GetCurrencyValueBelarusBankOnlineMode()
         {
-            ElementHelper.DisableElement(BelarusBankBorder, 3000);
+            string currencyCode = "USD";
 
-            NotifierHelper.notifier.ShowInformationPropertyMessage($"Идет процесс получения курса валют Беларусбанка...\nВалюта: USD\nОтделение: г. Брест, пр. Партизанский, отделение 100/1050");
+            ListCurrencyValuesItem selectedFromCurrency = (ListCurrencyValuesItem)ComboBoxFromCurrency.SelectedItem;
+            ListCurrencyValuesItem selectedToCurrency = (ListCurrencyValuesItem)ComboBoxToCurrency.SelectedItem;
 
-            string responseValueExchangeRates = await Task.Run(BelarusBankHelper.GetExchangeRates);
+            if (selectedFromCurrency != null)
+            {
+                if (selectedToCurrency == null)
+                {
+                    currencyCode = selectedFromCurrency.CurrencyCode;
+                }
+                else
+                {
+                    currencyCode = selectedToCurrency.CurrencyCode;
+                }
+            }
+
+            NotifierHelper.notifier.ShowInformationPropertyMessage($"Идет процесс получения курса валют Беларусбанка...\nВалюта: {currencyCode}\nОтделение: г. Брест, пр. Партизанский, отделение 100/1050");
+
+            string responseValueExchangeRates = await Task.Run(() => BelarusBankHelper.GetExchangeRates(currencyCode));
 
             if (responseValueExchangeRates.Equals("Not defined"))
             {
@@ -635,6 +637,22 @@ namespace OrganizationBankingSystem.MVVM.View
             else
             {
                 TextBlockValueExchangeRates.Text = responseValueExchangeRates;
+            }
+        }
+
+        private async void GetCurrencyValueBelarusBank(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ElementHelper.DisableElement(BelarusBankBorder, 3000);
+
+            CheckSetOnlineMode();
+
+            if (IsOnlineMode)
+            {
+                await GetCurrencyValueBelarusBankOnlineMode();
+            }
+            else
+            {
+                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет");
             }
         }
 
