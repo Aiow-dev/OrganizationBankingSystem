@@ -103,14 +103,14 @@ namespace OrganizationBankingSystem.MVVM.View
         {
             if (NetworkHelpers.CheckInternetConnection())
             {
-                TextBoxConnectionMode.Text = "Онлайн режим";
+                TextBoxConnectionMode.Text = "Онлайн-режим";
                 TextBoxConnectionMode.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(188, 219, 255));
 
                 IsOnlineMode = true;
             }
             else
             {
-                TextBoxConnectionMode.Text = "Офлайн режим";
+                TextBoxConnectionMode.Text = "Офлайн-режим";
                 TextBoxConnectionMode.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 241, 208));
 
                 IsOnlineMode = false;
@@ -413,7 +413,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
             if (Formaters.FormatNumbers(UnitCostCurrencyValue.Text) != string.Empty)
             {
-                SetConvertCurrencyValue(includeSecondCurrencyValue: true);
+                SetConvertCurrencyValue(Formaters.FormatTextToDouble(UnitCostCurrencyValue.Text),
+                    includeSecondCurrencyValue: true);
             }
             else
             {
@@ -439,9 +440,16 @@ namespace OrganizationBankingSystem.MVVM.View
                 {
                     await GetCurrencyValueOnlineMode();
                 }
-                else
+                else if (Formaters.FormatNumbers(FirstCurrencyNumber.Text) != string.Empty ||
+                    Formaters.FormatNumbers(UnitCostCurrencyValue.Text) != string.Empty)
                 {
                     GetCurrencyValueOfflineMode();
+                }
+                else
+                {
+                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Не удается получить актуальный курс выбранных валют в офлайн-режиме. \nВозможно, не указано одно из следующих полей: количество, стоимость за единицу");
+
+                    TextBlockValueExchangeRates.Text = string.Empty;
                 }
             }
             else

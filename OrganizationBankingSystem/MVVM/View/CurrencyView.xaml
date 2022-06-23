@@ -114,7 +114,7 @@
                                     Background="#FFFFF1D0"
                                     Foreground="#FF323232"
                                     Style="{StaticResource RoundedTextBlock}"
-                                    Text="Офлайн режим" />
+                                    Text="Офлайн-режим" />
                             </StackPanel>
                             <StackPanel Grid.Row="1">
                                 <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
