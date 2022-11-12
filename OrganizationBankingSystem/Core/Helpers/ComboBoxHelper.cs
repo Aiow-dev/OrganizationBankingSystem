@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using OrganizationBankingSystem.Core.Notifications;
+using System.Windows.Controls;
 
 namespace OrganizationBankingSystem.Core.Helpers
 {
@@ -16,7 +17,7 @@ namespace OrganizationBankingSystem.Core.Helpers
             }
             else
             {
-                NotifierHelper.notifier.ShowErrorPropertyMessage(errorMessage);
+                NotificationManager.notifier.ShowErrorPropertyMessage(errorMessage);
             }
         }
 

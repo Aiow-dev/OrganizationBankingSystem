@@ -4,9 +4,9 @@ using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Position;
 
-namespace OrganizationBankingSystem.Core.Helpers
+namespace OrganizationBankingSystem.Core.Notifications
 {
-    public static class NotifierHelper
+    public static class NotificationManager
     {
         public static readonly Notifier notifier = new(configureAction: cfg =>
            {

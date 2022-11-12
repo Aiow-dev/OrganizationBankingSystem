@@ -1,4 +1,5 @@
-﻿using ToastNotifications.Core;
+﻿using OrganizationBankingSystem.Core.Notifications;
+using ToastNotifications.Core;
 
 namespace OrganizationBankingSystem.Core
 {

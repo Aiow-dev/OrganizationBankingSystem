@@ -2,16 +2,16 @@
 using System.Runtime.CompilerServices;
 using ToastNotifications.Core;
 
-namespace OrganizationBankingSystem.Core
+namespace OrganizationBankingSystem.Core.Notifications
 {
-    public class NotificationInfo : NotificationBase, INotifyPropertyChanged
+    public class NotificationWarn : NotificationBase, INotifyPropertyChanged
     {
-        private InformationPropertyNotification _displayPartUI;
+        private DisplayPartUI _displayPartUI;
 
         public override NotificationDisplayPart DisplayPart => _displayPartUI
-            ??= new InformationPropertyNotification(this);
+            ??= new DisplayPartUI(this);
 
-        public NotificationInfo(string message, MessageOptions messageOptions = null) : base(message, messageOptions)
+        public NotificationWarn(string message, MessageOptions messageOptions = null) : base(message, messageOptions)
         {
             Message = message;
         }

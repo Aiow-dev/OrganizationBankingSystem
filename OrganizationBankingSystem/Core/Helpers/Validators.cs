@@ -42,9 +42,21 @@ namespace OrganizationBankingSystem.Core.Helpers
             }
         }
 
-        public static bool IsNumberText(string text)
+        public static bool IsNumberText(string text, int? max=null)
         {
-            return _regexNumber.IsMatch(text);
+            if (max == null)
+            {
+                return _regexNumber.IsMatch(text);
+            }
+
+            try
+            {
+                return Convert.ToInt32(text) <= max;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
 
         public static bool IsDoubleNumberText(string text)

@@ -11,7 +11,7 @@
     Height="600"
     AllowsTransparency="True"
     Background="Transparent"
-    Icon="/bank_logo_application.png"
+    Icon="/Assets/Images/bank_logo.png"
     Loaded="Window_Loaded"
     MouseLeftButtonDown="WindowMouseLeftButtonDown"
     WindowStartupLocation="CenterScreen"
@@ -27,7 +27,10 @@
         Width="1000"
         CornerRadius="8">
         <Border.Background>
-            <SolidColorBrush Opacity="0.83" Color="#FF1A1919" />
+            <RadialGradientBrush RadiusX="0.6" RadiusY="0.7" Center="0.6,0.5" GradientOrigin="0.5,0.5" Opacity="0.83">
+                <GradientStop Color="#FF0D4C92" Offset="0"/>
+                <GradientStop Color="#FF1A1919" Offset="1"/>
+            </RadialGradientBrush>
         </Border.Background>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -293,8 +296,12 @@
                 Grid.RowSpan="2"
                 Grid.Column="1"
                 Width="840"
-                Background="#FF1A1919"
-                CornerRadius="0,8,8,0" />
+                Background="#E51A1919"
+                CornerRadius="0,8,8,0">
+                <Border.Effect>
+                    <BlurEffect Radius="1"></BlurEffect>
+                </Border.Effect>
+            </Border>
             <ContentControl
                 x:Name="ContentControl"
                 Grid.Row="1"

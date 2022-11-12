@@ -1,6 +1,6 @@
 ﻿using ToastNotifications;
 
-namespace OrganizationBankingSystem.Core
+namespace OrganizationBankingSystem.Core.Notifications
 {
     internal static class MessageExtension
     {

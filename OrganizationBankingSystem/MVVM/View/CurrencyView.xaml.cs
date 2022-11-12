@@ -4,10 +4,12 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using LiveCharts;
-using OrganizationBankingSystem.Core;
+using OrganizationBankingSystem.Assets;
+using OrganizationBankingSystem.Assets.NotifierMessages;
 using OrganizationBankingSystem.Core.Converters;
 using OrganizationBankingSystem.Core.Helpers;
 using OrganizationBankingSystem.Core.Helpers.BelarusBank;
+using OrganizationBankingSystem.Core.Notifications;
 using OrganizationBankingSystem.Data;
 using OrganizationBankingSystem.MVVM.ViewModel;
 using System;
@@ -104,14 +106,14 @@ namespace OrganizationBankingSystem.MVVM.View
             if (NetworkHelpers.CheckInternetConnection())
             {
                 TextBoxConnectionMode.Text = "Онлайн-режим";
-                TextBoxConnectionMode.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(188, 219, 255));
+                TextBoxConnectionMode.Background = ColorBrush.Info;
 
                 IsOnlineMode = true;
             }
             else
             {
                 TextBoxConnectionMode.Text = "Офлайн-режим";
-                TextBoxConnectionMode.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 241, 208));
+                TextBoxConnectionMode.Background = ColorBrush.Warning;
 
                 IsOnlineMode = false;
             }
@@ -181,7 +183,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
                     Dispatcher.Invoke(() =>
                     {
-                        NotifierHelper.notifier.ShowWarningPropertyMessage($"Указанное значение количества дней недоступно\nМаксимально доступное значение для данного курса выбранных валют: {availableIndex}");
+                        NotificationManager.notifier.ShowWarningPropertyMessage($"Указанное значение количества дней недоступно\nМаксимально доступное значение для данного курса выбранных валют: {availableIndex}");
                     });
                 }
 
@@ -212,14 +214,14 @@ namespace OrganizationBankingSystem.MVVM.View
             {
                 Dispatcher.Invoke(() =>
                 {
-                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет");
+                    NotificationManager.notifier.ShowErrorPropertyMessage(ConnectionMessage.DISABLE_CONNECTION);
                 });
             }
             catch (KeyNotFoundException)
             {
                 Dispatcher.Invoke(() =>
                 {
-                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, на данный момент актуальный курс выбранных валют не доступен");
+                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, на данный момент актуальный курс выбранных валют не доступен");
                 });
             }
         }
@@ -378,7 +380,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
             RequiredValues = ValidatorNumber.ValidateNumberTextInput(DEFAULT_REQUIRED_VALUES, MAX_REQUIRED_VALUES, NumberValuesGraph.Text);
 
-            NotifierHelper.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
+            NotificationManager.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
 
             await Task.Run(GetExchangeRates);
 
@@ -395,12 +397,12 @@ namespace OrganizationBankingSystem.MVVM.View
                 }
                 else
                 {
-                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
+                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
                 }
             }
             catch (ArgumentOutOfRangeException)
             {
-                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Неверное количество значений");
+                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Неверное количество значений");
             }
         }
 
@@ -447,14 +449,14 @@ namespace OrganizationBankingSystem.MVVM.View
                 }
                 else
                 {
-                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Не удается получить актуальный курс выбранных валют в офлайн-режиме. \nВозможно, не указано одно из следующих полей: количество, стоимость за единицу");
+                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Не удается получить актуальный курс выбранных валют в офлайн-режиме. \nВозможно, не указано одно из следующих полей: количество, стоимость за единицу");
 
                     TextBlockValueExchangeRates.Text = string.Empty;
                 }
             }
             else
             {
-                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, в списках валют не выбраны или выбраны валюты, не содержащиеся в них");
+                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, в списках валют не выбраны или выбраны валюты, не содержащиеся в них");
             }
         }
 
@@ -470,11 +472,13 @@ namespace OrganizationBankingSystem.MVVM.View
 
             if (DetailStatistics.HasItems)
             {
-                System.Windows.Forms.SaveFileDialog saveFileDialog = new();
-                saveFileDialog.InitialDirectory = Syroot.Windows.IO.KnownFolders.Downloads.Path;
-                saveFileDialog.Title = "Экспорт детальной статистики в Excel";
-                saveFileDialog.FileName = $"{FromCurrency}_to_{ToCurrency}_detail_statistics_report";
-                saveFileDialog.Filter = "|*.xlsx";
+                System.Windows.Forms.SaveFileDialog saveFileDialog = new()
+                {
+                    InitialDirectory = Syroot.Windows.IO.KnownFolders.Downloads.Path,
+                    Title = "Экспорт детальной статистики в Excel",
+                    FileName = $"{FromCurrency}_to_{ToCurrency}_detail_statistics_report",
+                    Filter = "|*.xlsx"
+                };
 
                 if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
@@ -529,16 +533,16 @@ namespace OrganizationBankingSystem.MVVM.View
 
                     spreadSheetDocument.Close();
 
-                    NotifierHelper.notifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
+                    NotificationManager.notifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
                 }
                 catch (IOException)
                 {
-                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, данный файл занят другим процессом или уже открыт в Microsoft Excel");
+                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, данный файл занят другим процессом или уже открыт в Microsoft Excel");
                 }
             }
             else
             {
-                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Детальная статистика и график курсов валют не построены");
+                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Детальная статистика и график курсов валют не построены");
             }
         }
 
@@ -600,15 +604,15 @@ namespace OrganizationBankingSystem.MVVM.View
 
             ComboBoxTypeGraph.SelectedIndex = -1;
 
-            ButtonColorUp.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(161, 204, 165));
-            ButtonColorDown.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(210, 31, 60));
-            ButtonColorEquals.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(125, 132, 145));
+            ButtonColorUp.Background = ColorBrush.Green;
+            ButtonColorDown.Background = ColorBrush.Red;
+            ButtonColorEquals.Background = ColorBrush.Grey;
 
-            ButtonStrokeColorUp.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(161, 204, 165));
-            ButtonStrokeColorDown.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(210, 31, 60));
-            ButtonStrokeColorEquals.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(125, 132, 145));
+            ButtonStrokeColorUp.Background = ColorBrush.Green;
+            ButtonStrokeColorDown.Background = ColorBrush.Red;
+            ButtonStrokeColorEquals.Background = ColorBrush.Grey;
 
-            ButtonColorMaxValue.Background = new SolidColorBrush(System.Windows.Media.Colors.Transparent);
+            ButtonColorMaxValue.Background = ColorBrush.Transparent;
             ButtonColorMaxValue.BorderThickness = new Thickness(1);
 
             ToggleCheckBoxMaxValueCurrency.IsChecked = false;
@@ -634,13 +638,13 @@ namespace OrganizationBankingSystem.MVVM.View
                 }
             }
 
-            NotifierHelper.notifier.ShowInformationPropertyMessage($"Идет процесс получения курса валют Беларусбанка...\nВалюта: {currencyCode}\nОтделение: г. Брест, пр. Партизанский, отделение 100/1050");
+            NotificationManager.notifier.ShowInformationPropertyMessage($"Идет процесс получения курса валют Беларусбанка...\nВалюта: {currencyCode}\nОтделение: г. Брест, пр. Партизанский, отделение 100/1050");
 
             string responseValueExchangeRates = await Task.Run(() => BelarusBankHelper.GetExchangeRates(currencyCode));
 
             if (responseValueExchangeRates.Equals("Not defined"))
             {
-                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет.\nВозможно, на данный момент актуальный курс выбранных валют не доступен");
+                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет.\nВозможно, на данный момент актуальный курс выбранных валют не доступен");
             }
             else
             {
@@ -660,18 +664,18 @@ namespace OrganizationBankingSystem.MVVM.View
             }
             else
             {
-                NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет");
+                NotificationManager.notifier.ShowErrorPropertyMessage(ConnectionMessage.DISABLE_CONNECTION);
             }
         }
 
         private void ChangeBackgroundEnterBelarusBank(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            BelarusBankBorderRectangle.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(3, 166, 75));
+            BelarusBankBorderRectangle.Fill = ColorBrush.GreenLight;
         }
 
         private void ChangeBackgroundLeaveBelarusBank(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            BelarusBankBorderRectangle.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 148, 66));
+            BelarusBankBorderRectangle.Fill = ColorBrush.Green;
         }
     }
 }

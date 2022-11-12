@@ -1,5 +1,5 @@
 ﻿using OrganizationBankingSystem.Core;
-using OrganizationBankingSystem.Core.Helpers;
+using OrganizationBankingSystem.Core.Notifications;
 
 namespace OrganizationBankingSystem.MVVM.ViewModel
 {
@@ -52,7 +52,7 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
 
                 if (IsFileListCurrencyDamaged)
                 {
-                    NotifierHelper.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или поврежден файл списков валют (файл был удален или неккоректно изменен)");
+                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или поврежден файл списков валют (файл был удален или неккоректно изменен)");
                 }
             }
             );

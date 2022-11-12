@@ -8,22 +8,22 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Theme/MenuButtonTheme.xaml" />
-                <ResourceDictionary Source="Theme/MenuButtonIconsTheme.xaml" />
-                <ResourceDictionary Source="Theme/ComboBoxTheme.xaml" />
-                <ResourceDictionary Source="Theme/TextBlockHideAnimationTheme.xaml" />
-                <ResourceDictionary Source="Theme/DataGridTheme.xaml" />
-                <ResourceDictionary Source="Theme/StarButtonTheme.xaml" />
-                <ResourceDictionary Source="Theme/TextBoxTheme.xaml" />
-                <ResourceDictionary Source="Theme/ButtonTheme.xaml" />
-                <ResourceDictionary Source="Theme/TooltipTheme.xaml" />
-                <ResourceDictionary Source="Theme/ToggleButtonTheme.xaml" />
-                <ResourceDictionary Source="Theme/CheckBoxTheme.xaml" />
-                <ResourceDictionary Source="Theme/ToggleCheckBoxTheme.xaml" />
-                <ResourceDictionary Source="Theme/TextBlockTheme.xaml" />
-                <ResourceDictionary Source="Theme/ToggleButtonHideAnimationTheme.xaml" />
-                <ResourceDictionary Source="Theme/MenuItemTheme.xaml" />
-                <ResourceDictionary Source="Theme/ButtonWarningTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/MenuButtonTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/MenuButtonIconsTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/ComboBoxTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/TextBlockHideAnimationTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/DataGridTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/StarButtonTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/TextBoxTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/ButtonTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/TooltipTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/ToggleButtonTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/CheckBoxTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/ToggleCheckBoxTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/TextBlockTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/ToggleButtonHideAnimationTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/MenuItemTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/ButtonWarningTheme.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>

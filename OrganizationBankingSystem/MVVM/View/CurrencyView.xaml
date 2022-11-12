@@ -348,8 +348,8 @@
                                             <VisualBrush>
                                                 <VisualBrush.Visual>
                                                     <Grid Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Border}}, Mode=OneWay}" Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Border}}, Mode=OneWay}">
-                                                        <Rectangle x:Name="BelarusBankBorderRectangle" Fill="#FF03A64B" />
-                                                        <Image Source="/MVVM/View/belarusbank_logo.png" />
+                                                        <Rectangle x:Name="BelarusBankBorderRectangle" Fill="#FFA1A64B" />
+                                                        <Image Source="/Assets/Images/belarusbank.png" />
                                                     </Grid>
                                                 </VisualBrush.Visual>
                                             </VisualBrush>

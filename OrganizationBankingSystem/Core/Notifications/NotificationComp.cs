@@ -2,16 +2,16 @@
 using System.Runtime.CompilerServices;
 using ToastNotifications.Core;
 
-namespace OrganizationBankingSystem.Core
+namespace OrganizationBankingSystem.Core.Notifications
 {
-    public class NotificationErr : NotificationBase, INotifyPropertyChanged
+    public class NotificationComp : NotificationBase, INotifyPropertyChanged
     {
-        private ErrorPropertyNotification _displayPartUI;
+        private CompletedPropertyNotification _displayPartUI;
 
         public override NotificationDisplayPart DisplayPart => _displayPartUI
-            ??= new ErrorPropertyNotification(this);
+            ??= new CompletedPropertyNotification(this);
 
-        public NotificationErr(string message, MessageOptions messageOptions = null) : base(message, messageOptions)
+        public NotificationComp(string message, MessageOptions messageOptions = null) : base(message, messageOptions)
         {
             Message = message;
         }
@@ -36,6 +36,7 @@ namespace OrganizationBankingSystem.Core
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
+
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
