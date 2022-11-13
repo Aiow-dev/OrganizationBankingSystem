@@ -358,6 +358,14 @@
                                             <ToolTip Content="Получить курсы валют БеларусБанка" Style="{StaticResource TooltipTheme}" />
                                         </Border.ToolTip>
                                     </Border>
+                                    <Button
+                                        x:Name="ButtonTest"
+                                        Width="120"
+                                        BorderThickness="0,0,0,0"
+                                        Click="CreateTest"
+                                        Content="Создать (тест)"
+                                        Foreground="DarkGray"
+                                        Style="{StaticResource ButtonTheme}" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

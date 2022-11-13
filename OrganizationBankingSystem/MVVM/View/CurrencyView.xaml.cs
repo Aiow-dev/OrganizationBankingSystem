@@ -1,4 +1,5 @@
-﻿using CsvHelper;
+﻿using BankSystemModel;
+using CsvHelper;
 using CsvHelper.Configuration;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
@@ -458,6 +459,16 @@ namespace OrganizationBankingSystem.MVVM.View
             else
             {
                 NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, в списках валют не выбраны или выбраны валюты, не содержащиеся в них");
+            }
+        }
+
+        private void CreateTest(object sender, RoutedEventArgs e)
+        {
+            using (BankSystemContext db = new BankSystemContext())
+            {
+                User user1 = new User { FirstName = "Имя", LastName = "Фамилия", Patronymic = "Отчество", Phone = "Номер телефона" };
+                db.Users.Add(user1);
+                db.SaveChanges();
             }
         }
 
