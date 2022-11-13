@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BankSystemModel
+namespace OrganizationBankingSystem.MVVM.Model
 {
     public class BankUser
     {

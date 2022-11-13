@@ -1,5 +1,4 @@
-﻿using BankSystemModel;
-using CsvHelper;
+﻿using CsvHelper;
 using CsvHelper.Configuration;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
@@ -12,7 +11,11 @@ using OrganizationBankingSystem.Core.Helpers;
 using OrganizationBankingSystem.Core.Helpers.BelarusBank;
 using OrganizationBankingSystem.Core.Notifications;
 using OrganizationBankingSystem.Data;
+using OrganizationBankingSystem.MVVM.Model;
 using OrganizationBankingSystem.MVVM.ViewModel;
+using OrganizationBankingSystem.Services;
+using OrganizationBankingSystem.Services.AuthenticationServices;
+using OrganizationBankingSystem.Services.EntityServices;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -464,12 +467,15 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void CreateTest(object sender, RoutedEventArgs e)
         {
-            using (BankSystemContext db = new BankSystemContext())
+            IDataService<User> userService = new GenericDataService<User>(new BankSystemContextFactory());
+            userService.Create(new User
             {
-                User user1 = new User { FirstName = "Имя", LastName = "Фамилия", Patronymic = "Отчество", Phone = "Номер телефона" };
-                db.Users.Add(user1);
-                db.SaveChanges();
-            }
+                LastName = "Пользователь",
+                FirstName = "Пользователь",
+                Patronymic = "Пользователь",
+                Phone = "Пользователь",
+                BankUserId = 1
+            });
         }
 
         private void SwapValuesComboBox(object sender, RoutedEventArgs e)

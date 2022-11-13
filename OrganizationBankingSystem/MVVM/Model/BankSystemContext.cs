@@ -1,16 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 
-namespace BankSystemModel
+namespace OrganizationBankingSystem.MVVM.Model
 {
     public class BankSystemContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<BankUser> BankUsers { get; set; }
 
+        public BankSystemContext(DbContextOptions options) : base(options) { }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["BankSystemDatabase"].ConnectionString);
+            base.OnConfiguring(optionsBuilder);
         }
     }
 }
