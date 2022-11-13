@@ -2,7 +2,7 @@
 
 namespace OrganizationBankingSystem.Core.Helpers
 {
-    public static class NetworkHelpers
+    public static class NetworkHelper
     {
         public static bool CheckInternetConnection()
         {

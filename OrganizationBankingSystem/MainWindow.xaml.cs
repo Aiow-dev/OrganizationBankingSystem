@@ -24,7 +24,7 @@ namespace OrganizationBankingSystem
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!NetworkHelpers.CheckInternetConnection())
+            if (!NetworkHelper.CheckInternetConnection())
             {
                 NotificationManager.notifier.ShowWarningPropertyMessage("Отсутствует или является нестабильным подключение к сети Интернет. Это может повлиять на работу некоторых функций приложения");
             }

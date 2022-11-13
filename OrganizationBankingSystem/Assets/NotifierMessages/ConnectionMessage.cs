@@ -2,6 +2,6 @@
 {
     public class ConnectionMessage
     {
-        public const string DISABLE_CONNECTION = "Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет";
+        public static readonly string DISABLE_CONNECTION = "Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет";
     }
 }

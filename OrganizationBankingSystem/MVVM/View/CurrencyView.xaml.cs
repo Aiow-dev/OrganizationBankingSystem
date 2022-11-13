@@ -18,7 +18,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -103,7 +105,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void CheckSetOnlineMode()
         {
-            if (NetworkHelpers.CheckInternetConnection())
+            if (NetworkHelper.CheckInternetConnection())
             {
                 TextBoxConnectionMode.Text = "Онлайн-режим";
                 TextBoxConnectionMode.Background = ColorBrush.Info;
@@ -161,12 +163,11 @@ namespace OrganizationBankingSystem.MVVM.View
                 $"&apikey={ServiceManager.ServiceManager.GetServiceKey()}";
             Uri queryUri = new(QUERY_URL);
 
-            //TODO: use HttpClient
-            /*using HttpClient client = new();*/
-
             try
             {
-                dynamic jsonData = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(new WebClient().DownloadString(queryUri));
+                HttpClient httpClient = new();
+
+                dynamic jsonData = JsonSerializer.Deserialize<Dictionary<string, dynamic>>(httpClient.GetStreamAsync(queryUri).Result);
 
                 JsonElement timeSeriesDaily = jsonData["Time Series FX (Daily)"];
 
