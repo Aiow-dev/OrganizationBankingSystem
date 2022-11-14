@@ -467,15 +467,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void CreateTest(object sender, RoutedEventArgs e)
         {
-            IDataService<User> userService = new GenericDataService<User>(new BankSystemContextFactory());
-            userService.Create(new User
-            {
-                LastName = "Пользователь",
-                FirstName = "Пользователь",
-                Patronymic = "Пользователь",
-                Phone = "Пользователь",
-                BankUserId = 1
-            });
+            IAuthenticationService authentication = new AuthenticationService(new BankUserDataService(new BankSystemContextFactory()));
+            authentication.Login("Пользователь 2", "Пользователь 2");
         }
 
         private void SwapValuesComboBox(object sender, RoutedEventArgs e)

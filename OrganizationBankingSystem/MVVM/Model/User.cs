@@ -21,7 +21,6 @@ namespace OrganizationBankingSystem.MVVM.Model
         [Required]
         public string Phone { get; set; }
 
-        public int BankUserId { get; set; }
         public BankUser BankUser { get; set; }
     }
 }

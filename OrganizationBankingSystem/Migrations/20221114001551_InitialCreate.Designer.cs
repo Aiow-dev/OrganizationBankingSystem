@@ -11,7 +11,7 @@ using OrganizationBankingSystem.MVVM.Model;
 namespace OrganizationBankingSystem.Migrations
 {
     [DbContext(typeof(BankSystemContext))]
-    [Migration("20221113225700_InitialCreate")]
+    [Migration("20221114001551_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -41,7 +41,13 @@ namespace OrganizationBankingSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("BankUsers");
                 });
@@ -53,9 +59,6 @@ namespace OrganizationBankingSystem.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BankUserId")
-                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -78,26 +81,23 @@ namespace OrganizationBankingSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BankUserId")
-                        .IsUnique();
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("OrganizationBankingSystem.MVVM.Model.User", b =>
-                {
-                    b.HasOne("OrganizationBankingSystem.MVVM.Model.BankUser", "BankUser")
-                        .WithOne("Profile")
-                        .HasForeignKey("OrganizationBankingSystem.MVVM.Model.User", "BankUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BankUser");
                 });
 
             modelBuilder.Entity("OrganizationBankingSystem.MVVM.Model.BankUser", b =>
                 {
-                    b.Navigation("Profile");
+                    b.HasOne("OrganizationBankingSystem.MVVM.Model.User", "User")
+                        .WithOne("BankUser")
+                        .HasForeignKey("OrganizationBankingSystem.MVVM.Model.BankUser", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OrganizationBankingSystem.MVVM.Model.User", b =>
+                {
+                    b.Navigation("BankUser");
                 });
 #pragma warning restore 612, 618
         }

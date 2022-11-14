@@ -298,9 +298,6 @@
                 Width="840"
                 Background="#E51A1919"
                 CornerRadius="0,8,8,0">
-                <Border.Effect>
-                    <BlurEffect Radius="1"></BlurEffect>
-                </Border.Effect>
             </Border>
             <ContentControl
                 x:Name="ContentControl"
