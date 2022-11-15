@@ -1,5 +1,6 @@
 ﻿using OrganizationBankingSystem.Core.Helpers;
 using OrganizationBankingSystem.Core.Notifications;
+using OrganizationBankingSystem.MVVM.View;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -15,6 +16,9 @@ namespace OrganizationBankingSystem
         public MainWindow()
         {
             InitializeComponent();
+
+            LoginView loginView = new();
+            loginView.Show();
         }
 
         private void WindowMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

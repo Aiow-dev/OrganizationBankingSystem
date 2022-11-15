@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:view="clr-namespace:OrganizationBankingSystem.MVVM.View"
     xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
-    StartupUri="MainWindow.xaml">
+    StartupUri="MVVM/View/LoginView.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -38,6 +38,14 @@
 
             <DataTemplate DataType="{x:Type viewModel:CurrencyViewModel}">
                 <view:CurrencyView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:LoginFormViewModel}">
+                <view:LoginFormView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:RegistrationFormViewModel}">
+                <view:RegistrationFormView />
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

@@ -1,0 +1,40 @@
+﻿<Window x:Class="OrganizationBankingSystem.MVVM.View.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
+        xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        mc:Ignorable="d"
+        Title="DolphinBank"
+        Height="450"
+        Width="800"
+        AllowsTransparency="True"
+        Background="Transparent"
+        MouseLeftButtonDown="LoginWindowMove"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None">
+    
+    <Window.DataContext>
+        <viewModel:LoginViewModel />
+    </Window.DataContext>
+    
+    <Border CornerRadius="8" Background="#F21A1919">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border Background="#313F65" CornerRadius="8,0,0,8">
+                <Image gif:ImageBehavior.AnimatedSource="/Assets/Images/dolphin_animation.gif"/>
+            </Border>
+            <ContentControl
+                x:Name="ContentControl"
+                Grid.Column="1"
+                Width="Auto"
+                Margin="10,0,0,0"
+                Content="{Binding CurrentFormView}" />
+        </Grid>
+    </Border>
+</Window>
