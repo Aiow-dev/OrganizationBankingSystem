@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OrganizationBankingSystem.Core.Helpers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace OrganizationBankingSystem.MVVM.View
 {
@@ -27,6 +17,11 @@ namespace OrganizationBankingSystem.MVVM.View
         private void LoginWindowMove(object sender, MouseButtonEventArgs e)
         {
             DragMove();
+        }
+
+        private void ShutdownApplication(object sender, MouseButtonEventArgs e)
+        {
+            ApplicationHelper.SetShutdownApplication();
         }
     }
 }

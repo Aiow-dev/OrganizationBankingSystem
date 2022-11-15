@@ -1,65 +1,75 @@
-﻿<UserControl x:Class="OrganizationBankingSystem.MVVM.View.LoginFormView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
-             d:DataContext="{d:DesignInstance local:CurrencyView}"
-             mc:Ignorable="d">
+﻿<UserControl
+    x:Class="OrganizationBankingSystem.MVVM.View.LoginFormView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
+    d:DataContext="{d:DesignInstance Type=viewModel:LoginViewModel}"
+    mc:Ignorable="d">
     <Grid>
-        <StackPanel Width="400" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel
+            Width="400"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 FontSize="20"
                 Foreground="#FFF8F8F8"
                 Text="Войдите в учетную запись DolphinBank" />
-            <StackPanel HorizontalAlignment="Center" Margin="0,50,0,0" Width="250">
+            <StackPanel
+                Width="250"
+                Margin="0,50,0,0"
+                HorizontalAlignment="Center">
                 <Grid HorizontalAlignment="Center">
-            <TextBox x:Name="Login"
-                     Width="250"
-                     Height="35"
-                     Padding="3,0,0,3"
-                     Style="{StaticResource TextBoxTheme}" />
-            <TextBlock Width="250"
-                       Padding="5,0,0,5"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       Foreground="DarkGray"
-                       IsHitTestVisible="False"
-                       Text="Логин"
-                       TextWrapping="Wrap">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Style.Setters>
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </Style.Setters>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=Text, ElementName=Login}" Value="">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-        </Grid>
+                    <TextBox
+                        x:Name="Login"
+                        Width="250"
+                        Height="35"
+                        Padding="3,0,0,3"
+                        Style="{StaticResource TextBoxTheme}" />
+                    <TextBlock
+                        Width="250"
+                        Padding="5,0,0,5"
+                        VerticalAlignment="Center"
+                        Foreground="DarkGray"
+                        IsHitTestVisible="False"
+                        Text="Логин"
+                        TextWrapping="Wrap">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Setters>
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Style.Setters>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=Text, ElementName=Login}" Value="">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
                 <Grid Margin="0,20,0,0">
-                    <PasswordBox x:Name="Password"
-                                 Width="250"
-                                 Height="35"
-                                 Padding="3,0,0,3"
-                                 Style="{StaticResource PasswordBoxTheme}"
-                                 PasswordChanged="Password_PasswordChanged"
-                                 VerticalContentAlignment="Center" />
-                    <TextBlock x:Name="PasswordPlaceholder"
-                               Width="250"
-                               Padding="5,0,0,5"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center"
-                               Foreground="DarkGray"
-                               IsHitTestVisible="False"
-                               Text="Пароль"
-                               TextWrapping="Wrap">
+                    <PasswordBox
+                        x:Name="Password"
+                        Width="250"
+                        Height="35"
+                        Padding="3,0,0,3"
+                        VerticalContentAlignment="Center"
+                        PasswordChanged="Password_PasswordChanged"
+                        Style="{StaticResource PasswordBoxTheme}" />
+                    <TextBlock
+                        x:Name="PasswordPlaceholder"
+                        Width="250"
+                        Padding="5,0,0,5"
+                        VerticalAlignment="Center"
+                        Foreground="DarkGray"
+                        IsHitTestVisible="False"
+                        Text="Пароль"
+                        TextWrapping="Wrap">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Style.Setters>
@@ -74,17 +84,14 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </Grid>
-                <Button Margin="0,25,0,0"
-                        Width="120"
-                        Height="35"
-                        BorderThickness="0,0,0,0"
-                        Content="Войти"
-                        Foreground="DarkGray"
-                        Style="{StaticResource ButtonTheme}" />
-                <TextBlock Margin="0,10,0,0"
-                           Text="Еще нет учетной записи? Создайте ее!"
-                           Foreground="DarkGray"
-                           TextAlignment="Center" />
+                <Button
+                    Width="120"
+                    Height="35"
+                    Margin="0,25,0,0"
+                    BorderThickness="0,0,0,0"
+                    Content="Войти"
+                    Foreground="DarkGray"
+                    Style="{StaticResource ButtonTheme}" />
             </StackPanel>
         </StackPanel>
     </Grid>
