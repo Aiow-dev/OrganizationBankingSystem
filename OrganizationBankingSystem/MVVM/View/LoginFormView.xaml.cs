@@ -24,5 +24,16 @@ namespace OrganizationBankingSystem.MVVM.View
         {
             InitializeComponent();
         }
+
+        private void Password_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (Password.Password.Length != 0)
+            {
+                PasswordPlaceholder.Visibility = Visibility.Hidden;
+            } else
+            {
+                PasswordPlaceholder.Visibility = Visibility.Visible;
+            }
+        }
     }
 }

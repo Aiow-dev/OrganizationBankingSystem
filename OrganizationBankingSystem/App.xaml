@@ -24,6 +24,7 @@
                 <ResourceDictionary Source="Assets/Theme/ToggleButtonHideAnimationTheme.xaml" />
                 <ResourceDictionary Source="Assets/Theme/MenuItemTheme.xaml" />
                 <ResourceDictionary Source="Assets/Theme/ButtonWarningTheme.xaml" />
+                <ResourceDictionary Source="Assets/Theme/PasswordBoxTheme.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>
