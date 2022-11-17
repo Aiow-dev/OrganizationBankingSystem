@@ -17,7 +17,7 @@
                 FontSize="20"
                 Foreground="#FFF8F8F8"
                 Text="Создайте учетную запись DolphinBank" />
-            <StackPanel Margin="0,50,0,0" Orientation="Horizontal">
+            <StackPanel Margin="0,35,0,0" Orientation="Horizontal">
                 <StackPanel>
                     <Grid>
                         <TextBox
@@ -237,14 +237,31 @@
                     </Grid>
                 </StackPanel>
             </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                <ToggleButton
+                x:Name="AutoLogin"
+                Width="20"
+                Height="20"
+                IsChecked="False"
+                Style="{StaticResource ToggleCheckBoxTheme}">
+                <ToggleButton.ToolTip>
+                    <ToolTip Content="Входить в учетную запись автоматически после регистрации" Style="{StaticResource TooltipTheme}" />
+                </ToggleButton.ToolTip>
+            </ToggleButton>
+            <Label
+                Content="Автоматический вход"
+                FontSize="12"
+                Foreground="DarkGray" />
+            </StackPanel>
             <Button
                 Width="120"
-                Height="30"
+                Height="35"
                 Margin="0,25,0,0"
                 BorderThickness="0,0,0,0"
                 Content="Создать"
-                Foreground="DarkGray"
-                Style="{StaticResource ButtonTheme}" />
+                Foreground="#FF1B2F65"
+                Click="RegisterBankUser"
+                Style="{StaticResource ButtonSubmitTheme}" FontWeight="Bold" />
         </StackPanel>
     </Grid>
 </UserControl>

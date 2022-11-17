@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OrganizationBankingSystem.Core.Notifications;
+using OrganizationBankingSystem.Core.State.Authenticators;
+using OrganizationBankingSystem.Services.AuthenticationServices;
+using OrganizationBankingSystem.Services.EntityServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace OrganizationBankingSystem.MVVM.View
 {
@@ -30,9 +23,32 @@ namespace OrganizationBankingSystem.MVVM.View
             if (Password.Password.Length != 0)
             {
                 PasswordPlaceholder.Visibility = Visibility.Hidden;
-            } else
+            }
+            else
             {
                 PasswordPlaceholder.Visibility = Visibility.Visible;
+            }
+        }
+
+        private async void LoginBankUser(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() => {
+                NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа...");
+            });
+
+            string login = Login.Text;
+            string password = Password.Password;
+
+            IAuthenticator authenticator = new Authenticator(new AuthenticationService(new BankUserDataService(new Model.BankSystemContextFactory())));
+            bool success = await authenticator.Login(login, password);
+
+            if (success)
+            {
+                MainWindow mainWindow = new();
+                mainWindow.Show();
+
+                Window window = Window.GetWindow(this);
+                window.Close();
             }
         }
     }

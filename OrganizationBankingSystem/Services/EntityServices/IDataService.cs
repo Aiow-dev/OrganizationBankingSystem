@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace OrganizationBankingSystem.Services
+namespace OrganizationBankingSystem.Services.EntityServices
 {
     public interface IDataService<T>
     {

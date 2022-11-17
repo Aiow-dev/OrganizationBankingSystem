@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using OrganizationBankingSystem.MVVM.Model;
+using OrganizationBankingSystem.Services.EntityServices;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace OrganizationBankingSystem.Services.AuthenticationServices
 {
@@ -26,8 +26,6 @@ namespace OrganizationBankingSystem.Services.AuthenticationServices
             {
                 return null;
             }
-
-            MessageBox.Show("Вход разрешен");
 
             return bankUser;
         }

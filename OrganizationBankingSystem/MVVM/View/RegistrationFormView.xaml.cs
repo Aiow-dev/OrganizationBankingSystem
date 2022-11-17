@@ -1,4 +1,8 @@
-﻿using System;
+﻿using OrganizationBankingSystem.Core.Notifications;
+using OrganizationBankingSystem.Core.State.Authenticators;
+using OrganizationBankingSystem.Services.AuthenticationServices;
+using OrganizationBankingSystem.Services.EntityServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,6 +50,52 @@ namespace OrganizationBankingSystem.MVVM.View
             else
             {
                 PasswordConfirmPlaceholder.Visibility = Visibility.Visible;
+            }
+        }
+
+        private async void RegisterBankUser(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение создания учетной записи...");
+            });
+
+            string lastName = LastName.Text;
+            string firstName = FirstName.Text;
+            string patronymic = Patronymic.Text;
+            string phone = Phone.Text;
+            string login = Login.Text;
+            string password = Password.Password;
+            string confirmPassword = PasswordConfirm.Password;
+
+            IAuthenticator authenticator = new Authenticator(new AuthenticationService(new BankUserDataService(new Model.BankSystemContextFactory())));
+            RegistrationResult registrationResult = await authenticator.Register(lastName, firstName, patronymic, phone, login, password, confirmPassword);
+
+            if (registrationResult == RegistrationResult.Success)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    NotificationManager.notifier.ShowCompletedPropertyMessage("Учетная запись создана успешно!");
+                });
+
+                if (AutoLogin.IsChecked == true)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа!");
+                    });
+
+                    bool success = await authenticator.Login(login, password);
+
+                    if (success)
+                    {
+                        MainWindow mainWindow = new();
+                        mainWindow.Show();
+
+                        Window window = Window.GetWindow(this);
+                        window.Close();
+                    }
+                }
             }
         }
     }

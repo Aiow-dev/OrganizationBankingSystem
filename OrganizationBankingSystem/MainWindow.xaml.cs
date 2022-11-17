@@ -16,9 +16,6 @@ namespace OrganizationBankingSystem
         public MainWindow()
         {
             InitializeComponent();
-
-            LoginView loginView = new();
-            loginView.Show();
         }
 
         private void WindowMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

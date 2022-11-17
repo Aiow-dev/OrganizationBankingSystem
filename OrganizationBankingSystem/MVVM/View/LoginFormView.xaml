@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
-    d:DataContext="{d:DesignInstance Type=viewModel:LoginViewModel}"
+    d:DataContext="{d:DesignInstance Type=viewModel:LoginFormViewModel}"
     mc:Ignorable="d">
     <Grid>
         <StackPanel
@@ -90,8 +90,9 @@
                     Margin="0,25,0,0"
                     BorderThickness="0,0,0,0"
                     Content="Войти"
-                    Foreground="DarkGray"
-                    Style="{StaticResource ButtonTheme}" />
+                    Foreground="#FF1B2F65"
+                    Style="{StaticResource ButtonSubmitTheme}"
+                    Click="LoginBankUser" FontWeight="Bold" />
             </StackPanel>
         </StackPanel>
     </Grid>

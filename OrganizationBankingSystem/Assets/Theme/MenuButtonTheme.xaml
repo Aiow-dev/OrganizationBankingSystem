@@ -1,11 +1,13 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style
         x:Key="MenuButtonTheme"
         BasedOn="{StaticResource {x:Type ToggleButton}}"
         TargetType="{x:Type RadioButton}">
         <Style.Resources>
-            <SolidColorBrush x:Key="BlackTransparentBrush" Color="White" Opacity="0.1"></SolidColorBrush>
+            <SolidColorBrush
+                x:Key="BlackTransparentBrush"
+                Opacity="0.1"
+                Color="White" />
         </Style.Resources>
         <Style.Setters>
             <Setter Property="Template">
