@@ -237,31 +237,32 @@
                     </Grid>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+            <!--<StackPanel Margin="0,15,0,0" Orientation="Horizontal">
                 <ToggleButton
-                x:Name="AutoLogin"
-                Width="20"
-                Height="20"
-                IsChecked="False"
-                Style="{StaticResource ToggleCheckBoxTheme}">
-                <ToggleButton.ToolTip>
-                    <ToolTip Content="Входить в учетную запись автоматически после регистрации" Style="{StaticResource TooltipTheme}" />
-                </ToggleButton.ToolTip>
-            </ToggleButton>
-            <Label
-                Content="Автоматический вход"
-                FontSize="12"
-                Foreground="DarkGray" />
-            </StackPanel>
+                    x:Name="AutoLogin"
+                    Width="20"
+                    Height="20"
+                    IsChecked="False"
+                    Style="{StaticResource ToggleCheckBoxTheme}">
+                    <ToggleButton.ToolTip>
+                        <ToolTip Content="Входить в учетную запись автоматически после регистрации" Style="{StaticResource TooltipTheme}" />
+                    </ToggleButton.ToolTip>
+                </ToggleButton>
+                <Label
+                    Content="Автоматический вход"
+                    FontSize="12"
+                    Foreground="DarkGray" />
+            </StackPanel>-->
             <Button
                 Width="120"
                 Height="35"
                 Margin="0,25,0,0"
                 BorderThickness="0,0,0,0"
+                Click="RegisterWindow"
                 Content="Создать"
+                FontWeight="Bold"
                 Foreground="#FF1B2F65"
-                Click="RegisterBankUser"
-                Style="{StaticResource ButtonSubmitTheme}" FontWeight="Bold" />
+                Style="{StaticResource ButtonSubmitTheme}" />
         </StackPanel>
     </Grid>
 </UserControl>

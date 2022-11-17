@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:view="clr-namespace:OrganizationBankingSystem.MVVM.View"
     xmlns:viewModel="clr-namespace:OrganizationBankingSystem.MVVM.ViewModel"
-    StartupUri="MVVM/View/LoginView.xaml">
+    StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

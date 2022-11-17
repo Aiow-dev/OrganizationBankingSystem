@@ -24,6 +24,16 @@ namespace OrganizationBankingSystem.MVVM.View
     /// </summary>
     public partial class RegistrationFormView : UserControl
     {
+        private string _lastName;
+        private string _firstName;
+        private string _patronymic;
+        private string _phone;
+        private string _login;
+        private string _password;
+        private string _passwordConfirm;
+
+        private RegistrationResult _registrationResult;
+
         public RegistrationFormView()
         {
             InitializeComponent();
@@ -53,49 +63,50 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        private async void RegisterBankUser(object sender, RoutedEventArgs e)
+        private async Task Register()
         {
-            Dispatcher.Invoke(() =>
-            {
-                NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение создания учетной записи...");
-            });
 
-            string lastName = LastName.Text;
-            string firstName = FirstName.Text;
-            string patronymic = Patronymic.Text;
-            string phone = Phone.Text;
-            string login = Login.Text;
-            string password = Password.Password;
-            string confirmPassword = PasswordConfirm.Password;
+        }
 
+        private async Task RegisterBankUser()
+        {
             IAuthenticator authenticator = new Authenticator(new AuthenticationService(new BankUserDataService(new Model.BankSystemContextFactory())));
-            RegistrationResult registrationResult = await authenticator.Register(lastName, firstName, patronymic, phone, login, password, confirmPassword);
+            _registrationResult = await Task.Run(() => authenticator.Register(_lastName, _firstName, _patronymic, _phone, _login, _password, _passwordConfirm));
+        }
 
-            if (registrationResult == RegistrationResult.Success)
+        private async void RegisterWindow(object sender, RoutedEventArgs e)
+        {
+            NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение создания учетной записи...");
+
+            _lastName = LastName.Text;
+            _firstName = FirstName.Text;
+            _patronymic = Patronymic.Text;
+            _phone = Phone.Text;
+            _login = Login.Text;
+            _password = Password.Password;
+            _passwordConfirm = PasswordConfirm.Password;
+
+            await RegisterBankUser();
+
+            if (_registrationResult == RegistrationResult.Success)
             {
-                Dispatcher.Invoke(() =>
-                {
-                    NotificationManager.notifier.ShowCompletedPropertyMessage("Учетная запись создана успешно!");
-                });
+                NotificationManager.notifier.ShowCompletedPropertyMessage("Учетная запись создана успешно!");
 
-                if (AutoLogin.IsChecked == true)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа!");
-                    });
+                //if (AutoLogin.IsChecked == true)
+                //{
+                //    NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа!");
 
-                    bool success = await authenticator.Login(login, password);
+                //    bool success = await authenticator.Login(login, password);
 
-                    if (success)
-                    {
-                        MainWindow mainWindow = new();
-                        mainWindow.Show();
+                //    if (success)
+                //    {
+                //        MainWindow mainWindow = new();
+                //        mainWindow.Show();
 
-                        Window window = Window.GetWindow(this);
-                        window.Close();
-                    }
-                }
+                //        Window window = Window.GetWindow(this);
+                //        window.Close();
+                //    }
+                //}
             }
         }
     }

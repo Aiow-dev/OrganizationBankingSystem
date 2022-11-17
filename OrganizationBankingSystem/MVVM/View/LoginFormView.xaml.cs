@@ -2,9 +2,9 @@
 using OrganizationBankingSystem.Core.State.Authenticators;
 using OrganizationBankingSystem.Services.AuthenticationServices;
 using OrganizationBankingSystem.Services.EntityServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace OrganizationBankingSystem.MVVM.View
 {
@@ -13,6 +13,10 @@ namespace OrganizationBankingSystem.MVVM.View
     /// </summary>
     public partial class LoginFormView : UserControl
     {
+        private string _login;
+        private string _password;
+        private bool _isAuthenticated;
+
         public LoginFormView()
         {
             InitializeComponent();
@@ -30,25 +34,36 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        private async void LoginBankUser(object sender, RoutedEventArgs e)
+        private async Task LoginBankUser()
         {
-            Dispatcher.Invoke(() => {
-                NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа...");
-            });
-
-            string login = Login.Text;
-            string password = Password.Password;
-
             IAuthenticator authenticator = new Authenticator(new AuthenticationService(new BankUserDataService(new Model.BankSystemContextFactory())));
-            bool success = await authenticator.Login(login, password);
+            _isAuthenticated = await Task.Run(() => authenticator.Login(_login, _password));
+        }
 
-            if (success)
+        private async void LoginWindow(object sender, RoutedEventArgs e)
+        {
+            //Dispatcher.Invoke(() => {
+            NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа...");
+            //});
+
+            _login = Login.Text;
+            _password = Password.Password;
+
+            await LoginBankUser();
+
+            if (_isAuthenticated)
             {
-                MainWindow mainWindow = new();
-                mainWindow.Show();
+                //MainWindow mainWindow = new();
+                //Application.Current.MainWindow = mainWindow;
+                //mainWindow.Show();
 
-                Window window = Window.GetWindow(this);
-                window.Close();
+                //Window window = Window.GetWindow(this);
+                //window.Close();
+
+                Window loginWindow = Window.GetWindow(this);
+                loginWindow.Close();
+
+                Application.Current.MainWindow.Visibility = Visibility.Visible;
             }
         }
     }
