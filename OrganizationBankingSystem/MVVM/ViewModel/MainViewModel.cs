@@ -11,11 +11,15 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
 
         public RelayCommand CurrencyViewCommand { get; set; }
 
+        public RelayCommand ProfileViewCommand { get; set; }
+
         public static bool IsFileListCurrencyDamaged { get; set; }
 
         public DashboardViewModel DashboardVM;
         public BankAccountViewModel BankAccountVM;
         public CurrencyViewModel CurrencyVM;
+        public ProfileViewModel ProfileVM;
+
         private object _currentView;
 
         public object CurrentView
@@ -44,6 +48,11 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
             BankAccountViewCommand = new RelayCommand(o =>
             {
                 CurrentView = BankAccountVM;
+            });
+
+            ProfileViewCommand = new RelayCommand(o =>
+            {
+                CurrentView = ProfileVM;
             });
 
             CurrencyViewCommand = new RelayCommand(o =>

@@ -2,10 +2,10 @@
     x:Class="OrganizationBankingSystem.MVVM.View.DashboardView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:OrganizationBankingSystem.MVVM.View"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="542.764"
-    d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance local:DashboardView}"
     mc:Ignorable="d">
     <Grid Width="Auto" Margin="10,0,10,0">
         <Grid.ColumnDefinitions>
@@ -71,15 +71,48 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
-                                <RowDefinition Height="170" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <TextBlock
+                            <StackPanel Margin="0,0,10,0" Orientation="Horizontal">
+                                <TextBlock
                                 FontSize="15"
                                 Foreground="#FFF8F8F8"
                                 Text="Курсы валют" />
-                            <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                <TextBlock Foreground="#FFFFF1D0" Text="★" />
-                                <TextBlock Foreground="#FFF8F8F8" Text="Нет избранных курсов валют" />
+                                <RadioButton
+                                    x:Name="ButtonFavoriteCourses"
+                                    Height="23"
+                                    Margin="5,0,0,0"
+                                    VerticalAlignment="Top"
+                                    Click="GetFavoriteCoursesButton"
+                                    Content="⟳"
+                                    Style="{StaticResource MenuButtonIconsTheme}">
+                                    <RadioButton.ToolTip>
+                                        <ToolTip Content="Обновить" Style="{StaticResource TooltipTheme}" />
+                                    </RadioButton.ToolTip>
+                                </RadioButton>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,10,0" Grid.Row="1">
+                                <DataGrid
+                                x:Name="DetailStatistics"
+                                Grid.Row="1"
+                                Height="170"
+                                AutoGenerateColumns="False"
+                                Background="#FF282828"
+                                BorderThickness="0"
+                                CanUserResizeColumns="False"
+                                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderTheme}"
+                                IsReadOnly="True"
+                                ItemsSource="{Binding FavoriteCourseItems}"
+                                RowStyle="{StaticResource DataGridRowTheme}"
+                                Style="{StaticResource DataGridTheme}"
+                                VerticalScrollBarVisibility="Disabled">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Binding="{Binding NumberFavoriteCourse}" Header="№" />
+                                        <DataGridTextColumn Binding="{Binding FromCurrencyCode}" Header="Валюта (От)" />
+                                        <DataGridTextColumn Binding="{Binding ToCurrencyCode}" Header="Валюта (К)" />
+                                        <DataGridTextColumn Binding="{Binding ValueCourse}" Header="Значение" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </StackPanel>
                             <Border
                                 Grid.RowSpan="2"

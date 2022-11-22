@@ -234,6 +234,18 @@
                                 <ToolTip Content="Настройки" Style="{StaticResource TooltipTheme}" />
                             </RadioButton.ToolTip>
                         </RadioButton>
+                        <RadioButton
+                            Margin="0,0,0,15"
+                            HorizontalAlignment="Center"
+                            Command="{Binding ProfileViewCommand}"
+                            Content="🎩"
+                            FontSize="18"
+                            IsChecked="True"
+                            Style="{StaticResource MenuButtonIconsTheme}">
+                            <RadioButton.ToolTip>
+                                <ToolTip Content="Профиль" Style="{StaticResource TooltipTheme}" />
+                            </RadioButton.ToolTip>
+                        </RadioButton>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <RadioButton
@@ -285,6 +297,13 @@
                         <RadioButton
                             Margin="5,0,0,15"
                             Content="Настройки"
+                            FontSize="18"
+                            Foreground="#FFF8F8F8"
+                            Style="{StaticResource MenuButtonTheme}" />
+                        <RadioButton
+                            Margin="5,0,0,15"
+                            Command="{Binding ProfileViewCommand}"
+                            Content="Профиль"
                             FontSize="18"
                             Foreground="#FFF8F8F8"
                             Style="{StaticResource MenuButtonTheme}" />

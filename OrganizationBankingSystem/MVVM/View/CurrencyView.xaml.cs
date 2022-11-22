@@ -164,7 +164,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private void GetExchangeRates()
         {
-            string QUERY_URL = $"{Properties.Settings.Default.serviceUri}&from_symbol={FromCurrency}&to_symbol={ToCurrency}" +
+            string QUERY_URL = $"{Properties.Settings.Default.serviceUri}function=FX_DAILY&from_symbol={FromCurrency}&to_symbol={ToCurrency}" +
                 $"&apikey={ServiceManager.ServiceManager.GetServiceKey()}";
             Uri queryUri = new(QUERY_URL);
 
