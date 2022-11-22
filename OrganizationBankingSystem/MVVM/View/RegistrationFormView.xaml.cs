@@ -63,15 +63,9 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        private async Task Register()
-        {
-
-        }
-
         private async Task RegisterBankUser()
         {
-            IAuthenticator authenticator = new Authenticator(new AuthenticationService(new BankUserDataService(new Model.BankSystemContextFactory())));
-            _registrationResult = await Task.Run(() => authenticator.Register(_lastName, _firstName, _patronymic, _phone, _login, _password, _passwordConfirm));
+            _registrationResult = await Task.Run(() => AuthenticatorState.authenticator.Register(_lastName, _firstName, _patronymic, _phone, _login, _password, _passwordConfirm));
         }
 
         private async void RegisterWindow(object sender, RoutedEventArgs e)

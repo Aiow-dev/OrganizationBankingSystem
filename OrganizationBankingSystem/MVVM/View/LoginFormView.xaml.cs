@@ -36,8 +36,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async Task LoginBankUser()
         {
-            IAuthenticator authenticator = new Authenticator(new AuthenticationService(new BankUserDataService(new Model.BankSystemContextFactory())));
-            _isAuthenticated = await Task.Run(() => authenticator.Login(_login, _password));
+            _isAuthenticated = await Task.Run(() => AuthenticatorState.authenticator.Login(_login, _password));
         }
 
         private async void LoginWindow(object sender, RoutedEventArgs e)

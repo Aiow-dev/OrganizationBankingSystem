@@ -10,6 +10,7 @@ using OrganizationBankingSystem.Core.Converters;
 using OrganizationBankingSystem.Core.Helpers;
 using OrganizationBankingSystem.Core.Helpers.BelarusBank;
 using OrganizationBankingSystem.Core.Notifications;
+using OrganizationBankingSystem.Core.State.Authenticators;
 using OrganizationBankingSystem.Data;
 using OrganizationBankingSystem.MVVM.Model;
 using OrganizationBankingSystem.MVVM.ViewModel;
@@ -687,6 +688,32 @@ namespace OrganizationBankingSystem.MVVM.View
         private void ChangeBackgroundLeaveBelarusBank(object sender, System.Windows.Input.MouseEventArgs e)
         {
             BelarusBankBorderRectangle.Fill = ColorBrush.Green;
+        }
+
+        private async Task AddFavoriteCourse(string fromCurrencyCode, string toCurrencyCode)
+        {
+            MessageBox.Show(AuthenticatorState.authenticator.CurrentBankUser.Login);
+
+            FavoriteCourse favoriteCourse = new()
+            {
+                FromCurrencyCode = fromCurrencyCode,
+                ToCurrencyCode = toCurrencyCode,
+                BankUserId = AuthenticatorState.authenticator.CurrentBankUser.Id
+            };
+
+            FavoriteCourseDataService favoriteCourseService = new(new BankSystemContextFactory());
+            await Task.Run(() => favoriteCourseService.Create(favoriteCourse));
+        }
+
+        private async void AddFavoriteCourseButton(object sender, RoutedEventArgs e)
+        {
+            ListCurrencyValuesItem fromCurrency = (ListCurrencyValuesItem)ComboBoxFromCurrency.SelectedItem;
+            ListCurrencyValuesItem toCurrency = (ListCurrencyValuesItem)ComboBoxToCurrency.SelectedItem;
+
+            if (fromCurrency != null && toCurrency != null)
+            {
+                await AddFavoriteCourse(fromCurrency.CurrencyCode, toCurrency.CurrencyCode);
+            }
         }
     }
 }

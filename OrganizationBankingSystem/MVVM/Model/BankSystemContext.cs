@@ -6,6 +6,7 @@ namespace OrganizationBankingSystem.MVVM.Model
     {
         public DbSet<User> Users { get; set; }
         public DbSet<BankUser> BankUsers { get; set; }
+        public DbSet<FavoriteCourse> FavoriteCourses { get; set; }
 
         public BankSystemContext(DbContextOptions options) : base(options) { }
 

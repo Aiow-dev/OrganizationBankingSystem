@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrganizationBankingSystem.MVVM.Model;
 
@@ -11,9 +12,11 @@ using OrganizationBankingSystem.MVVM.Model;
 namespace OrganizationBankingSystem.Migrations
 {
     [DbContext(typeof(BankSystemContext))]
-    partial class BankSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20221121203837_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,7 +189,7 @@ namespace OrganizationBankingSystem.Migrations
 
                     b.HasIndex("BankUserId");
 
-                    b.ToTable("FavoriteCourses");
+                    b.ToTable("FavoriteCourse");
                 });
 
             modelBuilder.Entity("OrganizationBankingSystem.MVVM.Model.Tariff", b =>

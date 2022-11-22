@@ -185,7 +185,7 @@
                                         Margin="5,0,0,0"
                                         Content="☆"
                                         FontSize="17"
-                                        Style="{StaticResource StarButtonTheme}">
+                                        Style="{StaticResource StarButtonTheme}" Click="AddFavoriteCourseButton">
                                         <RadioButton.ToolTip>
                                             <ToolTip Content="Добавить валюту в избранное" Style="{StaticResource TooltipTheme}" />
                                         </RadioButton.ToolTip>
