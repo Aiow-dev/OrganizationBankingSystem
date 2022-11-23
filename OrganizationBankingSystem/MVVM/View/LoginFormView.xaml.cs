@@ -1,7 +1,5 @@
 ﻿using OrganizationBankingSystem.Core.Notifications;
 using OrganizationBankingSystem.Core.State.Authenticators;
-using OrganizationBankingSystem.Services.AuthenticationServices;
-using OrganizationBankingSystem.Services.EntityServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,9 +39,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void LoginWindow(object sender, RoutedEventArgs e)
         {
-            //Dispatcher.Invoke(() => {
             NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа...");
-            //});
 
             _login = Login.Text;
             _password = Password.Password;
@@ -52,17 +48,13 @@ namespace OrganizationBankingSystem.MVVM.View
 
             if (_isAuthenticated)
             {
-                //MainWindow mainWindow = new();
-                //Application.Current.MainWindow = mainWindow;
-                //mainWindow.Show();
-
-                //Window window = Window.GetWindow(this);
-                //window.Close();
-
                 Window loginWindow = Window.GetWindow(this);
                 loginWindow.Close();
 
                 Application.Current.MainWindow.Visibility = Visibility.Visible;
+            } else
+            {
+                NotificationManager.notifier.ShowErrorPropertyMessage("Не удалось выполнить вход. Возможно, введено неверный логин или пароль");
             }
         }
     }

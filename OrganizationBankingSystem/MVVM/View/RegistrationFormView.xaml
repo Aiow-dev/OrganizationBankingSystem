@@ -237,7 +237,7 @@
                     </Grid>
                 </StackPanel>
             </StackPanel>
-            <!--<StackPanel Margin="0,15,0,0" Orientation="Horizontal">
+            <StackPanel Margin="0,15,0,0" Orientation="Horizontal">
                 <ToggleButton
                     x:Name="AutoLogin"
                     Width="20"
@@ -245,14 +245,14 @@
                     IsChecked="False"
                     Style="{StaticResource ToggleCheckBoxTheme}">
                     <ToggleButton.ToolTip>
-                        <ToolTip Content="Входить в учетную запись автоматически после регистрации" Style="{StaticResource TooltipTheme}" />
+                        <ToolTip Content="Входить в учетную запись после регистрации" Style="{StaticResource TooltipTheme}" />
                     </ToggleButton.ToolTip>
                 </ToggleButton>
                 <Label
-                    Content="Автоматический вход"
+                    Content="Выполнить вход в учетную запись"
                     FontSize="12"
                     Foreground="DarkGray" />
-            </StackPanel>-->
+            </StackPanel>
             <Button
                 Width="120"
                 Height="35"

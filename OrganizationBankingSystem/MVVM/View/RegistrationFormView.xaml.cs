@@ -1,21 +1,9 @@
 ﻿using OrganizationBankingSystem.Core.Notifications;
 using OrganizationBankingSystem.Core.State.Authenticators;
 using OrganizationBankingSystem.Services.AuthenticationServices;
-using OrganizationBankingSystem.Services.EntityServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace OrganizationBankingSystem.MVVM.View
 {
@@ -86,21 +74,24 @@ namespace OrganizationBankingSystem.MVVM.View
             {
                 NotificationManager.notifier.ShowCompletedPropertyMessage("Учетная запись создана успешно!");
 
-                //if (AutoLogin.IsChecked == true)
-                //{
-                //    NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа!");
+                if (AutoLogin.IsChecked == true)
+                {
+                    NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа!");
 
-                //    bool success = await authenticator.Login(login, password);
+                    bool success = await AuthenticatorState.authenticator.Login(_login, _password);
 
-                //    if (success)
-                //    {
-                //        MainWindow mainWindow = new();
-                //        mainWindow.Show();
+                    if (success)
+                    {
+                        Window registrationWindow = Window.GetWindow(this);
+                        registrationWindow.Close();
 
-                //        Window window = Window.GetWindow(this);
-                //        window.Close();
-                //    }
-                //}
+                        Application.Current.MainWindow.Visibility = Visibility.Visible;
+                    }
+                }
+            }
+            else if (_registrationResult == RegistrationResult.PasswordDoNotMatch)
+            {
+                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Пароли не совпадают!");
             }
         }
     }
