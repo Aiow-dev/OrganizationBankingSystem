@@ -1,10 +1,13 @@
-﻿using OrganizationBankingSystem.Core.Helpers;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using OrganizationBankingSystem.Core.Helpers;
+using OrganizationBankingSystem.Core.Notifications;
 using OrganizationBankingSystem.Core.State.Authenticators;
 using OrganizationBankingSystem.Data;
 using OrganizationBankingSystem.MVVM.Model;
 using OrganizationBankingSystem.Services.EntityServices;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
@@ -21,12 +24,16 @@ namespace OrganizationBankingSystem.MVVM.View
     {
         public List<FavoriteCourseItem> FavoriteCourseItems { get; set; }
 
+        private FavoriteCourseDataService _favoriteCourseService;
+
         private dynamic _jsonData;
         private string _valueCourse;
 
         public DashboardView()
         {
             InitializeComponent();
+
+            _favoriteCourseService = new(new BankSystemContextFactory());
 
             DataContext = this;
         }
@@ -67,8 +74,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async Task GetFavoriteCourses(BankUser bankUser)
         {
-            FavoriteCourseDataService favoriteCourseService = new(new BankSystemContextFactory());
-            List<FavoriteCourse> favoriteCourses = await Task.Run(() => favoriteCourseService.GetByBankUser(bankUser));
+            List<FavoriteCourse> favoriteCourses = await Task.Run(() => _favoriteCourseService.GetByBankUser(bankUser));
 
             FavoriteCourseItems = new();
 
@@ -90,16 +96,70 @@ namespace OrganizationBankingSystem.MVVM.View
                 }
             }
 
-            DetailStatistics.ItemsSource = FavoriteCourseItems;
+            FavoriteCourses.ItemsSource = FavoriteCourseItems;
         }
 
         private async void GetFavoriteCoursesButton(object sender, RoutedEventArgs e)
         {
+            NotificationManager.notifier.ShowInformationPropertyMessage("Идет процесс получения избранных курсов валют...");
+
+            ElementHelper.DisableElement(ButtonFavoriteCourses, 10000);
+
             BankUser bankUser = AuthenticatorState.authenticator.CurrentBankUser;
 
             if (bankUser != null && NetworkHelper.CheckInternetConnection())
             {
                 await GetFavoriteCourses(bankUser);
+            }
+        }
+
+        private void ExportCoursesToSpreadsheetDocument(object sender, RoutedEventArgs e)
+        {
+            ElementHelper.DisableElement(ButtonExportStatistics, 1500);
+
+            if (FavoriteCourses.HasItems)
+            {
+                System.Windows.Forms.SaveFileDialog saveFileDialog = new()
+                {
+                    InitialDirectory = Syroot.Windows.IO.KnownFolders.Downloads.Path,
+                    Title = "Экспорт детальной статистики в Excel",
+                    FileName = $"FavoriteCourses_report",
+                    Filter = "|*.xlsx"
+                };
+
+                if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+
+                string[] headers = { "Номер", "Код валюты (От)", "Код валюты (К)", "Значение" };
+
+                List<List<DocumentItem>> documentItems = new();
+
+                foreach (FavoriteCourseItem favoriteCourseItem in FavoriteCourses.ItemsSource)
+                {
+                    List<DocumentItem> documentRow = new()
+                        {
+                            new DocumentItem(Convert.ToString(favoriteCourseItem.NumberFavoriteCourse), CellValues.Number),
+                            new DocumentItem(Convert.ToString(favoriteCourseItem.FromCurrencyCode)),
+                            new DocumentItem(Convert.ToString(favoriteCourseItem.ToCurrencyCode)),
+                            new DocumentItem(Convert.ToString(favoriteCourseItem.ValueCourse), CellValues.Number),
+                        };
+
+                    documentItems.Add(documentRow);
+                }
+
+                try
+                {
+                    DocumentHelpers.Export(saveFileDialog.FileName, headers, documentItems);
+
+                    NotificationManager.notifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
+                }
+                catch (IOException)
+                {
+                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, данный файл занят другим процессом или уже открыт в Microsoft Excel");
+                }
+            }
+            else
+            {
+                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, не обновлены избранные курсы валют");
             }
         }
     }

@@ -4,7 +4,6 @@ using OrganizationBankingSystem.MVVM.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace OrganizationBankingSystem.Services.EntityServices
 {
@@ -19,10 +18,9 @@ namespace OrganizationBankingSystem.Services.EntityServices
 
         public async Task<FavoriteCourse> Create(FavoriteCourse favoriteCourse)
         {
-            MessageBox.Show("FavoriteCourse");
             using BankSystemContext context = _contextFactory.CreateDbContext();
             EntityEntry<FavoriteCourse> createdResult = await context.FavoriteCourses.AddAsync(favoriteCourse);
-            MessageBox.Show("Добавление");
+
             await context.SaveChangesAsync();
 
             return createdResult.Entity;

@@ -494,56 +494,28 @@ namespace OrganizationBankingSystem.MVVM.View
 
                 if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
+                string[] headers = { "Номер дня", "Открытие", "Минимум", "Максимум", "Закрытие", "Дата" };
+
+                List<List<DocumentItem>> documentItems = new();
+
+                foreach (DetailStatisticsItem detailStatisticsItem in DetailStatistics.ItemsSource)
+                {
+                    List<DocumentItem> documentRow = new()
+                        {
+                            new DocumentItem(Convert.ToString(detailStatisticsItem.NumberOfDay), CellValues.Number),
+                            new DocumentItem(Convert.ToString(detailStatisticsItem.OpenValueCurrency), CellValues.Number),
+                            new DocumentItem(Convert.ToString(detailStatisticsItem.MinValueCurrency), CellValues.Number),
+                            new DocumentItem(Convert.ToString(detailStatisticsItem.MaxValueCurrency), CellValues.Number),
+                            new DocumentItem(Convert.ToString(detailStatisticsItem.CloseValueCurrency), CellValues.Number),
+                            new DocumentItem(Convert.ToString(detailStatisticsItem.DateCurrency), CellValues.String)
+                        };
+
+                    documentItems.Add(documentRow);
+                }
+
                 try
                 {
-                    using SpreadsheetDocument spreadSheetDocument = SpreadsheetDocument.Create(saveFileDialog.FileName.ToString(), SpreadsheetDocumentType.Workbook);
-
-                    WorkbookPart workBookPart = spreadSheetDocument.AddWorkbookPart();
-                    workBookPart.Workbook = new Workbook();
-
-                    WorksheetPart workSheetPart = workBookPart.AddNewPart<WorksheetPart>();
-                    workSheetPart.Worksheet = new Worksheet(new SheetData());
-
-                    Sheets sheets = spreadSheetDocument.WorkbookPart.Workbook.AppendChild(new Sheets());
-
-                    Sheet sheet = new()
-                    {
-                        Id = spreadSheetDocument.WorkbookPart.GetIdOfPart(workSheetPart),
-                        SheetId = 1,
-                        Name = saveFileDialog.FileName.ToString()
-                    };
-
-                    sheets.Append(sheet);
-
-                    Worksheet workSheet = workSheetPart.Worksheet;
-                    SheetData sheetData = workSheet.GetFirstChild<SheetData>();
-
-                    Row rowHeader = new();
-
-                    DocumentHelpers.AppendCellsToRow(rowHeader,
-                        new string[6] {"Номер дня", "Открытие", "Минимум",
-                            "Максимум", "Закрытие", "Дата"}, CellValues.String);
-
-                    sheetData.AppendChild(rowHeader);
-
-                    foreach (DetailStatisticsItem detailStatisticsItem in DetailStatistics.ItemsSource)
-                    {
-                        Row row = new();
-
-                        DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.NumberOfDay), CellValues.Number);
-                        DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.OpenValueCurrency), CellValues.Number);
-                        DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.MinValueCurrency), CellValues.Number);
-                        DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.MaxValueCurrency), CellValues.Number);
-                        DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.CloseValueCurrency), CellValues.Number);
-                        DocumentHelpers.AppendCellToRow(row, Convert.ToString(detailStatisticsItem.DateCurrency), CellValues.String);
-
-                        sheetData.AppendChild(row);
-                    }
-
-                    workSheetPart.Worksheet.Save();
-                    spreadSheetDocument.Save();
-
-                    spreadSheetDocument.Close();
+                    DocumentHelpers.Export(saveFileDialog.FileName, headers, documentItems);
 
                     NotificationManager.notifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
                 }
@@ -690,10 +662,8 @@ namespace OrganizationBankingSystem.MVVM.View
             BelarusBankBorderRectangle.Fill = ColorBrush.Green;
         }
 
-        private async Task AddFavoriteCourse(string fromCurrencyCode, string toCurrencyCode)
+        private static async Task AddFavoriteCourse(string fromCurrencyCode, string toCurrencyCode)
         {
-            MessageBox.Show(AuthenticatorState.authenticator.CurrentBankUser.Login);
-
             FavoriteCourse favoriteCourse = new()
             {
                 FromCurrencyCode = fromCurrencyCode,
@@ -707,6 +677,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void AddFavoriteCourseButton(object sender, RoutedEventArgs e)
         {
+            NotificationManager.notifier.ShowInformationPropertyMessage("Добавление пары валют в Избранное...");
+
             ListCurrencyValuesItem fromCurrency = (ListCurrencyValuesItem)ComboBoxFromCurrency.SelectedItem;
             ListCurrencyValuesItem toCurrency = (ListCurrencyValuesItem)ComboBoxToCurrency.SelectedItem;
 
