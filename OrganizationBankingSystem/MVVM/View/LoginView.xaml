@@ -78,7 +78,7 @@
                         Grid.Column="1"
                         VerticalAlignment="Center"
                         Command="{Binding RegistrationFormViewCommand}"
-                        Content="Регистрация!"
+                        Content="Регистрация"
                         Foreground="#FF5B73B5"
                         Style="{StaticResource MenuButtonTheme}" />
                     <RadioButton
@@ -86,7 +86,7 @@
                         Margin="20,0,0,0"
                         VerticalAlignment="Center"
                         Command="{Binding LoginFormViewCommand}"
-                        Content="Вход!"
+                        Content="Вход"
                         Foreground="#FF5B73B5"
                         Style="{StaticResource MenuButtonTheme}" />
                 </StackPanel>

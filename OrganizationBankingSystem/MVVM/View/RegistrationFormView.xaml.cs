@@ -58,7 +58,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void RegisterWindow(object sender, RoutedEventArgs e)
         {
-            NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение создания учетной записи...");
+            NotificationManager.mainNotifier.ShowInformationPropertyMessage("Выполнение создания учетной записи...");
 
             _lastName = LastName.Text;
             _firstName = FirstName.Text;
@@ -72,11 +72,11 @@ namespace OrganizationBankingSystem.MVVM.View
 
             if (_registrationResult == RegistrationResult.Success)
             {
-                NotificationManager.notifier.ShowCompletedPropertyMessage("Учетная запись создана успешно!");
+                NotificationManager.signNotifier.ShowCompletedPropertyMessage("Учетная запись создана успешно!");
 
                 if (AutoLogin.IsChecked == true)
                 {
-                    NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа!");
+                    NotificationManager.signNotifier.ShowInformationPropertyMessage("Выполнение входа...");
 
                     bool success = await AuthenticatorState.authenticator.Login(_login, _password);
 
@@ -91,7 +91,7 @@ namespace OrganizationBankingSystem.MVVM.View
             }
             else if (_registrationResult == RegistrationResult.PasswordDoNotMatch)
             {
-                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Пароли не совпадают!");
+                NotificationManager.signNotifier.ShowErrorPropertyMessage("Ошибка. Пароли не совпадают!");
             }
         }
     }

@@ -61,7 +61,7 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
 
                 if (IsFileListCurrencyDamaged)
                 {
-                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или поврежден файл списков валют (файл был удален или неккоректно изменен)");
+                    NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или поврежден файл списков валют (файл был удален или неккоректно изменен)");
                 }
             }
             );

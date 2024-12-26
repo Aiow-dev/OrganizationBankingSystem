@@ -4,6 +4,7 @@ using OrganizationBankingSystem.Core.Notifications;
 using OrganizationBankingSystem.Core.State.Authenticators;
 using OrganizationBankingSystem.Data;
 using OrganizationBankingSystem.MVVM.Model;
+using OrganizationBankingSystem.Services;
 using OrganizationBankingSystem.Services.EntityServices;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace OrganizationBankingSystem.MVVM.View
         private async Task GetExchangeRateData(string fromCurrency, string toCurrency)
         {
             string QUERY_URL = $"{Properties.Settings.Default.serviceUri}function=CURRENCY_EXCHANGE_RATE&from_currency={fromCurrency}&to_currency={toCurrency}" +
-    $"&apikey={ServiceManager.ServiceManager.GetServiceKey()}";
+    $"&apikey={Environment.GetEnvironmentVariable("ALPHAVANTAGE_API_KEY")}";
             Uri queryUri = new(QUERY_URL);
 
             HttpClient httpClient = new();
@@ -101,7 +102,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void GetFavoriteCoursesButton(object sender, RoutedEventArgs e)
         {
-            NotificationManager.notifier.ShowInformationPropertyMessage("Идет процесс получения избранных курсов валют...");
+            NotificationManager.mainNotifier.ShowInformationPropertyMessage("Идет процесс получения избранных курсов валют...");
 
             ElementHelper.DisableElement(ButtonFavoriteCourses, 10000);
 
@@ -150,16 +151,16 @@ namespace OrganizationBankingSystem.MVVM.View
                 {
                     DocumentHelpers.Export(saveFileDialog.FileName, headers, documentItems);
 
-                    NotificationManager.notifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
+                    NotificationManager.mainNotifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
                 }
                 catch (IOException)
                 {
-                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, данный файл занят другим процессом или уже открыт в Microsoft Excel");
+                    NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Возможно, данный файл занят другим процессом или уже открыт в Microsoft Excel");
                 }
             }
             else
             {
-                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, не обновлены избранные курсы валют");
+                NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Возможно, не обновлены избранные курсы валют");
             }
         }
     }

@@ -39,7 +39,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void LoginWindow(object sender, RoutedEventArgs e)
         {
-            NotificationManager.notifier.ShowInformationPropertyMessage("Выполнение входа...");
+            NotificationManager.signNotifier.ShowInformationPropertyMessage("Выполнение входа...");
 
             _login = Login.Text;
             _password = Password.Password;
@@ -54,7 +54,7 @@ namespace OrganizationBankingSystem.MVVM.View
                 Application.Current.MainWindow.Visibility = Visibility.Visible;
             } else
             {
-                NotificationManager.notifier.ShowErrorPropertyMessage("Не удалось выполнить вход. Возможно, введено неверный логин или пароль");
+                NotificationManager.signNotifier.ShowErrorPropertyMessage("Не удалось выполнить вход. Возможно, введен неверный логин или пароль");
             }
         }
     }

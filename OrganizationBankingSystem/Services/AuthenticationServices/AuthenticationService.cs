@@ -19,6 +19,10 @@ namespace OrganizationBankingSystem.Services.AuthenticationServices
         public async Task<BankUser> Login(string login, string password)
         {
             BankUser bankUser = await _bankUserService.GetByLogin(login);
+            if (bankUser == null)
+            {
+                return null;
+            }
 
             PasswordVerificationResult passwordResult = _passwordHasher.VerifyHashedPassword(bankUser.Password, password);
 

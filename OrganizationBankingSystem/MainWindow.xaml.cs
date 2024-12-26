@@ -2,6 +2,7 @@
 using OrganizationBankingSystem.Core.Notifications;
 using OrganizationBankingSystem.MVVM.View;
 using System;
+using System.Collections;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -25,9 +26,11 @@ namespace OrganizationBankingSystem
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            EnvManager.LoadEnvironment();
+
             if (!NetworkHelper.CheckInternetConnection())
             {
-                NotificationManager.notifier.ShowWarningPropertyMessage("Отсутствует или является нестабильным подключение к сети Интернет. Это может повлиять на работу некоторых функций приложения");
+                NotificationManager.mainNotifier.ShowWarningPropertyMessage("Отсутствует или является нестабильным подключение к сети Интернет. Это может повлиять на работу некоторых функций приложения");
             }
 
             this.Visibility = Visibility.Hidden;

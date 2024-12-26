@@ -1,7 +1,5 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using LiveCharts;
 using OrganizationBankingSystem.Assets;
@@ -14,7 +12,6 @@ using OrganizationBankingSystem.Core.State.Authenticators;
 using OrganizationBankingSystem.Data;
 using OrganizationBankingSystem.MVVM.Model;
 using OrganizationBankingSystem.MVVM.ViewModel;
-using OrganizationBankingSystem.Services;
 using OrganizationBankingSystem.Services.AuthenticationServices;
 using OrganizationBankingSystem.Services.EntityServices;
 using System;
@@ -25,7 +22,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -165,7 +161,7 @@ namespace OrganizationBankingSystem.MVVM.View
         private void GetExchangeRates()
         {
             string QUERY_URL = $"{Properties.Settings.Default.serviceUri}function=FX_DAILY&from_symbol={FromCurrency}&to_symbol={ToCurrency}" +
-                $"&apikey={ServiceManager.ServiceManager.GetServiceKey()}";
+                $"&apikey={Environment.GetEnvironmentVariable("ALPHAVANTAGE_API_KEY")}";
             Uri queryUri = new(QUERY_URL);
 
             try
@@ -189,7 +185,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
                     Dispatcher.Invoke(() =>
                     {
-                        NotificationManager.notifier.ShowWarningPropertyMessage($"Указанное значение количества дней недоступно\nМаксимально доступное значение для данного курса выбранных валют: {availableIndex}");
+                        NotificationManager.mainNotifier.ShowWarningPropertyMessage($"Указанное значение количества дней недоступно\nМаксимально доступное значение для данного курса выбранных валют: {availableIndex}");
                     });
                 }
 
@@ -220,14 +216,14 @@ namespace OrganizationBankingSystem.MVVM.View
             {
                 Dispatcher.Invoke(() =>
                 {
-                    NotificationManager.notifier.ShowErrorPropertyMessage(ConnectionMessage.DISABLE_CONNECTION);
+                    NotificationManager.mainNotifier.ShowErrorPropertyMessage(ConnectionMessage.DISABLE_CONNECTION);
                 });
             }
             catch (KeyNotFoundException)
             {
                 Dispatcher.Invoke(() =>
                 {
-                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, на данный момент актуальный курс выбранных валют не доступен");
+                    NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Возможно, на данный момент актуальный курс выбранных валют не доступен");
                 });
             }
         }
@@ -386,7 +382,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
             RequiredValues = ValidatorNumber.ValidateNumberTextInput(DEFAULT_REQUIRED_VALUES, MAX_REQUIRED_VALUES, NumberValuesGraph.Text);
 
-            NotificationManager.notifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
+            NotificationManager.mainNotifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
 
             await Task.Run(GetExchangeRates);
 
@@ -403,12 +399,12 @@ namespace OrganizationBankingSystem.MVVM.View
                 }
                 else
                 {
-                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
+                    NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Возможно, актуальный курс выбранных валют недоступен");
                 }
             }
             catch (ArgumentOutOfRangeException)
             {
-                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Неверное количество значений");
+                NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Неверное количество значений");
             }
         }
 
@@ -455,14 +451,14 @@ namespace OrganizationBankingSystem.MVVM.View
                 }
                 else
                 {
-                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Не удается получить актуальный курс выбранных валют в офлайн-режиме. \nВозможно, не указано одно из следующих полей: количество, стоимость за единицу");
+                    NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Не удается получить актуальный курс выбранных валют в офлайн-режиме. \nВозможно, не указано одно из следующих полей: количество, стоимость за единицу");
 
                     TextBlockValueExchangeRates.Text = string.Empty;
                 }
             }
             else
             {
-                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, в списках валют не выбраны или выбраны валюты, не содержащиеся в них");
+                NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Возможно, в списках валют не выбраны или выбраны валюты, не содержащиеся в них");
             }
         }
 
@@ -517,16 +513,16 @@ namespace OrganizationBankingSystem.MVVM.View
                 {
                     DocumentHelpers.Export(saveFileDialog.FileName, headers, documentItems);
 
-                    NotificationManager.notifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
+                    NotificationManager.mainNotifier.ShowCompletedPropertyMessage("Операция выполнена успешно!");
                 }
                 catch (IOException)
                 {
-                    NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, данный файл занят другим процессом или уже открыт в Microsoft Excel");
+                    NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Возможно, данный файл занят другим процессом или уже открыт в Microsoft Excel");
                 }
             }
             else
             {
-                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Детальная статистика и график курсов валют не построены");
+                NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Детальная статистика и график курсов валют не построены");
             }
         }
 
@@ -622,13 +618,13 @@ namespace OrganizationBankingSystem.MVVM.View
                 }
             }
 
-            NotificationManager.notifier.ShowInformationPropertyMessage($"Идет процесс получения курса валют Беларусбанка...\nВалюта: {currencyCode}\nОтделение: г. Брест, пр. Партизанский, отделение 100/1050");
+            NotificationManager.mainNotifier.ShowInformationPropertyMessage($"Идет процесс получения курса валют Беларусбанка...\nВалюта: {currencyCode}\nОтделение: г. Брест, пр. Партизанский, отделение 100/1050");
 
             string responseValueExchangeRates = await Task.Run(() => BelarusBankHelper.GetExchangeRates(currencyCode));
 
             if (responseValueExchangeRates.Equals("Not defined"))
             {
-                NotificationManager.notifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет.\nВозможно, на данный момент актуальный курс выбранных валют не доступен");
+                NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Возможно, отсутствует или является нестабильным подключение к сети Интернет.\nВозможно, на данный момент актуальный курс выбранных валют не доступен");
             }
             else
             {
@@ -648,7 +644,7 @@ namespace OrganizationBankingSystem.MVVM.View
             }
             else
             {
-                NotificationManager.notifier.ShowErrorPropertyMessage(ConnectionMessage.DISABLE_CONNECTION);
+                NotificationManager.mainNotifier.ShowErrorPropertyMessage(ConnectionMessage.DISABLE_CONNECTION);
             }
         }
 
@@ -677,7 +673,7 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void AddFavoriteCourseButton(object sender, RoutedEventArgs e)
         {
-            NotificationManager.notifier.ShowInformationPropertyMessage("Добавление пары валют в Избранное...");
+            NotificationManager.mainNotifier.ShowInformationPropertyMessage("Добавление пары валют в Избранное...");
 
             ListCurrencyValuesItem fromCurrency = (ListCurrencyValuesItem)ComboBoxFromCurrency.SelectedItem;
             ListCurrencyValuesItem toCurrency = (ListCurrencyValuesItem)ComboBoxToCurrency.SelectedItem;

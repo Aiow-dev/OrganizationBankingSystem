@@ -17,7 +17,7 @@ namespace OrganizationBankingSystem.Core.Helpers
             }
             else
             {
-                NotificationManager.notifier.ShowErrorPropertyMessage(errorMessage);
+                NotificationManager.mainNotifier.ShowErrorPropertyMessage(errorMessage);
             }
         }
 
