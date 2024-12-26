@@ -260,8 +260,7 @@
                 BorderThickness="0,0,0,0"
                 Click="RegisterWindow"
                 Content="Создать"
-                FontWeight="Bold"
-                Foreground="#FF1B2F65"
+                Foreground="#FFF8F8F8"
                 Style="{StaticResource ButtonSubmitTheme}" />
         </StackPanel>
     </Grid>

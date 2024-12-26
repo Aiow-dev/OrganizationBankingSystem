@@ -12,6 +12,19 @@ namespace OrganizationBankingSystem.Core.Helpers
         }
     }
 
+    public static class ValidatorText
+    {
+        public static bool NotEmpty(string text)
+        {
+            text = Regex.Replace(text, @"\s+", "");
+            return text.Length != 0;
+        }
+        public static bool AllNotEmpty(params string[] text_array)
+        {
+            return text_array.All(s => NotEmpty(s));
+        }
+    }
+
     public static class ValidatorNumber
     {
         private static readonly Regex _regexNumber = new(@"[^0-9]+");

@@ -1,9 +1,10 @@
-﻿using OrganizationBankingSystem.Core.Notifications;
-using OrganizationBankingSystem.Core.State.Authenticators;
-using OrganizationBankingSystem.Services.AuthenticationServices;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using OrganizationBankingSystem.Core.Helpers;
+using OrganizationBankingSystem.Core.Notifications;
+using OrganizationBankingSystem.Core.State.Authenticators;
+using OrganizationBankingSystem.Services.AuthenticationServices;
 
 namespace OrganizationBankingSystem.MVVM.View
 {
@@ -58,8 +59,6 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void RegisterWindow(object sender, RoutedEventArgs e)
         {
-            NotificationManager.mainNotifier.ShowInformationPropertyMessage("Выполнение создания учетной записи...");
-
             _lastName = LastName.Text;
             _firstName = FirstName.Text;
             _patronymic = Patronymic.Text;
@@ -67,6 +66,12 @@ namespace OrganizationBankingSystem.MVVM.View
             _login = Login.Text;
             _password = Password.Password;
             _passwordConfirm = PasswordConfirm.Password;
+
+            if (!ValidatorText.AllNotEmpty(_lastName, _firstName, _patronymic, _phone, _login, _password, _passwordConfirm))
+            {
+                NotificationManager.signNotifier.ShowErrorPropertyMessage("Ошибка регистрации учетной записи. Возможно, некоторые поля не заполнены");
+                return;
+            }
 
             await RegisterBankUser();
 
@@ -76,8 +81,6 @@ namespace OrganizationBankingSystem.MVVM.View
 
                 if (AutoLogin.IsChecked == true)
                 {
-                    NotificationManager.signNotifier.ShowInformationPropertyMessage("Выполнение входа...");
-
                     bool success = await AuthenticatorState.authenticator.Login(_login, _password);
 
                     if (success)
@@ -92,6 +95,10 @@ namespace OrganizationBankingSystem.MVVM.View
             else if (_registrationResult == RegistrationResult.PasswordDoNotMatch)
             {
                 NotificationManager.signNotifier.ShowErrorPropertyMessage("Ошибка. Пароли не совпадают!");
+            }
+            else if (_registrationResult == RegistrationResult.ExistingLogin)
+            {
+                NotificationManager.signNotifier.ShowErrorPropertyMessage("Ошибка. Пользователь с данным логином уже существует!");
             }
         }
     }

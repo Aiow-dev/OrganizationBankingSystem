@@ -299,8 +299,8 @@
                                         BorderThickness="0,0,0,0"
                                         Click="GetCurrencyValue"
                                         Content="Получить значение"
-                                        Foreground="DarkGray"
-                                        Style="{StaticResource ButtonTheme}" />
+                                        Foreground="#FFF8F8F8"
+                                        Style="{StaticResource ButtonSubmitTheme}" />
                                     <Grid Margin="10,0,0,0">
                                         <TextBox
                                             x:Name="TextBlockValueExchangeRates"

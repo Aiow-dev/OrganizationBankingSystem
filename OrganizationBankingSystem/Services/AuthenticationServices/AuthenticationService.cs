@@ -40,6 +40,11 @@ namespace OrganizationBankingSystem.Services.AuthenticationServices
             {
                 return RegistrationResult.PasswordDoNotMatch;
             }
+            BankUser existBankUser = await _bankUserService.GetByLogin(login);
+            if (existBankUser != null)
+            {
+                return RegistrationResult.ExistingLogin;
+            }
 
             string hashedPassword = _passwordHasher.HashPassword(password);
 

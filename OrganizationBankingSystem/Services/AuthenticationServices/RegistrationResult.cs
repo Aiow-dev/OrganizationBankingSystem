@@ -3,6 +3,7 @@
     public enum RegistrationResult
     {
         Success,
-        PasswordDoNotMatch
+        PasswordDoNotMatch,
+        ExistingLogin
     }
 }

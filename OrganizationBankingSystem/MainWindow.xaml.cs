@@ -2,7 +2,6 @@
 using OrganizationBankingSystem.Core.Notifications;
 using OrganizationBankingSystem.MVVM.View;
 using System;
-using System.Collections;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;

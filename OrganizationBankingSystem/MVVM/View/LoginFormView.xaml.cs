@@ -1,4 +1,5 @@
-﻿using OrganizationBankingSystem.Core.Notifications;
+﻿using OrganizationBankingSystem.Core.Helpers;
+using OrganizationBankingSystem.Core.Notifications;
 using OrganizationBankingSystem.Core.State.Authenticators;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,10 +40,19 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void LoginWindow(object sender, RoutedEventArgs e)
         {
-            NotificationManager.signNotifier.ShowInformationPropertyMessage("Выполнение входа...");
-
             _login = Login.Text;
             _password = Password.Password;
+
+            if (!ValidatorText.NotEmpty(_login))
+            {
+                NotificationManager.signNotifier.ShowErrorPropertyMessage("Ошибка. Поле логина не заполнено");
+                return;
+            }
+            if (!ValidatorText.NotEmpty(_password))
+            {
+                NotificationManager.signNotifier.ShowErrorPropertyMessage("Ошибка. Поле пароля не заполнено");
+                return;
+            }
 
             await LoginBankUser();
 
