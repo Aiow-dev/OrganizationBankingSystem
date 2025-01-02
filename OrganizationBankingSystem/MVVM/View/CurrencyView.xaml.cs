@@ -462,12 +462,6 @@ namespace OrganizationBankingSystem.MVVM.View
             }
         }
 
-        private void CreateTest(object sender, RoutedEventArgs e)
-        {
-            IAuthenticationService authentication = new AuthenticationService(new BankUserDataService(new BankSystemContextFactory()));
-            authentication.Login("Пользователь 2", "Пользователь 2");
-        }
-
         private void SwapValuesComboBox(object sender, RoutedEventArgs e)
         {
             ComboBoxHelper.SwapValuesComboBox(ComboBoxFromCurrency, ComboBoxToCurrency,
@@ -673,14 +667,13 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void AddFavoriteCourseButton(object sender, RoutedEventArgs e)
         {
-            NotificationManager.mainNotifier.ShowInformationPropertyMessage("Добавление пары валют в Избранное...");
-
             ListCurrencyValuesItem fromCurrency = (ListCurrencyValuesItem)ComboBoxFromCurrency.SelectedItem;
             ListCurrencyValuesItem toCurrency = (ListCurrencyValuesItem)ComboBoxToCurrency.SelectedItem;
 
             if (fromCurrency != null && toCurrency != null)
             {
                 await AddFavoriteCourse(fromCurrency.CurrencyCode, toCurrency.CurrencyCode);
+                NotificationManager.mainNotifier.ShowCompletedPropertyMessage($"Пара валют {fromCurrency.CurrencyCode} - {toCurrency.CurrencyCode} добавлена в избранное");
             }
         }
     }

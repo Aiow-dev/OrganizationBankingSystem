@@ -1,12 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using OrganizationBankingSystem.Core.Helpers;
-using OrganizationBankingSystem.Core.Notifications;
-using OrganizationBankingSystem.Core.State.Authenticators;
-using OrganizationBankingSystem.Data;
-using OrganizationBankingSystem.MVVM.Model;
-using OrganizationBankingSystem.Services;
-using OrganizationBankingSystem.Services.EntityServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -15,6 +7,15 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.IdentityModel.Tokens;
+using OrganizationBankingSystem.Core.Helpers;
+using OrganizationBankingSystem.Core.Notifications;
+using OrganizationBankingSystem.Core.State.Authenticators;
+using OrganizationBankingSystem.Core.State.Views;
+using OrganizationBankingSystem.Data;
+using OrganizationBankingSystem.MVVM.Model;
+using OrganizationBankingSystem.Services.EntityServices;
 
 namespace OrganizationBankingSystem.MVVM.View
 {
@@ -37,6 +38,16 @@ namespace OrganizationBankingSystem.MVVM.View
             _favoriteCourseService = new(new BankSystemContextFactory());
 
             DataContext = this;
+
+            RestoreState();
+        }
+
+        private void RestoreState()
+        {
+            if (!DashboardState.CachedFavoriteCourseItems.IsNullOrEmpty())
+            {
+                FavoriteCourses.ItemsSource = DashboardState.CachedFavoriteCourseItems;
+            }
         }
 
         private async Task GetExchangeRateData(string fromCurrency, string toCurrency)
@@ -82,25 +93,26 @@ namespace OrganizationBankingSystem.MVVM.View
             for (int i = 0; i < favoriteCourses.Count; i++)
             {
                 await Task.Run(() => GetExchangeRate(favoriteCourses[i].FromCurrencyCode, favoriteCourses[i].ToCurrencyCode));
+                FavoriteCourseItem favoriteCourseItem = new()
+                {
+                    NumberFavoriteCourse = i + 1,
+                    FromCurrencyCode = favoriteCourses[i].FromCurrencyCode,
+                    ToCurrencyCode = favoriteCourses[i].ToCurrencyCode,
+                    ValueCourse = 0
+                };
 
                 if (_valueCourse != string.Empty)
                 {
-                    FavoriteCourseItem favoriteCourseItem = new()
-                    {
-                        NumberFavoriteCourse = i + 1,
-                        FromCurrencyCode = favoriteCourses[i].FromCurrencyCode,
-                        ToCurrencyCode = favoriteCourses[i].ToCurrencyCode,
-                        ValueCourse = Convert.ToDouble(_valueCourse.Replace(".", ","))
-                    };
-
-                    FavoriteCourseItems.Add(favoriteCourseItem);
+                    favoriteCourseItem.ValueCourse = Convert.ToDouble(_valueCourse.Replace(".", ","));
                 }
+                FavoriteCourseItems.Add(favoriteCourseItem);
             }
 
+            DashboardState.CachedFavoriteCourseItems = FavoriteCourseItems;
             FavoriteCourses.ItemsSource = FavoriteCourseItems;
         }
 
-        private async void GetFavoriteCoursesButton(object sender, RoutedEventArgs e)
+        public async void GetFavoriteCoursesButton(object sender, RoutedEventArgs e)
         {
             NotificationManager.mainNotifier.ShowInformationPropertyMessage("Идет процесс получения избранных курсов валют...");
 

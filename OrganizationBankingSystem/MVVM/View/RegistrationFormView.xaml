@@ -259,7 +259,7 @@
                 Margin="0,25,0,0"
                 BorderThickness="0,0,0,0"
                 Click="RegisterWindow"
-                Content="Создать"
+                Content="Зарегистрироваться"
                 Foreground="#FFF8F8F8"
                 Style="{StaticResource ButtonSubmitTheme}" />
         </StackPanel>

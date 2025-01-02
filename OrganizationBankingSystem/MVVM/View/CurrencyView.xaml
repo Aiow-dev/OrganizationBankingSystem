@@ -188,7 +188,7 @@
                                         FontSize="17"
                                         Style="{StaticResource StarButtonTheme}">
                                         <RadioButton.ToolTip>
-                                            <ToolTip Content="Добавить валюту в избранное" Style="{StaticResource TooltipTheme}" />
+                                            <ToolTip Content="Добавить пару валют в избранное" Style="{StaticResource TooltipTheme}" />
                                         </RadioButton.ToolTip>
                                     </RadioButton>
                                     <RadioButton
@@ -266,17 +266,6 @@
                                             </TextBlock.Style>
                                         </TextBlock>
                                     </Grid>
-                                    <RadioButton
-                                        Width="20"
-                                        Height="20"
-                                        Margin="5,0,0,0"
-                                        Content="☆"
-                                        FontSize="17"
-                                        Style="{StaticResource StarButtonTheme}">
-                                        <RadioButton.ToolTip>
-                                            <ToolTip Content="Добавить валюту в избранное" Style="{StaticResource TooltipTheme}" />
-                                        </RadioButton.ToolTip>
-                                    </RadioButton>
                                     <RadioButton
                                         Width="25"
                                         Height="25"
@@ -359,14 +348,6 @@
                                             <ToolTip Content="Получить курсы валют БеларусБанка" Style="{StaticResource TooltipTheme}" />
                                         </Border.ToolTip>
                                     </Border>
-                                    <Button
-                                        x:Name="ButtonTest"
-                                        Width="120"
-                                        BorderThickness="0,0,0,0"
-                                        Click="CreateTest"
-                                        Content="Создать (тест)"
-                                        Foreground="DarkGray"
-                                        Style="{StaticResource ButtonTheme}" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
@@ -433,7 +414,6 @@
             </Border>
             <Border
                 Grid.Column="1"
-                Width="381"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Stretch"
                 Background="#FF282828"

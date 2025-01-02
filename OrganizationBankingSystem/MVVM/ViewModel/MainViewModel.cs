@@ -37,6 +37,7 @@ namespace OrganizationBankingSystem.MVVM.ViewModel
             DashboardVM = new DashboardViewModel();
             BankAccountVM = new BankAccountViewModel();
             CurrencyVM = new CurrencyViewModel();
+            ProfileVM = new ProfileViewModel();
 
             CurrentView = DashboardVM;
 
