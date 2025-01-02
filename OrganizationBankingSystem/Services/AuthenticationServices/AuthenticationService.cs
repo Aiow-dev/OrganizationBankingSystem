@@ -30,6 +30,8 @@ namespace OrganizationBankingSystem.Services.AuthenticationServices
             {
                 return null;
             }
+            
+            bankUser.User = await _bankUserService.GetUserById(bankUser.UserId);
 
             return bankUser;
         }

@@ -40,6 +40,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void LoginWindow(object sender, RoutedEventArgs e)
         {
+            NotificationManager.signNotifier.ShowInformationPropertyMessage("Вход в учетную запись...");
+
             _login = Login.Text;
             _password = Password.Password;
 

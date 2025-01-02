@@ -6,5 +6,6 @@ namespace OrganizationBankingSystem.Services.EntityServices
     public interface IBankUserService : IDataService<BankUser>
     {
         Task<BankUser> GetByLogin(string login);
+        Task<User> GetUserById(int id);
     }
 }

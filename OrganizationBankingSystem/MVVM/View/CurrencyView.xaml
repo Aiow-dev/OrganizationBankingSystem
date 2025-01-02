@@ -297,7 +297,6 @@
                                             Height="35"
                                             Padding="3,0,0,3"
                                             IsReadOnly="True"
-                                            PreviewTextInput="DoubleNumberValuesGraphPreviewTextInput"
                                             Style="{StaticResource TextBoxTheme}" />
                                         <TextBlock
                                             Width="185"

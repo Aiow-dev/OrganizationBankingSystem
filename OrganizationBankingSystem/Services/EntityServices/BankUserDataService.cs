@@ -29,5 +29,11 @@ namespace OrganizationBankingSystem.Services.EntityServices
 
             return await context.BankUsers.FirstOrDefaultAsync(item => item.Login == login);
         }
+
+        public async Task<User> GetUserById(int id)
+        {
+            using BankSystemContext context = _contextFactory.CreateDbContext();
+            return await context.Users.FirstOrDefaultAsync(item => item.Id == id);
+        }
     }
 }

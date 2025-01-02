@@ -59,6 +59,8 @@ namespace OrganizationBankingSystem.MVVM.View
 
         private async void RegisterWindow(object sender, RoutedEventArgs e)
         {
+            NotificationManager.signNotifier.ShowInformationPropertyMessage("Создание учетной записи...");
+
             _lastName = LastName.Text;
             _firstName = FirstName.Text;
             _patronymic = Patronymic.Text;

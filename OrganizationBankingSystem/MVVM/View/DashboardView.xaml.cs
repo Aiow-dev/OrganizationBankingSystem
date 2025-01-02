@@ -39,10 +39,10 @@ namespace OrganizationBankingSystem.MVVM.View
 
             DataContext = this;
 
-            RestoreState();
+            LoadViewState();
         }
 
-        private void RestoreState()
+        private void LoadViewState()
         {
             if (!DashboardState.CachedFavoriteCourseItems.IsNullOrEmpty())
             {
