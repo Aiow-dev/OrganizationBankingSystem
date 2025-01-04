@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
 
-namespace OrganizationBankingSystem.Core.Helpers.BelarusBank
+namespace OrganizationBankingSystem.Core.Helpers.BelarusBankHelpers
 {
     public enum TypeOperation
     {

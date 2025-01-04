@@ -29,6 +29,11 @@ namespace OrganizationBankingSystem.Core.State.Authenticators
             return CurrentBankUser != null;
         }
 
+        public void UpdateUserPhone(string phone)
+        {
+            CurrentBankUser.User.Phone = phone;
+        }
+
         public void Logout()
         {
             CurrentBankUser = null;

@@ -36,5 +36,23 @@ namespace OrganizationBankingSystem.Core.Notifications
 
             cfg.Dispatcher = Application.Current.Dispatcher;
         });
+
+        public static Notifier CreateDialogNotifier(Window parentWindow)
+        {
+            return new(configureAction: cfg =>
+            {
+                cfg.PositionProvider = new WindowPositionProvider(
+                    parentWindow: parentWindow,
+                    corner: Corner.BottomRight,
+                    offsetX: 10,
+                    offsetY: 10);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(2),
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(2));
+
+                cfg.Dispatcher = Application.Current.Dispatcher;
+            });
+        }
     }
 }
