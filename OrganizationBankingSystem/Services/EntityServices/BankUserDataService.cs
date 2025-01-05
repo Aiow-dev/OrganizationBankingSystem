@@ -84,5 +84,21 @@ namespace OrganizationBankingSystem.Services.EntityServices
 
             return DbResult.Success;
         }
+
+        public async Task<DbResult> Delete(int bankUserId)
+        {
+            using BankSystemContext context = _contextFactory.CreateDbContext();
+            BankUser bankUser = await context.BankUsers.FirstOrDefaultAsync(item => item.Id == bankUserId);
+            if (bankUser == null)
+            {
+                return DbResult.NotFound;
+            }
+            User user = await context.Users.FirstOrDefaultAsync(item => item.Id == bankUser.UserId);
+
+            context.BankUsers.Remove(bankUser);
+            context.Users.Remove(user);
+            context.SaveChanges();
+            return DbResult.Success;
+        }
     }
 }

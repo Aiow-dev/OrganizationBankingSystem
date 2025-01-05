@@ -42,33 +42,43 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="100" />
                 </Grid.RowDefinitions>
-                <TextBox
-                    x:Name="NewPhoneNumber"
-                    Width="220"
-                    Height="35"
-                    Padding="3,0,0,3"
-                    Style="{StaticResource TextBoxTheme}" />
-                <TextBlock
-                    Width="220"
-                    Padding="5,0,0,5"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Foreground="DarkGray"
-                    IsHitTestVisible="False"
-                    Text="Введите новый номер телефона">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Style.Setters>
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </Style.Setters>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=Text, ElementName=NewPhoneNumber}" Value="">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,20,0,60"
+                        HorizontalAlignment="Center"
+                        FontSize="15"
+                        Foreground="#FFF8F8F8"
+                        Text="Изменение номера телефона" />
+                    <Grid>
+                        <TextBox
+                            x:Name="NewPhoneNumber"
+                            Width="220"
+                            Height="35"
+                            Padding="3,0,0,3"
+                            Style="{StaticResource TextBoxTheme}" />
+                        <TextBlock
+                            Width="220"
+                            Padding="5,0,0,5"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="DarkGray"
+                            IsHitTestVisible="False"
+                            Text="Введите новый номер телефона">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Setters>
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </Style.Setters>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=Text, ElementName=NewPhoneNumber}" Value="">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                </StackPanel>
                 <Button
                     x:Name="ButtonChangePhone"
                     Grid.Row="1"

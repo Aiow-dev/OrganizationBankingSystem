@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Input;
 using OrganizationBankingSystem.Core.Helpers;
 using OrganizationBankingSystem.Core.Notifications;
-using OrganizationBankingSystem.Core.State.Authenticators;
 using OrganizationBankingSystem.MVVM.Model;
 using OrganizationBankingSystem.Services.EntityServices;
 using ToastNotifications;
