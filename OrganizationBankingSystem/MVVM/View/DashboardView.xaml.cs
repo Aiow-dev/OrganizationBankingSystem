@@ -26,7 +26,7 @@ namespace OrganizationBankingSystem.MVVM.View
     {
         public List<FavoriteCourseItem> FavoriteCourseItems { get; set; }
 
-        private FavoriteCourseDataService _favoriteCourseService;
+        private readonly FavoriteCourseDataService _favoriteCourseService;
 
         private dynamic _jsonData;
         private string _valueCourse;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using OrganizationBankingSystem.Core.Helpers;
 using OrganizationBankingSystem.Core.Notifications;
@@ -17,9 +18,9 @@ namespace OrganizationBankingSystem.MVVM.View.Dialogs
     public partial class ChangePhoneNumberDialog : Window
     {
         private DbResult _result;
-        private BankUserDataService _bankUserDataService;
-        private int _userId;
-        private Notifier _notifier;
+        private readonly BankUserDataService _bankUserDataService;
+        private readonly int _userId;
+        private readonly Notifier _notifier;
         public event Action<string> OnChangePhoneNumber;
 
         public ChangePhoneNumberDialog(int userId)
@@ -63,6 +64,7 @@ namespace OrganizationBankingSystem.MVVM.View.Dialogs
 
             AuthenticatorState.authenticator.UpdateUserPhone(phoneText);
             OnChangePhoneNumber?.Invoke(phoneText);
+            NotificationManager.mainNotifier.ShowCompletedPropertyMessage("Номер телефона изменен");
             this.Close();
         }
 

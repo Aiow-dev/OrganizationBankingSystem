@@ -49,7 +49,7 @@ namespace OrganizationBankingSystem.Core.Notifications
 
                 cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
                     notificationLifetime: TimeSpan.FromSeconds(2),
-                    maximumNotificationCount: MaximumNotificationCount.FromCount(2));
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(1));
 
                 cfg.Dispatcher = Application.Current.Dispatcher;
             });

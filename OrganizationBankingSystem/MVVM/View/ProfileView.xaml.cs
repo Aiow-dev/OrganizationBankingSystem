@@ -40,5 +40,18 @@ namespace OrganizationBankingSystem.MVVM.View
             changePhoneNumberDialog.OnChangePhoneNumber += value => PhoneText.Text = value;
             changePhoneNumberDialog.ShowDialog();
         }
+
+        private void ShowChangePasswordForm(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ChangePasswordDialog changePhoneNumberDialog = new ChangePasswordDialog(_userId);
+            changePhoneNumberDialog.ShowDialog();
+        }
+
+        private void ShowDeleteAccountForm(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ChangePhoneNumberDialog changePhoneNumberDialog = new ChangePhoneNumberDialog(_userId);
+            changePhoneNumberDialog.OnChangePhoneNumber += value => PhoneText.Text = value;
+            changePhoneNumberDialog.ShowDialog();
+        }
     }
 }

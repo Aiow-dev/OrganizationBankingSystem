@@ -8,5 +8,6 @@ namespace OrganizationBankingSystem.Services.EntityServices
         Task<BankUser> GetByLogin(string login);
         Task<User> GetUserById(int id);
         Task<DbResult> ChangeUserPhone(int id, string phone);
+        Task<DbResult> ChangePassword(int id, string currentPassword, string newPassword);
     }
 }
