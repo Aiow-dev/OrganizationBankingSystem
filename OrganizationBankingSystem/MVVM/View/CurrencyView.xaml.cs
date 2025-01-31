@@ -379,7 +379,13 @@ namespace OrganizationBankingSystem.MVVM.View
             const int DEFAULT_REQUIRED_VALUES = 30;
             const int MAX_REQUIRED_VALUES = 360;
 
-            RequiredValues = ValidatorNumber.ValidateNumberTextInput(DEFAULT_REQUIRED_VALUES, MAX_REQUIRED_VALUES, NumberValuesGraph.Text);
+            RequiredValues = ValidatorNumber.ValidateNumberTextInput(DEFAULT_REQUIRED_VALUES, MAX_REQUIRED_VALUES,
+                NumberValuesGraph.Text);
+            if (RequiredValues == 0)
+            {
+                NotificationManager.mainNotifier.ShowErrorPropertyMessage("Ошибка. Невозможно отобразить ноль значений графика");
+                return;
+            }
 
             NotificationManager.mainNotifier.ShowInformationPropertyMessage($"Идет процесс построения графика валют...\nИсходная валюта: {FromCurrency}\nКонечная валюта: {ToCurrency}");
 
